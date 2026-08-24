@@ -5,13 +5,13 @@ $modSrc      = "$root\hp_colors"
 $modCompiled = "$root\hp_colors_compiled"
 $terserSrc   = "$root\hp_colors_terser"
 $terserCompiled = "$root\hp_colors_terser_compiled"
+. (Join-Path $root 'scripts\source2_package_pipeline.ps1')
 $compiler    = "$root\sr2compiler\New folder.exe"
-$vpkeditcliCandidates = @(
+$vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
     "$root\passive_items_mod\compiler\vpkeditcli.exe",
     "$root\vpk cli\vpkeditcli.exe",
     "$root\passive_items_mod_release\compiler\vpkeditcli.exe"
 )
-$vpkeditcli = $vpkeditcliCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
 $vpkOut      = "$root\pak97_dir.vpk"
 $vpkDest     = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak97_dir.vpk"
 
@@ -359,20 +359,7 @@ Write-Host "  Compiled OK -> $modCompiled" -ForegroundColor Green
 
 # ## Step 3: Pack VPK ##########################################################
 Write-Host "`n[3/4] Packing VPK..." -ForegroundColor Cyan
-if (-not $vpkeditcli) {
-    Write-Host "[ERROR] vpkeditcli.exe not found in known repo tool paths." -ForegroundColor Red
-    exit 1
-}
-$packArgs = "`"$modCompiled`" -o `"$vpkOut`" -s --no-progress"
-$pack = Start-Process -FilePath $vpkeditcli -ArgumentList $packArgs -PassThru -Wait -NoNewWindow
-if ($pack.ExitCode -ne 0) {
-    Write-Host "[ERROR] vpkeditcli failed with code $($pack.ExitCode)" -ForegroundColor Red
-    exit 1
-}
-if (-not (Test-Path $vpkOut)) {
-    Write-Host "[ERROR] VPK not created at $vpkOut" -ForegroundColor Red
-    exit 1
-}
+Invoke-VpkPack -VpkEditCli $vpkeditcli -InputDir $modCompiled -OutputPath $vpkOut
 $vpkSize = (Get-Item $vpkOut).Length
 Write-Host "  Packed OK -> $vpkOut  ($([math]::Round($vpkSize/1KB, 1)) KB)" -ForegroundColor Green
 

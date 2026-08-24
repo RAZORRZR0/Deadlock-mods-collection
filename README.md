@@ -46,6 +46,22 @@ The artifacts are `topbar_rank_barebones_dir.vpk` and `topbar_rank_barebones_no_
 
 These TopBar Rank editions are separate from the standalone `showrank_barebones` editions and their release artifacts. Source/build validation verifies inputs and packages; it is not live in-game proof. Smoke-test the installed edition in Deadlock.
 
+### ShowRank + ByteNode Recent Purchases + Hideout Testing Tools
+
+A unified Panorama package combining rank badge overlays (topbar player cards, team averages, profile cards, context menus, ESC player list), missing lane alerts (topbar `MISSING` indicators, portrait darkening, hero-icon announcements), ByteNode's in-game shop purchase history and live topbar floating purchase notifications, and Hideout sandbox testing tools (Hero Testing menu and HUD Damage Report in Hideout mode).
+
+- Resolves the collision on `panorama/layout/citadel_hud_top_bar_player.xml` by cleanly merging `#ShowRankBarebonesTopbarRankImage`, `#ShowRankBarebonesMissingIndicator`, and `.HeroNameHidden`.
+- Includes `#ShowRankBarebonesNotificationRoot` in `citadel_hud_top_bar.xml` for missing announcements.
+- Incorporates `hero_testing_menu.css`, `hud_damage_report.css`, and un-collapses `CitadelHudTopBar` in Hideout mode so sandbox bots, stats, and testing panels work in the Hideout practice map.
+- Packages all 18 assets inside `panorama/` at the root of the VPK.
+
+Build and package:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1
+# Or install directly to Deadlock:
+powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1 -Install
+```
+
 ### ❤️ Health & Status
 
 - **Custom Health Bars**: Modified health bars (`hp`, `self_hp`) including color-blind friendly options.

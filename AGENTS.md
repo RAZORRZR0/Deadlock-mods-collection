@@ -35,6 +35,7 @@ Important lanes:
 - **HP Colors minimal**: a runtime-only pak consumes a separate builder preset-store VPK through the static request/snapshot bridge. Do not add full-lane UI, persistence, convars, or runtime preset-store rescans.
 - **HP Colors Rewrite**: `hp_colors_rewrite/` owns the canonical clean-room runtime. `hp_colors_rewrite_qollock/` adds package-derived QOLLOCK compatibility without forking canonical behavior; read `hp_colors_rewrite/AGENTS.md` before changing either lane.
 - **Topbar Rank/ShowRank**: layouts load `showrank_common.js` plus the combined topbar runtime. Guarded global wrappers bridge profile, player-list, topbar, and Escape contexts.
+- **ShowRank + Recent Purchases + Hideout Testing**: `showrank_recent_purchases/` merges ShowRank (ranks, MISSING portrait indicators, and toast announcements) with ByteNode's shop history, floating topbar quick-purchase notifications, and Hideout sandbox testing tools.
 - **Topbar Status Buffs**: a healthbar publisher writes compact status snapshots; a topbar consumer renders them. It conflicts with other pak89 variants.
 - **Abilities**: Python performs streaming/text-span transforms over huge VData inputs. Do not introduce a full parser; transforms may mutate inputs and wrappers restore baselines.
 
@@ -45,11 +46,11 @@ Important lanes:
 - `hp_colors_minimal/` — minimal pak97 runtime paired with a separate pak96 builder preset.
 - `hp_colors_rewrite/`, `hp_colors_rewrite_qollock/` — canonical Rewrite source and its pak02 compatibility layer for an installed QOLLOCK pak03.
 - `hp_color_debug/`, `hp_colors_minimal*_debug/` — diagnostic variants; follow their local contracts instead of copying them into production lanes.
-- `topbar_rank/`, `showrank/` — rank surfaces, topbar HUD, profile/player-list hooks, and build variants. Current combined code uses `showrank_common.js`; legacy `topbar_rank_rank_bridge.js` references are stale.
+- `topbar_rank/`, `showrank/`, `showrank_recent_purchases/` — rank surfaces, topbar HUD, profile/player-list hooks, combined ByteNode purchase notifications, and build variants.
 - `topbar_status_buffs/` — healthbar-to-topbar status-effect bridge.
 - `buff_timer_virgin/`, `recent_purchase/`, `3d hud/` — independent Panorama HUD/shop overrides.
 - `abilities/scripts/` — mutable VData baselines and Python text transforms.
-- `scripts/` — shared packaging helpers, HP codecs/contracts, VM adapters, and preset-store utilities.
+- `scripts/` — shared packaging helpers (`source2_package_pipeline.ps1`, `pack_vpk.mjs`, `inspect_vpk.mjs`), HP codecs/contracts, VM adapters, and preset-store utilities.
 - `sr2compiler/` — shipped Source 2 compiler wrapper, .NET runtime config, and Dota Workshop Tools preference.
 - `vpk cli/` — repository-local VPK pack/list tooling candidate.
 - `docs/` — workspace structure and API research. Use `docs/WORKSPACE_STRUCTURE.md` for source/archive layout.
@@ -89,6 +90,10 @@ powershell -ExecutionPolicy Bypass -File build_hp_colors_rewrite_qollock.ps1
 # Topbar Rank / ShowRank
 npm --prefix showrank test
 powershell -ExecutionPolicy Bypass -File build_showrank_variants.ps1 -Variant all
+
+# ShowRank (No Missing) + ByteNode Recent Purchases
+node --test scripts/validate-showrank-recent-purchases.test.js
+powershell -ExecutionPolicy Bypass -File build_showrank_recent_purchases.ps1
 
 # Other production wrappers
 powershell -ExecutionPolicy Bypass -File build_topbar_status_buffs.ps1
@@ -142,7 +147,7 @@ Multiple builds reuse pak slots, notably pak89, pak97, and pak98. Treat those ou
 - Required tooling varies by wrapper: Node, PowerShell, .NET 9, Dota 2 Workshop Tools/resourcecompiler, `vpkeditcli.exe`, 7-Zip, and the Python launcher for abilities.
 - There is no root package manager. Node validators run directly. Closure builds invoke `npx --yes google-closure-compiler`; do not assume dependencies are pinned locally.
 - `sr2compiler/New folder.exe` may exit nonzero after successful redirected execution because its final `Console.ReadKey` cannot read stdin. Required compiled outputs plus the compiler's `0 failed` summary are the success signal.
-- `scripts/source2_package_pipeline.ps1` may choose among configured VPK-tool candidates; do not hardcode a different tool path when the wrapper already resolves one.
+- `scripts/source2_package_pipeline.ps1` chooses among configured VPK-tool candidates (`vpkeditcli.exe`, `Source2Viewer-CLI.exe`) and seamlessly falls back to pure JavaScript Node VPK packing/inspection (`scripts/pack_vpk.mjs`, `scripts/inspect_vpk.mjs`). All packaged Panorama assets must preserve the `panorama/` root directory prefix inside the VPK archive.
 - Never hand-edit compiled assets, VPKs, staging directories, or archives. Build wrappers may delete/recreate them.
 
 ## Testing & QA

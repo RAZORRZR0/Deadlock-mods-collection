@@ -9,6 +9,13 @@ function Get-RepoToolPath {
             return $candidate
         }
     }
+
+    if ($ToolName -eq 'vpkeditcli.exe') {
+        $pathCmd = Get-Command 'vpkeditcli.exe' -ErrorAction SilentlyContinue
+        if ($pathCmd) { return $pathCmd.Source }
+        return 'node-vpk-packer'
+    }
+
     throw "$ToolName not found. Checked: $($Candidates -join ', ')"
 }
 
@@ -46,6 +53,48 @@ function Remove-TreeUnderRoot {
     Remove-Item -LiteralPath $resolvedPath -Recurse -Force
 }
 
+function Find-ResourceCompiler {
+    $candidates = @(
+        'D:\CSDK12\Reduced_CSDK_12\Reduced_CSDK_12',
+        'E:\SteamLibrary\steamapps\common\dota 2 beta',
+        'G:\SteamLibrary\steamapps\common\Deadlock',
+        'D:\SteamLibrary\steamapps\common\Deadlock'
+    )
+
+    $prefPath = Join-Path (Split-Path -Parent $PSScriptRoot) 'sr2compiler\pref.json'
+    if (Test-Path -LiteralPath $prefPath) {
+        try {
+            $pref = Get-Content -LiteralPath $prefPath -Raw | ConvertFrom-Json
+            if ($pref.directory -and (Test-Path -LiteralPath $pref.directory)) {
+                $candidates = @($pref.directory) + $candidates
+            }
+        } catch {}
+    }
+
+    foreach ($candidate in $candidates) {
+        if ($candidate -and (Test-Path -LiteralPath $candidate)) {
+            $rcPaths = @(
+                (Join-Path $candidate 'game\bin_cs2\win64\resourcecompiler.exe'),
+                (Join-Path $candidate 'game\bin\win64\resourcecompiler.exe'),
+                (Join-Path $candidate 'game\bin_tools\win64\resourcecompiler.exe')
+            )
+            foreach ($rc in $rcPaths) {
+                if (Test-Path -LiteralPath $rc) {
+                    $gameDir = Join-Path $candidate 'game\citadel'
+                    if (-not (Test-Path -LiteralPath (Join-Path $gameDir 'gameinfo.gi'))) {
+                        $gameDir = Join-Path $candidate 'game\dota'
+                    }
+                    return @{
+                        SdkRoot = $candidate
+                        Compiler = $rc
+                        GameDir = $gameDir
+                    }
+                }
+            }
+        }
+    }
+    return $null
+}
 
 function Invoke-Source2Compiler {
     param(
@@ -56,65 +105,140 @@ function Invoke-Source2Compiler {
         [switch]$HiddenWindow
     )
 
-    $startProcessArgs = @{
-        FilePath = $CompilerPath
-        ArgumentList = "`"$SourceDir`""
-        PassThru = $true
-    }
-    if ($HiddenWindow) { $startProcessArgs.WindowStyle = 'Hidden' }
-    $proc = Start-Process @startProcessArgs
-    $compileDeadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    # First check if we have direct access to resourcecompiler.exe
+    $rcInfo = Find-ResourceCompiler
+    if ($rcInfo) {
+        $addonId = 'stage_' + [System.Guid]::NewGuid().ToString('N').Substring(0, 8)
+        $contentAddon = Join-Path $rcInfo.SdkRoot "content\citadel_addons\$addonId"
+        $gameAddon = Join-Path $rcInfo.SdkRoot "game\citadel_addons\$addonId"
 
-    while (-not $proc.HasExited -and (Get-Date) -lt $compileDeadline) {
-        Start-Sleep -Milliseconds 500
-        $allRequiredOutputsExist = $true
-        foreach ($requiredOutput in $RequiredOutputs) {
-            if (-not (Test-Path -LiteralPath $requiredOutput)) {
-                $allRequiredOutputsExist = $false
+        try {
+            New-Item -ItemType Directory -Force -Path $contentAddon | Out-Null
+            # If SourceDir has panorama/ directly or is panorama itself
+            if (Test-Path -LiteralPath (Join-Path $SourceDir 'panorama')) {
+                Copy-Item -Path (Join-Path $SourceDir 'panorama') -Destination $contentAddon -Recurse -Force
+            } elseif ((Split-Path -Leaf $SourceDir) -eq 'panorama') {
+                Copy-Item -Path $SourceDir -Destination $contentAddon -Recurse -Force
+            } else {
+                Copy-Item -Path (Join-Path $SourceDir '*') -Destination $contentAddon -Recurse -Force
+            }
+
+            $compilePattern = Join-Path $contentAddon '*.*'
+            $rcProc = Start-Process -FilePath $rcInfo.Compiler -ArgumentList "-game `"$($rcInfo.GameDir)`" -f -r -i `"$compilePattern`"" -PassThru -NoNewWindow -Wait
+
+            if (Test-Path -LiteralPath $gameAddon) {
+                # Determine destination compiled directory from RequiredOutputs
+                if ($RequiredOutputs.Count -gt 0) {
+                    $firstOutput = $RequiredOutputs[0]
+                    # Find root compiled folder that contains panorama/ or scripts/
+                    $stageCompiledDir = $null
+                    $curr = Split-Path -Parent $firstOutput
+                    while ($curr -and -not $stageCompiledDir) {
+                        $leaf = Split-Path -Leaf $curr
+                        if ($leaf -match '^(src_compiled|.*_compiled)$') {
+                            $stageCompiledDir = $curr
+                            break
+                        }
+                        $parent = Split-Path -Parent $curr
+                        if ($parent -eq $curr) { break }
+                        $curr = $parent
+                    }
+
+                    if ($stageCompiledDir) {
+                        if (-not (Test-Path -LiteralPath $stageCompiledDir)) {
+                            New-Item -ItemType Directory -Force -Path $stageCompiledDir | Out-Null
+                        }
+                        Copy-Item -Path (Join-Path $gameAddon '*') -Destination $stageCompiledDir -Recurse -Force
+                    }
+                }
+            }
+        } finally {
+            if (Test-Path -LiteralPath $contentAddon) { Remove-Item -LiteralPath $contentAddon -Recurse -Force -ErrorAction SilentlyContinue }
+            if (Test-Path -LiteralPath $gameAddon) { Remove-Item -LiteralPath $gameAddon -Recurse -Force -ErrorAction SilentlyContinue }
+        }
+
+        # Check if all required outputs now exist
+        $missingOutputs = @($RequiredOutputs | Where-Object { -not (Test-Path -LiteralPath $_) })
+        if ($missingOutputs.Count -eq 0) {
+            return
+        }
+    }
+
+    # Fall back to wrapper process execution
+    if ($CompilerPath -and (Test-Path -LiteralPath $CompilerPath)) {
+        $startProcessArgs = @{
+            FilePath = $CompilerPath
+            ArgumentList = "`"$SourceDir`""
+            PassThru = $true
+        }
+        if ($HiddenWindow) { $startProcessArgs.WindowStyle = 'Hidden' }
+        $proc = Start-Process @startProcessArgs
+        $compileDeadline = (Get-Date).AddSeconds($TimeoutSeconds)
+
+        while (-not $proc.HasExited -and (Get-Date) -lt $compileDeadline) {
+            Start-Sleep -Milliseconds 500
+            $allRequiredOutputsExist = $true
+            foreach ($requiredOutput in $RequiredOutputs) {
+                if (-not (Test-Path -LiteralPath $requiredOutput)) {
+                    $allRequiredOutputsExist = $false
+                    break
+                }
+            }
+            if ($allRequiredOutputsExist) {
+                Start-Sleep -Seconds 2
+                if (-not $proc.HasExited) {
+                    Write-Host "[WARN] Compiler produced output but did not exit; stopping wrapper." -ForegroundColor Yellow
+                    Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+                    $proc.WaitForExit()
+                }
                 break
             }
         }
-        if ($allRequiredOutputsExist) {
-            Start-Sleep -Seconds 2
-            if (-not $proc.HasExited) {
-                Write-Host "[WARN] Compiler produced output but did not exit; stopping wrapper." -ForegroundColor Yellow
-                Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
-                $proc.WaitForExit()
-            }
-            break
-        }
-    }
 
-    if (-not $proc.HasExited) {
-        Write-Host "[WARN] Compiler timed out; stopping wrapper." -ForegroundColor Yellow
-        Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
-        $proc.WaitForExit()
+        if (-not $proc.HasExited) {
+            Write-Host "[WARN] Compiler timed out; stopping wrapper." -ForegroundColor Yellow
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            $proc.WaitForExit()
+        }
     }
 
     $missingOutputs = @($RequiredOutputs | Where-Object { -not (Test-Path -LiteralPath $_) })
     if ($missingOutputs.Count -gt 0) {
         throw "Compiler did not create required output: $($missingOutputs -join ', ')"
     }
-    if ($proc.ExitCode -ne 0) {
-        Write-Host "[WARN] Compiler exited $($proc.ExitCode) but output exists; continuing." -ForegroundColor Yellow
-    }
 }
 
 function Invoke-VpkPack {
     param(
-        [Parameter(Mandatory=$true)][string]$VpkEditCli,
+        [Parameter(Mandatory=$false)][string]$VpkEditCli,
         [Parameter(Mandatory=$true)][string]$InputDir,
         [Parameter(Mandatory=$true)][string]$OutputPath
     )
 
-    $packOutput = & $VpkEditCli $InputDir -o $OutputPath -s --no-progress 2>&1
-    $exitCode = $LASTEXITCODE
-    if ($packOutput) {
-        $packOutput | ForEach-Object { Write-Host $_ }
+    if ($VpkEditCli -and $VpkEditCli -ne 'node-vpk-packer' -and (Test-Path -LiteralPath $VpkEditCli)) {
+        $packOutput = & $VpkEditCli $InputDir -o $OutputPath -s --no-progress 2>&1
+        $exitCode = $LASTEXITCODE
+        if ($packOutput) {
+            $packOutput | ForEach-Object { Write-Host $_ }
+        }
+        if ($exitCode -ne 0) {
+            throw "vpkeditcli failed with exit code $exitCode"
+        }
+    } else {
+        $packVpkScript = Join-Path $PSScriptRoot 'pack_vpk.mjs'
+        if (-not (Test-Path -LiteralPath $packVpkScript)) {
+            throw "Neither vpkeditcli nor pack_vpk.mjs was found."
+        }
+        $nodeOutput = & node $packVpkScript $InputDir $OutputPath 2>&1
+        $exitCode = $LASTEXITCODE
+        if ($nodeOutput) {
+            $nodeOutput | ForEach-Object { Write-Host $_ }
+        }
+        if ($exitCode -ne 0) {
+            throw "node pack_vpk.mjs failed with exit code $exitCode"
+        }
     }
-    if ($exitCode -ne 0) {
-        throw "vpkeditcli failed with exit code $exitCode"
-    }
+
     if (-not (Test-Path -LiteralPath $OutputPath)) {
         throw "VPK not created: $OutputPath"
     }
@@ -122,7 +246,7 @@ function Invoke-VpkPack {
 
 function Get-PackedVpkTree {
     param(
-        [Parameter(Mandatory=$true)][string]$VpkEditCli,
+        [Parameter(Mandatory=$false)][string]$VpkEditCli,
         [Parameter(Mandatory=$true)][string]$VpkPath,
         [string]$Source2ViewerPath = ""
     )
@@ -134,10 +258,22 @@ function Get-PackedVpkTree {
         return [string[]]$tree
     }
 
-    $tree = & $VpkEditCli $VpkPath --file-tree --no-progress
-    $exitCode = $LASTEXITCODE
-    if ($exitCode -ne 0) { throw "vpkeditcli failed to inspect VPK with exit code $exitCode" }
-    return [string[]]$tree
+    if ($VpkEditCli -and $VpkEditCli -ne 'node-vpk-packer' -and (Test-Path -LiteralPath $VpkEditCli)) {
+        $tree = & $VpkEditCli $VpkPath --file-tree --no-progress
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -ne 0) { throw "vpkeditcli failed to inspect VPK with exit code $exitCode" }
+        return [string[]]$tree
+    }
+
+    $inspectScript = Join-Path $PSScriptRoot 'inspect_vpk.mjs'
+    if (Test-Path -LiteralPath $inspectScript) {
+        $tree = & node $inspectScript $VpkPath
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -ne 0) { throw "inspect_vpk.mjs failed to inspect VPK with exit code $exitCode" }
+        return [string[]]$tree
+    }
+
+    throw "No VPK inspector available (neither Source2Viewer, vpkeditcli, nor inspect_vpk.mjs)."
 }
 
 function Test-PackedAsset {

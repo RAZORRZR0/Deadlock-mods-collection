@@ -1,3 +1,9 @@
+param(
+    [switch]$Install,
+    [string]$AddonsPath = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons",
+    [string]$PakName = "pak81_dir.vpk"
+)
+
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -12,8 +18,8 @@ $vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
     (Join-Path $root 'vpk cli\vpkeditcli.exe'),
     (Join-Path $root 'passive_items_mod_release\compiler\vpkeditcli.exe')
 )
-$vpkOut = Join-Path $root 'pak81_dir.vpk'
-$vpkDest = 'G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak81_dir.vpk'
+$vpkOut = Join-Path $root $PakName
+$vpkDest = "$AddonsPath\$PakName"
 $scriptRelative = 'panorama\scripts\recent_purchase_queue_costs.js'
 
 function New-RecentPurchaseClosureExterns {
@@ -109,7 +115,9 @@ if (-not (Test-Path -LiteralPath $compressedScript)) {
     throw "Compressed script target was not created: $compressedScript"
 }
 
-node recent_purchase\scripts\validate-team-chat-intent.js
+if (Test-Path 'recent_purchase\scripts\validate-team-chat-intent.js') {
+    node recent_purchase\scripts\validate-team-chat-intent.js
+}
 
 $closureExterns = New-RecentPurchaseClosureExterns -Path (Join-Path $stagingSrc 'closure-externs.js')
 $closureArgs = @(
@@ -159,13 +167,19 @@ Assert-PackedVpkAssets -Tree $vpkTree `
 $vpkSize = (Get-Item -LiteralPath $vpkOut).Length
 Write-Host "  Packed OK -> $vpkOut ($([math]::Round($vpkSize / 1KB, 1)) KB)" -ForegroundColor Green
 
-# -- Step 4: Deploy --------------------------------------------------------------
-Write-Host "`n[4/4] Deploying to Deadlock addons..." -ForegroundColor Cyan
-$destDir = Split-Path $vpkDest -Parent
-if (-not (Test-Path -LiteralPath $destDir)) {
-    throw "Destination folder not found: $destDir"
+if ($Install) {
+    # -- Step 4: Deploy --------------------------------------------------------------
+    Write-Host "`n[4/4] Deploying to Deadlock addons..." -ForegroundColor Cyan
+    $deadlockProcesses = Get-Process -Name 'deadlock' -ErrorAction SilentlyContinue
+    if ($deadlockProcesses) {
+        throw "Cannot install while Deadlock is running. Please close Deadlock and re-run with -Install."
+    }
+    $destDir = Split-Path $vpkDest -Parent
+    if (-not (Test-Path -LiteralPath $destDir)) {
+        New-Item -ItemType Directory -Force -Path $destDir | Out-Null
+    }
+    Copy-Item -LiteralPath $vpkOut -Destination $vpkDest -Force
+    Write-Host "  Deployed OK -> $vpkDest" -ForegroundColor Green
 }
-Copy-Item -LiteralPath $vpkOut -Destination $vpkDest -Force
-Write-Host "  Deployed OK -> $vpkDest" -ForegroundColor Green
 
-Write-Host "`nDone! Launch Deadlock to test." -ForegroundColor Yellow
+Write-Host "`nDone!" -ForegroundColor Green

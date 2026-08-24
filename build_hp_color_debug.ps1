@@ -11,20 +11,12 @@ $debugProbeSrc = "$root\hp_color_debug\panorama\scripts\hero_detection_debug.js"
 $debugProbeTest = "$root\hp_color_debug\scripts\validate-hero-detection-debug.test.js"
 $terserSrc   = "$root\hp_color_debug_terser"
 $terserCompiled = "$root\hp_color_debug_terser_compiled"
-$compiler    = "$root\sr2compiler\New folder.exe"
-$vpkeditcliCandidates = @(
+. (Join-Path $root 'scripts\source2_package_pipeline.ps1')
+$vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
     "$root\passive_items_mod\compiler\vpkeditcli.exe",
     "$root\vpk cli\vpkeditcli.exe",
     "$root\passive_items_mod_release\compiler\vpkeditcli.exe"
 )
-$vpkeditcli = $vpkeditcliCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-if (-not $vpkeditcli) {
-    Write-Host "[ERROR] vpkeditcli.exe not found. Checked:" -ForegroundColor Red
-    foreach ($candidate in $vpkeditcliCandidates) {
-        Write-Host "  $candidate" -ForegroundColor Red
-    }
-    exit 1
-}
 $vpkOut      = "$root\pak97_dir.vpk"
 $vpkDest     = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak97_dir.vpk"
 $builderPresetVpk = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak96_dir.vpk"
@@ -336,22 +328,8 @@ Write-Host "  Compiled OK -> $modCompiled" -ForegroundColor Green
 
 # ## Step 3: Pack VPK ##########################################################
 Write-Host "`n[3/4] Packing VPK..." -ForegroundColor Cyan
-Write-Host "  Using vpkeditcli -> $vpkeditcli" -ForegroundColor DarkGray
-$packArgs = "`"$modCompiled`" -o `"$vpkOut`" -s --no-progress"
-$pack = Start-Process -FilePath $vpkeditcli -ArgumentList $packArgs -PassThru -Wait -NoNewWindow
-if ($pack.ExitCode -ne 0) {
-    Write-Host "[ERROR] vpkeditcli failed with code $($pack.ExitCode)" -ForegroundColor Red
-    exit 1
-}
-if (-not (Test-Path $vpkOut)) {
-    Write-Host "[ERROR] VPK not created at $vpkOut" -ForegroundColor Red
-    exit 1
-}
-$vpkTree = & $vpkeditcli $vpkOut --file-tree --no-progress
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "[ERROR] Could not inspect packed VPK contents" -ForegroundColor Red
-    exit 1
-}
+Invoke-VpkPack -VpkEditCli $vpkeditcli -InputDir $modCompiled -OutputPath $vpkOut
+$vpkTree = Get-PackedVpkTree -VpkEditCli $vpkeditcli -VpkPath $vpkOut
 foreach ($packedAsset in @("anita_ui_core.vjs_c", "anita_ui.vcss_c", "healthbar_logic.vjs_c", "hero_detection_debug.vjs_c")) {
     if (-not (($vpkTree | Select-String -SimpleMatch $packedAsset -Quiet))) {
         Write-Host "[ERROR] Packed VPK missing required asset: $packedAsset" -ForegroundColor Red

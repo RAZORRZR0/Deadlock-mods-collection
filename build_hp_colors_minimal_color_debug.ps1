@@ -10,9 +10,12 @@ $modSrc          = "$root\hp_colors_minimal_color_debug"
 $modCompiled     = "$root\hp_colors_minimal_color_debug_compiled"
 $terserSrc       = "$root\hp_colors_minimal_color_debug_terser"
 $terserCompiled  = "$root\hp_colors_minimal_color_debug_terser_compiled"
-$compiler        = "$root\sr2compiler\New folder.exe"
-$vpkeditcli      = "$root\passive_items_mod\compiler\vpkeditcli.exe"
-$vpkeditFallback = "$root\vpk cli\vpkeditcli.exe"
+. (Join-Path $root 'scripts\source2_package_pipeline.ps1')
+$vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
+    "$root\passive_items_mod\compiler\vpkeditcli.exe",
+    "$root\vpk cli\vpkeditcli.exe",
+    "$root\passive_items_mod_release\compiler\vpkeditcli.exe"
+)
 $vpkOut          = "$root\$PakName"
 $addonsDir       = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons"
 $vpkDest         = Join-Path $addonsDir $PakName
@@ -356,29 +359,11 @@ Copy-Item -LiteralPath $terserCompiled -Destination $modCompiled -Recurse -Force
 Write-Host "  Compiled OK -> $modCompiled" -ForegroundColor Green
 
 Write-Host "`n[3/4] Packing VPK..." -ForegroundColor Cyan
-if (-not (Test-Path $vpkeditcli) -and (Test-Path $vpkeditFallback)) {
-    $vpkeditcli = $vpkeditFallback
-}
-if (-not (Test-Path $vpkeditcli)) {
-    Write-Host "[ERROR] vpkeditcli not found: $vpkeditcli" -ForegroundColor Red
-    exit 1
-}
-$packArgs = @($modCompiled, "-o", $vpkOut, "-s", "--no-progress")
-$pack = Start-Process -FilePath $vpkeditcli -ArgumentList $packArgs -PassThru -Wait -NoNewWindow
-if ($pack.ExitCode -ne 0) {
-    Write-Host "[ERROR] vpkeditcli failed with code $($pack.ExitCode)" -ForegroundColor Red
-    exit 1
-}
-if (-not (Test-Path $vpkOut)) {
-    Write-Host "[ERROR] VPK not created at $vpkOut" -ForegroundColor Red
-    exit 1
-}
+Invoke-VpkPack -VpkEditCli $vpkeditcli -InputDir $modCompiled -OutputPath $vpkOut
 $vpkSize = (Get-Item $vpkOut).Length
 Write-Host "  Packed OK -> $vpkOut  ($([math]::Round($vpkSize/1KB, 1)) KB)" -ForegroundColor Green
 
-$source2Viewer = "$root\.tmp\source2viewer-cli\Source2Viewer-CLI.exe"
-if (Test-Path $source2Viewer) {
-    $tree = & $source2Viewer -i $vpkOut --vpk_list 2>&1
+$tree = Get-PackedVpkTree -VpkEditCli $vpkeditcli -VpkPath $vpkOut
     $requiredPacked = @(
         "panorama/layout/unit_status_overlay.vxml_c",
         "panorama/scripts/anita_ui_core.vjs_c",
