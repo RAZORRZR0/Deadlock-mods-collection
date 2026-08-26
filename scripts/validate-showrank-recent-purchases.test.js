@@ -26,6 +26,10 @@ test('showrank_recent_purchases: source contract', () => {
   assert.match(heroShopXml, /recent_purchases_redux_data\.vjs_c/, 'hero shop XML includes item icon data');
   assert.match(heroShopXml, /id="RecentPurchasesPanel"/, 'hero shop XML includes RecentPurchasesPanel');
 
+  const heroTestingXml = fs.readFileSync(path.join(modDir, 'panorama/layout/hud_hero_testing.xml'), 'utf8');
+  assert.match(heroTestingXml, /id="DevConsoleInput"/, 'hero testing XML includes DevConsoleInput');
+  assert.match(heroTestingXml, /HeroTesting_HeroControl/, 'hero testing XML includes Hero Control section');
+
   const showrankJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/showrank_barebones.js'), 'utf8');
   assert.match(showrankJs, /registerMissingRecord\(missingShared,\s*root\)/, 'showrank runtime registers missing records');
 
@@ -47,7 +51,7 @@ test('showrank_recent_purchases: compiled VPK archive contract', (t) => {
   }
   const vpkBytes = fs.readFileSync(vpkPath);
   const parsed = parseVpk(vpkBytes);
-  assert.equal(parsed.files.length, 18, 'VPK contains exactly 18 compiled assets');
+  assert.equal(parsed.files.length, 20, 'VPK contains exactly 20 compiled assets');
 
   const expectedPaths = [
     'panorama/layout/citadel_db_page_profile.vxml_c',
@@ -56,8 +60,10 @@ test('showrank_recent_purchases: compiled VPK archive contract', (t) => {
     'panorama/layout/citadel_hud_top_bar_player.vxml_c',
     'panorama/layout/citadel_ui_context_menu_player.vxml_c',
     'panorama/layout/hud_escape_menu.vxml_c',
+    'panorama/layout/hud_hero_testing.vxml_c',
     'panorama/layout/players_list_entry.vxml_c',
     'panorama/layout/profile_card.vxml_c',
+    'panorama/scripts/hud_hero_testing.vjs_c',
     'panorama/scripts/recent_purchases_redux.vjs_c',
     'panorama/scripts/recent_purchases_redux_data.vjs_c',
     'panorama/scripts/showrank_barebones.vjs_c',

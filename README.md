@@ -52,14 +52,25 @@ A unified Panorama package combining rank badge overlays (topbar player cards, t
 
 - Resolves the collision on `panorama/layout/citadel_hud_top_bar_player.xml` by cleanly merging `#ShowRankBarebonesTopbarRankImage`, `#ShowRankBarebonesMissingIndicator`, and `.HeroNameHidden`.
 - Includes `#ShowRankBarebonesNotificationRoot` in `citadel_hud_top_bar.xml` for missing announcements.
-- Incorporates `hero_testing_menu.css`, `hud_damage_report.css`, and un-collapses `CitadelHudTopBar` in Hideout mode so sandbox bots, stats, and testing panels work in the Hideout practice map.
-- Packages all 18 assets inside `panorama/` at the root of the VPK.
+- Incorporates `hero_testing_menu.css`, `hud_damage_report.css`, `hud_hero_testing.xml`, and un-collapses `CitadelHudTopBar` in Hideout mode so sandbox bots, stats, and testing panels work across Hideout, Sandbox, and local maps.
+- Packages all 20 assets inside `panorama/` at the root of the VPK.
 
 Build and package:
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1
 # Or install directly to Deadlock:
 powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1 -Install
+```
+
+### Developer Testing Tools HUD (`testing_tools`)
+
+A standalone Developer & Hero Testing Sandbox HUD featuring an in-game Dev Console (`>_`), Hero Tools (`Change Hero`, `Level Up`, `Max Level`, `Reset`, `Spawn Camp`), Game Rules toggles (`No Death`, `No Reload`, `No Cooldown`, `Fast Stamina`, game speed), Play & Watch quick map launchers, and Hero Control bot spawning & puppet controls.
+
+Build and package:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build_testing_tools.ps1
+# Or install directly to Deadlock:
+powershell -ExecutionPolicy Bypass -File .\build_testing_tools.ps1 -Install
 ```
 
 ### ❤️ Health & Status

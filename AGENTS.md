@@ -91,9 +91,13 @@ powershell -ExecutionPolicy Bypass -File build_hp_colors_rewrite_qollock.ps1
 npm --prefix showrank test
 powershell -ExecutionPolicy Bypass -File build_showrank_variants.ps1 -Variant all
 
-# ShowRank (No Missing) + ByteNode Recent Purchases
+# ShowRank + ByteNode Recent Purchases + Hideout Testing Tools
 node --test scripts/validate-showrank-recent-purchases.test.js
 powershell -ExecutionPolicy Bypass -File build_showrank_recent_purchases.ps1
+
+# Standalone Developer Testing Tools HUD
+node --test scripts/validate-testing-tools.test.js
+powershell -ExecutionPolicy Bypass -File build_testing_tools.ps1
 
 # Other production wrappers
 powershell -ExecutionPolicy Bypass -File build_topbar_status_buffs.ps1

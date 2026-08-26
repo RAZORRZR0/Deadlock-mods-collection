@@ -1,0 +1,615 @@
+/* Prettified by Source 2 Viewer 18.0.0.0 - https://valveresourceformat.github.io */
+
+CitadelPostGameNew
+{
+	width: 100%;
+	height: 100%;
+	background-color: offBlack;
+}
+
+#CommendNotification
+{
+	ignore-parent-flow: true;
+}
+
+.ScoreboardBackground
+{
+	background-color: gradient( radial, 50% 50%, -5% -5%, 60% 60%, from( #00000000), to( #000000 ) );
+	width: 100%;
+	height: 100%;
+}
+
+#Team1Screen .ScoreboardBackground
+{
+	background-color: gradient( radial, 50% 0%, 0% 0%, 40% 40%, from( team1ColorDarker&12 ), to( #000000bb ) );
+}
+
+#Team2Screen .ScoreboardBackground
+{
+	background-color: gradient( radial, 50% 0%, 0% 0%, 40% 40%, from( team2ColorAlt&12 ), to( #000000bb ) );
+}
+
+.Body
+{
+	width: 100%;
+	height: 100%;
+}
+
+.FooterBar
+{
+	vertical-align: bottom;
+	width: 100%;
+	transition-property: opacity, transform;
+	transition-duration: 0.5s;
+	opacity: 0.0;
+	transform: translateY( 20px );
+}
+
+.ProgressState_None .FooterBar,.ProgressState_Completed .FooterBar
+{
+	opacity: 1.0;
+	transform: none;
+}
+
+.FooterBarBL
+{
+	margin: 16px;
+	height: 28px;
+	horizontal-align: left;
+	vertical-align: bottom;
+	flow-children: right;
+}
+
+.FooterBarBL CitadelBindingButton
+{
+	margin-right: 12px;
+	opacity: 0.2;
+}
+
+.FooterBarMid
+{
+	vertical-align: bottom;
+	horizontal-align: center;
+	flow-children: none;
+	width: 1200px;
+	height: 180px;
+}
+
+.FooterBarBR
+{
+	horizontal-align: right;
+	vertical-align: bottom;
+	flow-children: right;
+}
+
+.FooterBarBR #ReplayButton
+{
+	margin: 0px 8px 12px 0px;
+}
+
+CitadelPostGameNew.ProgressState_Loading .AsyncLoadingContainer
+{
+	visibility: visible;
+}
+
+CitadelPostGameNew.ProgressState_Loading .AsyncSuccessContainer
+{
+	visibility: collapse;
+}
+
+.AsyncFailureContainer .ErrorContents
+{
+	horizontal-align: center;
+	vertical-align: middle;
+	flow-children: down;
+}
+
+.AsyncFailureContainer .ErrorContents .ErrorMsg
+{
+	horizontal-align: center;
+	text-align: center;
+}
+
+.AsyncFailureContainer .ErrorContents #RetryButton
+{
+	horizontal-align: center;
+}
+
+#ScreensCarousel
+{
+	width: 100%;
+	height: 100%;
+	flow-children: right;
+}
+
+#ScreensCarousel .PostGameScreen
+{
+	width: 100%;
+	height: 100%;
+	opacity: 0.0;
+	transition-property: opacity, position, transform;
+	transition-duration: 0.2s;
+}
+
+#ScreensCarousel .PostGameScreen.Focused
+{
+	opacity: 1.0;
+}
+
+#Team1Screen
+{
+	background-image: url("s2r://panorama/images/post_game/bg_team1_psd.vtex");
+	background-size: cover;
+	background-position: center;
+}
+
+#Team2Screen
+{
+	background-image: url("s2r://panorama/images/post_game/bg_team2_psd.vtex");
+	background-size: cover;
+	background-position: center;
+}
+
+#MVPScreen
+{
+	background-image: url("s2r://panorama/images/post_game/postgame_bg_psd.vtex");
+	background-size: cover;
+	background-position: center;
+}
+
+#ScoreboardScreen
+{
+	background-image: url("s2r://panorama/images/post_game/mvp_bg_png.vtex");
+	background-size: cover;
+	background-position: center;
+}
+
+#GraphsScreen
+{
+	background-image: url("s2r://panorama/images/post_game/mvp_bg_png.vtex");
+	background-size: cover;
+	background-position: center;
+}
+
+.AspectRatio16x10 #ScreensCarousel .PostGameScreen.RightOfFocus1.Team
+{
+	transform: translateX( -210px );
+}
+
+.AspectRatio16x10 #ScreensCarousel .PostGameScreen.RightOfFocus1.Scoreboard
+{
+	transform: translateX( -300px );
+}
+
+.AspectRatio16x10 #ScreensCarousel .PostGameScreen.LeftOfFocus1.Team
+{
+	transform: translateX( 210px );
+}
+
+.AspectRatio16x10 #ScreensCarousel .PostGameScreen.LeftOfFocus1.Scoreboard
+{
+	transform: translateX( 300px );
+}
+
+#Team1Screen
+{
+	background-color: gradient( radial, 50% 0%, 0% 0%, 40% 40%, from( team1Color&10 ), to( team1ColorDarker&08 ) );
+}
+
+#Team2Screen
+{
+	background-color: gradient( radial, 50% 0%, 0% 0%, 40% 40%, from( team2Color&10 ), to( team2ColorDarker&08 ) );
+}
+
+#ScoreboardScreen #Scoreboard
+{
+	background-color: none;
+	padding: 0px 0px 60px 0px;
+	horizontal-align: center;
+}
+
+#GraphsScreen #Graphs
+{
+	margin: 0px 40px 160px 40px;
+	horizontal-align: center;
+}
+
+#PlayAgainButton
+{
+	flow-children: right;
+	vertical-align: bottom;
+	horizontal-align: middle;
+	z-index: 101;
+	pre-transform-scale2d: 0.9;
+	opacity: 0.0;
+	margin-bottom: 80px;
+	transition-property: opacity, transform;
+	transition-duration: 0.2s;
+}
+
+.CanPlayAgain.ProgressState_Completed #PlayAgainButton
+{
+	opacity: 1.0;
+	transform: none;
+}
+
+.in_matchmaking .CanPlayAgain.ProgressState_Completed #PlayAgainButton
+{
+	opacity: 0.0;
+}
+
+#PlayAgainButton:hover:enabled
+{
+	sound: "UI.HeroCard.Hover";
+}
+
+#PlayAgainButton #PlayButtonFX
+{
+	width: 400px;
+	height: 110px;
+	vertical-align: middle;
+	ignore-parent-flow: true;
+	horizontal-align: center;
+	opacity: 0;
+	margin-left: 100px;
+	margin-top: 16px;
+	transition-property: opacity;
+	transition-duration: 0.2s;
+	overflow: noclip;
+}
+
+#PlayAgainButton .buttonContent
+{
+	horizontal-align: left;
+	vertical-align: bottom;
+	z-index: 2;
+	horizontal-align: middle;
+	min-width: 280px;
+	margin-bottom: 18px;
+}
+
+#PlayAgainButton .buttonContent SplitLabel
+{
+	horizontal-align: center;
+}
+
+#PlayAgainButton .buttonContent SplitLabel Image
+{
+	transition-property: transform;
+	transition-duration: 0.2s;
+}
+
+#PlayAgainButton .buttonContent .btn_bg
+{
+	width: 100%;
+	height: 100%;
+	background-size: 100% 100%;
+	wash-color: rgb(18, 18, 18);
+	transition-property: background-color, transform, background-image, border;
+	transition-duration: 0.2s;
+}
+
+#PlayAgainButton .buttonContent .btn_texture
+{
+	width: 100%;
+	height: 100%;
+	background-image: url("s2r://panorama/images/main_menu/pick_screen/temp/play_box_psd.vtex");
+	background-size: 100% 100%;
+	opacity: 0.2;
+	wash-color: #93aead;
+}
+
+#PlayAgainButton:hover .btn_bg
+{
+	transform: rotateZ(-3deg);
+}
+
+#PlayAgainButton:hover .btn_texture
+{
+	background-image: url("s2r://panorama/images/main_menu/pick_screen/temp/play_box_fill_psd.vtex");
+	transform: rotateZ(-3deg);
+	opacity: 1;
+	wash-color: offWhite;
+}
+
+#PlayAgainButton:hover Label
+{
+	font-style: italic;
+	color: offBlack;
+}
+
+#PlayAgainButton:hover #PlayButtonFX
+{
+	opacity: 1;
+}
+
+#PlayAgainButton:hover #playTest
+{
+	wash-color: offBlack;
+	opacity: 1;
+}
+
+#PlayAgainButton:hover SplitLabel Image:nth-child(1)
+{
+	transform: rotateZ(-5deg);
+}
+
+#PlayAgainButton:hover SplitLabel Image:first-child
+{
+	transform: rotateZ(-5deg);
+}
+
+#PlayAgainButton:hover SplitLabel Image:nth-child(even)
+{
+	transform: translateY(-1px);
+}
+
+#PlayAgainButton:hover SplitLabel Image:nth-child(odd)
+{
+	transform: translateY(1px);
+}
+
+#PlayAgainButton:hover SplitLabel Image:last-child
+{
+	transform: rotateZ(3deg);
+}
+
+#PlayAgainButton:active
+{
+	sound: "UI.Roster.Confirm";
+}
+
+#PlayAgainButton Label
+{
+	font-size: 30px;
+	font-weight: bold;
+	color: offWhite&ee;
+	font-family: oracle;
+	text-transform: uppercase;
+	vertical-align: middle;
+	horizontal-align: middle;
+	transition-duration: 0.2s;
+	text-overflow: shrink;
+	max-width: 300px;
+	letter-spacing: 1px;
+	padding: 5px 0px;
+	text-align: center;
+}
+
+.Language_polish #PlayAgainButton Label
+{
+	letter-spacing: 4px;
+}
+
+.Language_russian #PlayAgainButton Label
+{
+	letter-spacing: 7px;
+}
+
+.Language_ukrainian #PlayAgainButton Label
+{
+	letter-spacing: 7px;
+}
+
+#PlayAgainButton:disabled
+{
+	opacity: 0.1;
+	saturation: 0;
+}
+
+#PlayAgainButton:hover .btn_fx
+{
+	opacity: 1;
+}
+
+.ViewOtherTeam
+{
+	horizontal-align: right;
+	margin: 136px 24px;
+}
+
+.ViewOtherTeam Label
+{
+	font-family: block;
+	text-transform: uppercase;
+	font-size: 14px;
+	color: silvered&08;
+	text-align: right;
+}
+
+.CarouselNav
+{
+	flow-children: right;
+	width: fit-children;
+	height: 60px;
+	margin-bottom: 12px;
+	vertical-align: bottom;
+	horizontal-align: center;
+}
+
+.CarouselNav .CarouselNavArrow
+{
+	width: 48px;
+	height: 48px;
+	border-radius: 60px;
+	background-color: keybindHousingBGColor&88;
+	horizontal-align: center;
+	vertical-align: center;
+	opacity: 0.12;
+	pre-transform-scale2d: .8;
+	transition-property: brightness, opacity, transform, pre-transform-scale2d;
+	transition-duration: 0.12s;
+	transition-timing-function: ease-in-out;
+}
+
+.CarouselNav .CarouselNavArrow .NavArrowIcon
+{
+	background-image: url("s2r://panorama/images/icons/arrow_east.vsvg");
+	background-size: 100%;
+	width: 18px;
+	height: 18px;
+	background-position: center;
+	horizontal-align: center;
+	vertical-align: center;
+	background-repeat: no-repeat;
+	wash-color: offWhite;
+}
+
+.CarouselNav .CarouselNavArrow:hover:enabled
+{
+	brightness: 2.0;
+	pre-transform-scale2d: .82;
+}
+
+.CarouselNav .CarouselNavArrow:active
+{
+	brightness: 1.5;
+}
+
+.CarouselNav .CarouselNavArrow:disabled
+{
+	opacity: 0.02;
+}
+
+.CarouselNav #CarouselNavLeftArrow
+{
+	transform: scaleX( -1.0 );
+	margin-right: 12px;
+}
+
+.CarouselNav #CarouselNavRightArrow
+{
+	margin-left: 12px;
+}
+
+.CarouselNav #CarouselNavItems
+{
+	flow-children: right;
+	vertical-align: center;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem
+{
+	width: 48px;
+	height: 48px;
+	margin: 0px;
+	border-radius: 60px;
+	background-color: keybindHousingBGColor&88;
+	tooltip-position: top;
+	pre-transform-scale2d: .8;
+	opacity: 0.12;
+	transition-property: pre-transform-scale2d, opacity;
+	transition-duration: 0.08s;
+	transition-timing-function: ease-in-out;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem:hover
+{
+	opacity: 0.4;
+	pre-transform-scale2d: .82;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem:selected
+{
+	opacity: .5;
+	pre-transform-scale2d: .88;
+	background-color: offWhite&88;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem:selected .Icon
+{
+	wash-color: offBlack;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem Label
+{
+	vertical-align: middle;
+	width: 100%;
+	text-overflow: shrink;
+	text-transform: uppercase;
+	text-align: center;
+	color: white;
+	visibility: collapse;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem .Icon
+{
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 40px 40px;
+	background-color: #00000001;
+	margin: 2px;
+	wash-color: offWhite;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.MVP .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_mvp.vsvg");
+	background-size: 90%;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.Ranked .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_ranked.vsvg");
+	background-size: 68%;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.Team1 .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_team1_png.vtex");
+	background-size: 80%;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.Team2 .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_team2_png.vtex");
+	background-size: 80%;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.Scoreboard .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_scoreboard.vsvg");
+	background-size: 56%;
+}
+
+.CarouselNav #CarouselNavItems .CarouselNavItem.Graphs .Icon
+{
+	background-image: url("s2r://panorama/images/post_game/nav_icon_graphs.vsvg");
+	background-size: 56%;
+}
+
+.AsyncLoadingContainer
+{
+	background-color: black;
+}
+
+.MatchMode
+{
+	font-family: block;
+	font-size: 24px;
+	color: copperFlat&11;
+	margin: 20px 28px;
+	visibility: visible;
+	horizontal-align: right;
+}
+
+#MatchID
+{
+	font-family: block;
+	font-size: 14px;
+	color: copperFlat&11;
+	margin: 48px 28px;
+	visibility: visible;
+	horizontal-align: right;
+	text-transform: uppercase;
+	z-index: 20;
+}
+
+MatchDetailsGraphs
+{
+	width: 100%;
+	height: 100%;
+}
+

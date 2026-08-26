@@ -1,0 +1,1181 @@
+/* Prettified by Source 2 Viewer 18.0.0.0 - https://valveresourceformat.github.io */
+
+CitadelPlayPage
+{
+	width: 100%;
+	height: 100%;
+	background-color: #000000aa;
+}
+
+#HeroScenePanelBacker
+{
+	width: 100%;
+	height: 100%;
+	horizontal-align: center;
+	opacity: 1;
+	blur: gaussian(2.3px);
+	opacity: .03;
+	opacity-mask: url("s2r://panorama/images/masks/softedge_box_png.vtex");
+	margin-right: -350px;
+}
+
+#PlayModes
+{
+	flow-children: down;
+	horizontal-align: middle;
+	vertical-align: middle;
+	margin-top: -30px;
+}
+
+#Option_NewPlayerPlacementMatches
+{
+	visibility: collapse;
+}
+
+#PlayOptions
+{
+	flow-children: down;
+	max-width: 1500px;
+	height: 750px;
+	margin-top: -30px;
+}
+
+#CitadelPlayPageBots #PlayOptions
+{
+	flow-children: right;
+}
+
+#PrimaryModes
+{
+	height: fill-parent-flow(1.0);
+	vertical-align: bottom;
+	margin: 0px 20px;
+	margin-top: -20px;
+	flow-children: right;
+	horizontal-align: center;
+}
+
+Label.PlayTitle
+{
+	font-size: 56px;
+	font-weight: bold;
+	color: #7a9392;
+	opacity: 0.3;
+	padding: 0px;
+	font-family: block;
+	text-transform: uppercase;
+	horizontal-align: left;
+	margin-left: 0px;
+	font-family: oracle;
+	horizontal-align: center;
+}
+
+.LowPriGamesText
+{
+	text-transform: uppercase;
+	font-weight: bold;
+	color: orange;
+}
+
+#NameTestPlayMenu
+{
+	background-image: url("s2r://panorama/images/main_menu/temp/select_play_mode_psd.vtex");
+	background-size: contain;
+	width: 600px;
+	height: 80px;
+	horizontal-align: center;
+	background-repeat: no-repeat;
+	wash-color: #394645;
+	visibility: collapse;
+}
+
+.Language_english #NameTestPlayMenu
+{
+	visibility: visible;
+}
+
+.TextArea
+{
+	flow-children: down;
+	width: 100%;
+	vertical-align: bottom;
+	margin-bottom: 60px;
+}
+
+.TitleArea,.DescArea
+{
+	horizontal-align: center;
+}
+
+.DescArea
+{
+	height: fit-children;
+	width: 100%;
+	width: fit-children;
+	flow-children: down;
+	margin-top: -12px;
+}
+
+.smallButton .DescArea
+{
+	padding: 0px;
+	background-color: offBlack&00;
+}
+
+.smallButton .TextArea,.medButton .TextArea
+{
+	horizontal-align: right;
+	height: 60px;
+	margin: 0px 10px 5px 10px;
+	transition-property: height;
+	transition-timing-function: ease;
+	transition-duration: 0.15s;
+}
+
+.smallButton:hover .TextArea,.medButton:hover .TextArea
+{
+	height: 120px;
+}
+
+.titleBG
+{
+	background-color: offBlack;
+	width: 100%;
+	height: 80%;
+	vertical-align: middle;
+	ignore-parent-flow: true;
+	animation-name: TagGroove1;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-frame-time: 1s;
+}
+
+.DescArea .titleBG
+{
+	animation-name: TagGroove2;
+	animation-name: none;
+}
+
+.tutorial_button .titleBG
+{
+	background-color: rgb(23, 6, 31);
+}
+
+@keyframes 'TagGroove1'
+{
+	0%
+	{
+		transform: rotateZ(-1deg);
+	}
+	
+	25%
+	{
+		transform: rotateZ(1deg);
+	}
+	
+	50%
+	{
+		transform: rotateZ(0deg);
+	}
+	
+	75%
+	{
+		transform: rotateZ(-2deg);
+	}
+	
+	100%
+	{
+		transform: rotateZ(1deg);
+	}
+	
+}
+
+@keyframes 'TagGroove2'
+{
+	0%
+	{
+		transform: rotateZ(0deg);
+	}
+	
+	25%
+	{
+		transform: rotateZ(-1deg);
+	}
+	
+	50%
+	{
+		transform: rotateZ(0deg);
+	}
+	
+	75%
+	{
+		transform: rotateZ(2deg);
+	}
+	
+	100%
+	{
+		transform: rotateZ(1deg);
+	}
+	
+}
+
+.playoptionLabel
+{
+	font-size: 50px;
+	font-family: serif;
+	font-weight: bold;
+	horizontal-align: center;
+	color: offWhite;
+	text-align: left;
+	vertical-align: bottom;
+	font-family: oracle;
+	text-transform: uppercase;
+	text-overflow: shrink;
+	padding: 0px 12px;
+	max-height: 70px;
+}
+
+.tutorial_button .playoptionLabel
+{
+	color: #edc8ff;
+}
+
+#Option_LeaveQueue .playoptionLabel
+{
+	color: #ff6565;
+}
+
+#SubModes .playoptionLabel
+{
+	max-height: 70px;
+}
+
+.Language_japanese .playoptionLabel
+{
+	white-space: nowrap;
+}
+
+.medButton .playoptionLabel
+{
+	font-size: 30px;
+}
+
+.smallButton .playoptionLabel
+{
+	font-size: 22px;
+	padding: 5px;
+}
+
+.smallButton .subHeader.playoptionLabel
+{
+	font-size: 26px;
+	vertical-align: top;
+	visibility: collapse;
+}
+
+#LockedContainer
+{
+	height: fit-children;
+	width: 100%;
+}
+
+.playoption:enabled:hover Label.menuButtonLabel
+{
+	color: offBlack;
+	transition-property: color, transform;
+	transition-duration: 0.08s;
+}
+
+#Option_Matchmaking.playoption:hover Label.menuButtonLabel,#Option_PlayersVsBots.playoption:hover Label.menuButtonLabel
+{
+	color: offBlack;
+	transition-property: color, transform;
+	transition-duration: 0.08s;
+}
+
+#SubModes
+{
+	flow-children: down;
+	width: 1100px;
+	height: 160px;
+	vertical-align: middle;
+	horizontal-align: middle;
+}
+
+#CitadelPlayPageBots #SubModes
+{
+	flow-children: down;
+	height: fit-children;
+	width: 800px;
+}
+
+.botDifficulties
+{
+	flow-children: right;
+}
+
+.playoption
+{
+	margin: 0px;
+	flow-children: down;
+	transition-property: background-color, pre-transform-scale2d, padding;
+	transition-duration: 0.125s;
+	transition-timing-function: ease-out;
+}
+
+.playoption.fullButton
+{
+	width: 640px;
+	height: 400px;
+	margin: 10px;
+	horizontal-align: center;
+}
+
+.playoption.largeButton
+{
+	width: 430px;
+	height: 720px;
+	padding: 20px;
+}
+
+#Option_Matchmaking
+{
+	width: 600px;
+	margin: 0px -50px;
+}
+
+#Option_Ranked:disabled .backgroundImg,#Option_Ranked:disabled .playImage,.RankedState_Restricted #Option_Ranked .backgroundImg,.RankedState_Restricted #Option_Ranked .playImage,.RankedState_Locked #Option_Ranked .backgroundImg,.RankedState_Locked #Option_Ranked .playImage
+{
+	brightness: 0.2;
+	saturation: 0;
+	opacity: 0.4;
+}
+
+#Option_Ranked:disabled .playoptionLabel,.RankedState_Restricted #Option_Ranked .playoptionLabel,.RankedState_Locked #Option_Ranked .playoptionLabel
+{
+	color: rgb(181, 63, 63);
+}
+
+#Option_Ranked:disabled .TextArea,.RankedState_Restricted #Option_Ranked .TextArea,.RankedState_Locked #Option_Ranked .TextArea
+{
+	opacity: 0.3;
+}
+
+.RankedState_Restricted:not(.LowPriorityMatchmaking) #Option_Ranked .TextArea
+{
+	opacity: 1;
+}
+
+#Option_StreetBrawl:disabled .backgroundImg,#Option_StreetBrawl:disabled .playImage
+{
+	brightness: 0.2;
+	saturation: 0;
+	opacity: 0.4;
+}
+
+#Option_StreetBrawl:disabled .playoptionLabel
+{
+	color: rgb(181, 63, 63);
+}
+
+#Option_StreetBrawl:disabled .TextArea
+{
+	opacity: 0.3;
+}
+
+.RankLocked
+{
+	horizontal-align: center;
+	margin-top: 200px;
+	padding-bottom: 10px;
+	overflow: noclip;
+	opacity: 0;
+	transition-property: opacity;
+	transition-duration: 0.1s;
+}
+
+.RankLocked #RankLockedPanel
+{
+	horizontal-align: center;
+	margin-bottom: 20px;
+}
+
+.RankLocked .RankLockedBackground
+{
+	width: 128px;
+	height: 128px;
+	background-color: #b53f3f20;
+	border-radius: 50%;
+	horizontal-align: center;
+}
+
+.RankLocked .RankLockedIcon
+{
+	horizontal-align: center;
+	width: 48px;
+	height: 48px;
+	margin-top: 28px;
+	wash-color: offWhite;
+	opacity: 0.3;
+	background-image: url("s2r://panorama/images/control_icons/lock_psd.vtex");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.RankLocked .RankLockedText
+{
+	horizontal-align: center;
+	text-align: center;
+	vertical-align: bottom;
+	font-size: 30px;
+	background-color: black;
+	padding: 0px 8px;
+	font-family: oracle;
+	color: #ff8585;
+	font-weight: bold;
+	transform: rotateZ(-5deg);
+	text-transform: uppercase;
+	color: #b53f3f;
+	animation-name: TagGroove1;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-frame-time: 1s;
+}
+
+.RankLocked .RankLockedDetails
+{
+	vertical-align: bottom;
+	font-family: block;
+	text-transform: uppercase;
+	transform: rotateZ(-3deg) translateY(10px);
+	font-size: 16px;
+	opacity: 0.9;
+	text-align: center;
+	max-width: 280px;
+}
+
+.RankedState_Locked #Option_Ranked:hover .RankLocked
+{
+	opacity: 1;
+}
+
+.playoption.medButton
+{
+	width: 300px;
+	height: 370px;
+	padding: 0px;
+	margin: 20px;
+}
+
+#Option_LeaveQueue
+{
+	width: 450px;
+}
+
+#SubModesContainerTop
+{
+	flow-children: right;
+	width: fit-children;
+}
+
+#CitadelPlayPageBots #SubModesContainerTop
+{
+	flow-children: down;
+}
+
+#SubModesContainerBottom
+{
+	flow-children: right;
+	height: fit-children;
+	width: fit-children;
+}
+
+#CitadelPlayPageBots #SubModesContainerBottom
+{
+	flow-children: down;
+}
+
+#SubModesContainerNewPlayer
+{
+	flow-children: right;
+	height: fit-children;
+	width: fit-children;
+}
+
+.playoption.smallButton
+{
+	width: fill-parent-flow(1.0);
+	height: fill-parent-flow(1.0);
+	height: 260px;
+	margin: 0px 10px;
+}
+
+#CitadelPlayPageBots .playoption.smallButton
+{
+	height: 200px;
+}
+
+.in_party #Option_HeroTesting
+{
+	opacity: 0.2;
+}
+
+.party_can_sandbox #Option_HeroTesting
+{
+	opacity: 1;
+}
+
+.playoption:enabled:hover
+{
+	sound: "UI.PlayMenu.Hover";
+}
+
+.playoption.fullButton:enabled:hover
+{
+	sound: "UI.PlayMenu.Hover";
+}
+
+.playoption:active
+{
+	sound: "UI.PlayMenu.Activate";
+}
+
+#Option_Matchmaking.playoption Label.menuButtonLabel,#Option_PlayersVsBots.playoption Label.menuButtonLabel
+{
+	font-size: 38px;
+	text-align: center;
+	horizontal-align: center;
+	color: offWhite;
+	height: 52px;
+	text-overflow: shrink;
+}
+
+.playoption Label.queueNumber
+{
+	font-weight: semi-bold;
+}
+
+.playoption:enabled:hover Label.queueNumber
+{
+	color: offBlack;
+}
+
+Label.playModeDesc
+{
+	font-family: sans;
+	font-size: 16px;
+	color: offWhite&50;
+	font-weight: normal;
+	padding: 5px 10px;
+	text-overflow: shrink;
+	font-family: oracle;
+}
+
+Label.low_priority_label
+{
+	color: #ff3c3c;
+	font-family: block;
+	text-transform: uppercase;
+	font-size: 14px;
+	visibility: collapse;
+}
+
+.LowPriorityMatchmaking Label.low_priority_label
+{
+	visibility: visible;
+}
+
+.largeButton .playModeDesc
+{
+	font-size: 20px;
+}
+
+.largeButton .playModeDesc.low_priority_label
+{
+	font-size: 16px;
+}
+
+.medButton .playModeDesc
+{
+	font-size: 18px;
+}
+
+.playModeDesc
+{
+	opacity: 0;
+	padding: 10px 5px;
+	transition-property: opacity;
+	transition-duration: 0.2s;
+}
+
+.LowPriorityMatchmaking #Option_Matchmaking .playModeDesc,.LowPriorityMatchmaking #Option_Matchmaking .titleBG
+{
+	opacity: 1;
+}
+
+.largeButton:hover .playModeDesc,.smallButton:hover .playModeDesc
+{
+	opacity: 1;
+	transition-duration: 0.01s;
+}
+
+.smallButton .DescArea .titleBG,.largeButton .DescArea .titleBG
+{
+	opacity: 0;
+}
+
+.smallButton:hover .DescArea .titleBG,.largeButton:hover .DescArea .titleBG
+{
+	opacity: 1;
+}
+
+.LowPriorityMatchmaking #play_matchmaking_description
+{
+	visibility: collapse;
+}
+
+.LowPriorityMatchmaking #play_low_priority_matchmaking_description
+{
+	visibility: visible;
+}
+
+#LowPriorityWarning
+{
+	background-color: #ff3c3cee;
+	horizontal-align: right;
+	vertical-align: top;
+	margin: 30px;
+	width: 450px;
+	padding: 20px;
+	border-radius: 2px;
+	z-index: 1;
+	flow-children: down;
+	visibility: collapse;
+}
+
+.LowPriorityMatchmaking #LowPriorityWarning
+{
+	visibility: visible;
+}
+
+#LowPriorityWarning .low_prio_title_area
+{
+	flow-children: right;
+}
+
+#LowPriorityWarning .low_prio_title
+{
+	font-family: block;
+	text-transform: uppercase;
+	font-size: 18px;
+	opacity: 0.8;
+}
+
+#LowPriorityWarning .low_prio_games_remaining
+{
+	font-family: block;
+	text-transform: uppercase;
+	opacity: 0.9;
+	margin-top: 5px;
+	color: #700b0b;
+}
+
+#LowPriorityWarning #play_low_priority_matchmaking_description
+{
+	text-overflow: shrink;
+	margin-bottom: 5px;
+	font-family: sans;
+	font-size: 15px;
+	margin-top: 5px;
+	visibility: collapse;
+}
+
+#LowPriorityWarning .icon_info
+{
+	width: 16px;
+	height: 16px;
+	opacity: 0.3;
+	vertical-align: middle;
+	margin-left: 5px;
+	margin-bottom: 2px;
+	background-image: url("s2r://panorama/images/icons/icon_info.vsvg");
+	background-size: contain;
+	background-repeat: no-repeat;
+	wash-color: offWhite;
+}
+
+#LowPriorityWarning:hover #play_low_priority_matchmaking_description
+{
+	visibility: visible;
+}
+
+#RankedRestrictedReasons
+{
+	flow-children: down;
+	padding: 4px 8px;
+	horizontal-align: center;
+	visibility: collapse;
+}
+
+#RankedRestrictedReasons Label
+{
+	color: #ff3c3c;
+	text-overflow: shrink;
+	text-align: center;
+	margin-bottom: 5px;
+	font-family: block;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0px 30px;
+	background-color: offBlack;
+	padding: 0px 8px;
+	margin: 0px 50px;
+}
+
+.playoption:hover #RankedRestrictedReasons
+{
+	visibility: visible;
+}
+
+.backgroundImg
+{
+	width: 100%;
+	height: 100%;
+	background-image: url("s2r://panorama/images/main_menu/play/play_inactive_psd.vtex");
+	background-size: 100% 100%;
+	ignore-parent-flow: true;
+	img-shadow: 0px 0px 30px #000000;
+}
+
+.smallButton .backgroundImg
+{
+	opacity: 0.5;
+}
+
+#Option_Matchmaking .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_psd.vtex");
+}
+
+#Option_Ranked .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_ranked_psd.vtex");
+}
+
+#Option_NewPlayerPlacementMatches .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_psd.vtex");
+}
+
+#Option_PlayersVsBots .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_bots_sm_psd.vtex");
+}
+
+#Option_StreetBrawl .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_brawl_psd.vtex");
+}
+
+#Option_HeroTesting .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_sandbox_psd.vtex");
+}
+
+#Option_ExploreMap .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_map_psd.vtex");
+}
+
+#Option_Lobby .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_custom_psd.vtex");
+}
+
+#Option_EditRoster .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_psd.vtex");
+}
+
+#Option_LeaveQueue .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_cancel_psd.vtex");
+}
+
+#Option_CoOpBots .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_psd.vtex");
+}
+
+#Option_Tutorial2026 .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_learn_psd.vtex");
+}
+
+#Option_Tutorial_BotsBrawl .backgroundImg
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_learn_psd.vtex");
+}
+
+.playoption:hover .backgroundImg
+{
+	pre-transform-scale2d: 1.1;
+	brightness: 3;
+}
+
+#Option_Matchmaking.playoption:hover .backgroundImg
+{
+	transform: rotateZ(3deg);
+}
+
+#Option_PlayersVsBots.playoption:hover .backgroundImg
+{
+	transform: rotateZ(2deg);
+}
+
+#Option_Tutorial2026.playoption:hover .backgroundImg
+{
+	transform: rotateZ(-2deg);
+}
+
+#Option_Tutorial_BotsBrawl.playoption:hover .backgroundImg
+{
+	transform: rotateZ(-2deg);
+}
+
+.playImage
+{
+	width: 100%;
+	height: 100%;
+	ignore-parent-flow: true;
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_subject_psd.vtex");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-frame-time: 1s;
+	transition-property: transform, pre-transform-scale2d;
+	transition-duration: 0.1s;
+}
+
+#Option_Matchmaking .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_subject_psd.vtex");
+}
+
+#Option_Ranked .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_ranked_subject_psd.vtex");
+}
+
+#Option_NewPlayerPlacementMatches .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_play_subject_psd.vtex");
+}
+
+#Option_StreetBrawl .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_brawl_subject_psd.vtex");
+	background-position: center;
+}
+
+#Option_EditRoster .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_roster_subject_psd.vtex");
+}
+
+#Option_LeaveQueue .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_cancel_subject_psd.vtex");
+	background-position: center;
+}
+
+#Option_PlayersVsBots .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_bots_subject_sm_psd.vtex");
+}
+
+#Option_HeroTesting .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_sandbox_subject_psd.vtex");
+}
+
+#Option_ExploreMap .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_map_subject_psd.vtex");
+}
+
+#Option_Lobby .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_custom_subject_psd.vtex");
+}
+
+#Option_Tutorial2026 .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_learn_subject_psd.vtex");
+}
+
+#Option_Tutorial_BotsBrawl .playImage
+{
+	background-image: url("s2r://panorama/images/main_menu/play/card_learn_subject_psd.vtex");
+}
+
+#Option_Matchmaking:hover .playImage
+{
+	animation-name: TagGroove1;
+}
+
+#Option_NewPlayerPlacementMatches:hover .playImage
+{
+	animation-name: TagGroove1;
+}
+
+#Option_PlayersVsBots:hover .playImage
+{
+	animation-name: TagGroove2;
+}
+
+#Option_HeroTesting:hover .playImage
+{
+	animation-name: TagGroove1;
+}
+
+#Option_ExploreMap:hover .playImage
+{
+	animation-name: TagGroove2;
+}
+
+#Option_Lobby:hover .playImage
+{
+	animation-name: TagGroove1;
+}
+
+.playoption:hover .playImage
+{
+	pre-transform-scale2d: 1.02;
+}
+
+#Option_Matchmaking.playoption:hover .playImage
+{
+	transform: rotateZ(-5deg);
+}
+
+#Option_NewPlayerPlacementMatches.playoption:hover .playImage
+{
+	transform: rotateZ(-5deg);
+}
+
+#Option_PlayersVsBots.playoption:hover .playImage
+{
+	transform: rotateZ(5deg);
+}
+
+#Option_HeroTesting.playoption:hover .playImage
+{
+	transform: rotateZ(-10deg);
+}
+
+#Option_ExploreMap.playoption:hover .playImage
+{
+	transform: rotateZ(10deg);
+}
+
+#Option_Lobby.playoption:hover .playImage
+{
+	transform: rotateZ(-15deg);
+}
+
+#Option_EditRoster .playModeDesc
+{
+	max-width: 300px;
+}
+
+#UnavailableOverlay,#UnavailableOverlayParty
+{
+	ignore-parent-flow: true;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	visibility: collapse;
+}
+
+#UnavailableOverlay Label,#UnavailableOverlayParty Label
+{
+	text-align: center;
+	font-family: block;
+	text-transform: uppercase;
+	horizontal-align: center;
+	vertical-align: bottom;
+	margin-bottom: 10px;
+	font-size: 15px;
+	max-height: 20px;
+	text-overflow: shrink;
+	font-weight: bold;
+	opacity: 1;
+	background-color: #000000;
+	color: rgb(255, 79, 79);
+}
+
+.in_matchmaking #UnavailableOverlay
+{
+	visibility: visible;
+}
+
+.in_party #UnavailableOverlayParty
+{
+	visibility: visible;
+}
+
+.show_in_queue
+{
+	visibility: collapse;
+}
+
+.in_matchmaking .show_in_queue
+{
+	visibility: visible;
+}
+
+.in_matchmaking .hide_in_queue
+{
+	visibility: collapse;
+}
+
+.in_matchmaking .dim_in_queue
+{
+	opacity: 0.5;
+	brightness: 0.5;
+}
+
+.new_button
+{
+	visibility: collapse;
+	background-color: brandGreen;
+	border-radius: 3px 0px 0px 3px;
+	padding: 2px 3px;
+	horizontal-align: right;
+	vertical-align: top;
+	horizontal-align: right;
+	vertical-align: center;
+	margin-left: 15px;
+	margin-top: 0px;
+	font-family: sans;
+	flow-children: right;
+	padding: 1px 8px;
+	border-radius: 2px;
+	animation-duration: 3s;
+	animation-timing-function: ease;
+	animation-iteration-count: infinite;
+}
+
+#Option_ExploreMap .new_button
+{
+	background-color: #3bcfe9;
+}
+
+.nav_menu_item:hover .new_button
+{
+	margin-right: 0px;
+}
+
+#Option_ExploreMap .new_button
+{
+	visibility: visible;
+	horizontal-align: center;
+	margin-left: 0px;
+	vertical-align: top;
+	ignore-parent-flow: true;
+	horizontal-align: right;
+	border-radius: 0px 0px 0px 3px;
+}
+
+.new_button Label
+{
+	color: offBlack;
+	font-size: 14px;
+	font-family: sans;
+	text-transform: uppercase;
+	font-weight: bold;
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+#Option_Tutorial2026,#Option_Tutorial_BotsBrawl
+{
+	visibility: collapse;
+}
+
+.showTutorial #Option_Tutorial2026
+{
+	visibility: visible;
+}
+
+.showBrawlBots #Option_Tutorial_BotsBrawl
+{
+	visibility: visible;
+}
+
+.showTutorial #Option_Ranked,.showBrawlBots #Option_Ranked
+{
+	visibility: collapse;
+}
+
+.tutorial_button
+{
+	animation-name: tutorial_glow;
+	animation-duration: 2.5s;
+	animation-iteration-count: infinite;
+}
+
+.tutorial_button:hover
+{
+	animation-name: none;
+}
+
+@keyframes 'tutorial_glow'
+{
+	0%
+	{
+		brightness: 1;
+		pre-transform-scale2d: 1;
+	}
+	
+	50%
+	{
+		brightness: 1.2;
+		pre-transform-scale2d: 1.05;
+		transform: rotateZ(0deg);
+	}
+	
+	100%
+	{
+		brightness: 1;
+		pre-transform-scale2d: 1;
+	}
+	
+}
+
+.RecommendedTag
+{
+	background-color: #be46e0;
+	background-color: offBlack;
+	horizontal-align: center;
+	margin-right: 30px;
+	padding: 0px 5px;
+	border-radius: 1px;
+	animation-name: TagGroove2;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-frame-time: 1s;
+}
+
+.RecommendedTag Label
+{
+	font-family: block;
+	font-size: 26px;
+	text-transform: uppercase;
+	color: #be46e0;
+}
+

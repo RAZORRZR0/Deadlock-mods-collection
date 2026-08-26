@@ -1,0 +1,9 @@
+<!-- xml reconstructed by Source 2 Viewer 18.0.0.0 - https://valveresourceformat.github.io -->
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/tooltips/citadel_tooltip_ranked_badge.vcss_c" />
+	</styles>
+	<TooltipContents>
+		<CitadelRankedBadgeOldFull id="RankedBadge" />
+	</TooltipContents>
+</root>
