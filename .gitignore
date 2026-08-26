@@ -29,6 +29,7 @@
 *.tmp
 .tmp*
 _temp/
+_custom_pack_build/
 
 # Local QOLLite 2.2 working copy
 /qollite-source-2.2/
@@ -81,6 +82,11 @@ originalcss/
 citadel_events/
 /showrank/
 /_reference
+QoL_Decomp/
+Esc_Menu_decomp/
+Panorama_basic_decomp/
+DLNS_ByteNode_recent_purchases_decomp/
+testing_tools_hideout/
 
 # BEGIN oh-my-opencode-slim clonedeps
 .slim/clonedeps/repos/

@@ -71,7 +71,9 @@
 			</Panel>
 			<Panel id="StatusRow">
 				<Panel id="UltimateStatus" class="UltimateStatus">
-					<Panel id="UltimateStatusBG" class="UltimateStatusBG" />
+					<Panel id="UltimateStatusBG" class="UltimateStatusBG">
+						<Label id="UltimateCooldownTextHidden" text="{i:ult_cooldown}" />
+					</Panel>
 					<Panel id="UltimateAbilityIconMini" />
 					<Panel class="LockedOverlay">
 						<Panel class="LockedIcon" />
@@ -82,8 +84,10 @@
 					<Panel class="RebirthIcon" />
 					<Panel class="RebirthAndRejuvenator" />
 				</Panel>
+				<Label id="UltimateCooldownTextShown" />
 			</Panel>
 		</Panel>
+		<Label id="AlwaysPlayerName" class="AlwaysPlayerName" text="{s:player_name}" />
 		<Panel id="PlayerNameNWContainer" onmouseover="CitadelTopDownScoreboardPlayerHovered();">
 			<Panel id="BackgroundStrip" />
 			<Panel class="PlayerInfoContainer TopBottomFlow">
@@ -126,5 +130,6 @@
 			<Panel id="LaneSwapIcon" />
 		</CitadelHudTopBarLaneSwapContainer>
 		<Panel id="SpectatePlayerButtonPanel" onmouseover="$.GetContextPanel().AddClass(&apos;SpectateHover&apos;)" onmouseout="$.GetContextPanel().RemoveClass(&apos;SpectateHover&apos;)" />
+		<Label id="HiddenGoldValue" class="hiddenGoldValue" text="{i:gold}" />
 	</CitadelHudTopBarPlayer>
 </root>

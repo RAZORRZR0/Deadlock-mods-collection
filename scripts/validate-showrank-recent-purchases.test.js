@@ -16,10 +16,15 @@ test('showrank_recent_purchases: source contract', () => {
   assert.match(topbarPlayerXml, /id="ShowRankBarebonesTopbarRankImage"/, 'topbar player XML includes ShowRank rank image');
   assert.match(topbarPlayerXml, /class="HeroNameHidden"/, 'topbar player XML includes ByteNode HeroNameHidden label');
   assert.match(topbarPlayerXml, /id="ShowRankBarebonesMissingIndicator"/, 'topbar player XML includes missing indicator');
+  assert.match(topbarPlayerXml, /class="AlwaysPlayerName"/, 'topbar player XML includes AlwaysPlayerName nickname label');
+  assert.match(topbarPlayerXml, /id="UltimateCooldownTextHidden"/, 'topbar player XML includes UltimateCooldownTextHidden label');
+  assert.match(topbarPlayerXml, /id="UltimateCooldownTextShown"/, 'topbar player XML includes UltimateCooldownTextShown label');
 
   const topbarXml = fs.readFileSync(path.join(modDir, 'panorama/layout/citadel_hud_top_bar.xml'), 'utf8');
   assert.match(topbarXml, /id="ShowRankBarebonesTeamAverageLayer"/, 'topbar XML includes ShowRank team average ranks');
   assert.match(topbarXml, /id="ShowRankBarebonesNotificationRoot"/, 'topbar XML includes missing notification toast root');
+  assert.match(topbarXml, /id="UrnTracker"/, 'topbar XML includes UrnTracker soul difference panel');
+
 
   const heroShopXml = fs.readFileSync(path.join(modDir, 'panorama/layout/citadel_hud_hero_shop.xml'), 'utf8');
   assert.match(heroShopXml, /recent_purchases_redux\.vjs_c/, 'hero shop XML includes recent purchases runtime');

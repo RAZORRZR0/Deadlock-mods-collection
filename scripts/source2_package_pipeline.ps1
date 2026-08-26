@@ -114,13 +114,15 @@ function Invoke-Source2Compiler {
 
         try {
             New-Item -ItemType Directory -Force -Path $contentAddon | Out-Null
-            # If SourceDir has panorama/ directly or is panorama itself
-            if (Test-Path -LiteralPath (Join-Path $SourceDir 'panorama')) {
-                Copy-Item -Path (Join-Path $SourceDir 'panorama') -Destination $contentAddon -Recurse -Force
-            } elseif ((Split-Path -Leaf $SourceDir) -eq 'panorama') {
-                Copy-Item -Path $SourceDir -Destination $contentAddon -Recurse -Force
+            # Copy all contents from SourceDir to contentAddon
+            if ((Split-Path -Leaf $SourceDir) -in @('panorama', 'scripts')) {
+                $subName = Split-Path -Leaf $SourceDir
+                $targetSub = Join-Path $contentAddon $subName
+                Copy-Item -Path $SourceDir -Destination $targetSub -Recurse -Force
             } else {
-                Copy-Item -Path (Join-Path $SourceDir '*') -Destination $contentAddon -Recurse -Force
+                Get-ChildItem -LiteralPath $SourceDir | ForEach-Object {
+                    Copy-Item -LiteralPath $_.FullName -Destination $contentAddon -Recurse -Force
+                }
             }
 
             $compilePattern = Join-Path $contentAddon '*.*'

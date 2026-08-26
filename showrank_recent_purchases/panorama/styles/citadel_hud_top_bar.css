@@ -594,3 +594,175 @@
 	
 }
 
+.hiddenGoldValue
+{
+	visibility: collapse;
+}
+
+/* ==========================================================================
+   Top Bar Nicknames (AlwaysPlayerName)
+   ========================================================================== */
+.AlwaysPlayerName
+{
+	ignore-parent-flow: true;
+	horizontal-align: center;
+	vertical-align: top;
+	width: 100%;
+	height: 18px;
+	font-size: 15px;
+	color: #FFF6D8;
+	text-align: center;
+	font-weight: semi-bold;
+	font-family: oracle;
+	text-overflow: shrink min(10px) ellipsis;
+	white-space: nowrap;
+	text-shadow: 0px 0px 2px 3.0 #000000;
+	margin-top: 2px;
+	z-index: 100;
+	visibility: visible;
+}
+
+.spec_mode .AlwaysPlayerName
+{
+	margin-top: 2px;
+}
+
+/* ==========================================================================
+   Top Bar Ultimate Cooldowns
+   ========================================================================== */
+#StatusRow
+{
+	flow-children: down;
+	height: 45px;
+}
+
+.UltimateUnlocked .UltimateStatus
+{
+	horizontal-align: center;
+}
+
+#UltimateCooldownTextHidden
+{
+	visibility: collapse;
+}
+
+#UltimateCooldownTextShown
+{
+	visibility: collapse;
+	width: 40px;
+	text-align: center;
+	font-family: numericOracle;
+	font-weight: bold;
+	font-size: 15px;
+	color: #ffffff;
+	text-shadow: 0px 0px 0px 4.0 offBlack;
+	z-index: 999;
+}
+
+.UltimateUnlocked #UltimateCooldownTextShown
+{
+	visibility: visible;
+}
+
+.UltimateCooldownReady #UltimateCooldownTextShown,
+.gScoreboardOpen #UltimateCooldownTextShown
+{
+	visibility: collapse;
+}
+
+/* ==========================================================================
+   Top Bar Soul Difference (UrnTracker)
+   ========================================================================== */
+.TeamNetworth
+{
+	width: 300px !important;
+	padding-bottom: 2px;
+}
+
+#UrnTracker
+{
+	width: 145px !important;
+	height: 18px;
+	background-color: gradient(linear, 100% 0%, 0% 0%, from(#FFFFFFFF), color-stop(0.70, #FFFFFFFF), color-stop(0.85, #FFFFFF08), to(#FFFFFF00));
+	wash-color: #000000;
+	border-radius: 0px;
+	border-bottom-right-radius: 10px;
+	horizontal-align: center;
+	margin-right: 40px !important;
+	y: 34px;
+	x: -58px;
+	opacity-mask: url("s2r://panorama/images/masks/dust_01_psd.vtex");
+	flow-children: right;
+}
+
+#UrnTracker.show
+{
+	opacity: 1;
+}
+
+#UrnTrackerLabel
+{
+	horizontal-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	vertical-align: center;
+	text-align: right;
+	color: black;
+	width: 100px;
+	height: 18px;
+	padding-right: 2px;
+	text-overflow: shrink;
+	font-family: oracle;
+	padding-left: 30px;
+}
+
+#UrnTracker[visible="false"]
+{
+	opacity: 0 !important;
+	pointer-events: none;
+}
+
+#UrnTracker.good
+{
+	wash-color: #00FF7F;
+}
+
+#UrnTracker.good #UrnTrackerLabel
+{
+	color: black;
+}
+
+#UrnTracker.bad
+{
+	wash-color: #CD5C5C;
+}
+
+#UrnTracker.bad #UrnTrackerLabel
+{
+	color: black;
+}
+
+#UrnTracker.neutral
+{
+	wash-color: #DCDCDC;
+}
+
+#UrnTracker.neutral #UrnTrackerLabel
+{
+	color: black;
+}
+
+#UrnTracker .UrnTrackerSoulIcon
+{
+	width: 10px;
+	height: 100%;
+	background-image: url("s2r://panorama/images/hud/icons/icon_soul.vsvg");
+	background-size: 65% 65%;
+	background-position: center;
+	background-repeat: no-repeat;
+	img-shadow: 0px 0px 0px 2.0 #ffffff77;
+	contrast: -1;
+	margin-left: 1px;
+}
+
+

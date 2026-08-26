@@ -889,6 +889,227 @@
         shared.missingSessionToken += 1;
         shared.missingLeaderToken += 1;
     }
+    function parseNetworthValue(str) {
+        var clean;
+        var match;
+        var num;
+        var unit;
+        if (!str) {
+            return 0;
+        }
+        clean = String(str).replace(/<[^>]*>/g, "").replace(/,/g, "").trim().toLowerCase();
+        match = clean.match(/([0-9]+(?:\.[0-9]+)?)\s*([km])?/);
+        if (!match) {
+            return 0;
+        }
+        num = parseFloat(match[1]);
+        if (!isFinite(num) || num <= 0) {
+            return 0;
+        }
+        unit = match[2];
+        if (unit === "k") {
+            num *= 1000;
+        } else if (unit === "m") {
+            num *= 1000000;
+        }
+        return num;
+    }
+    function updateTopBarUltimateCooldowns(shared) {
+        var records = shared && shared.missingRecords;
+        var index;
+        var record;
+        var statusRow;
+        var hiddenLabel;
+        var shownLabel;
+        var rawCd;
+        var cdNum;
+        var cdText;
+        if (!records) {
+            return;
+        }
+        for (index = 0; index < records.length; index += 1) {
+            record = records[index];
+            if (!record || !isValid(record.root)) {
+                continue;
+            }
+            statusRow = findChild(record.root, "StatusRow");
+            if (!isValid(statusRow)) {
+                continue;
+            }
+            hiddenLabel = findChild(statusRow, "UltimateCooldownTextHidden");
+            shownLabel = findChild(statusRow, "UltimateCooldownTextShown");
+            if (!isValid(hiddenLabel) || !isValid(shownLabel)) {
+                continue;
+            }
+            rawCd = readText(hiddenLabel);
+            if (!rawCd) {
+                if (shownLabel.text !== "") {
+                    shownLabel.text = "";
+                }
+                continue;
+            }
+            cdNum = parseFloat(rawCd);
+            if (!isFinite(cdNum) || cdNum <= 0) {
+                if (shownLabel.text !== "") {
+                    shownLabel.text = "";
+                }
+                continue;
+            }
+            cdText = String(Math.floor(cdNum + 1));
+            if (shownLabel.text !== cdText) {
+                shownLabel.text = cdText;
+            }
+        }
+    }
+    function updateTopBarSoulDifference(shared) {
+        var docRoot = shared && shared.documentRoot;
+        var topBar;
+        var friendlyScore;
+        var enemyScore;
+        var friendlyLabel;
+        var enemyLabel;
+        var friendlyNetworth = 0;
+        var enemyNetworth = 0;
+        var teamFriendly;
+        var teamEnemy;
+        var friendlyPlayers;
+        var enemyPlayers;
+        var index;
+        var goldLbl;
+        var higher;
+        var lower;
+        var diffPct;
+        var threshold;
+        var mood;
+        var displayText;
+        var urnTracker;
+        var urnLabel;
+        var gameClockLabel;
+        var gameSec = 0;
+        var gameMin = 0;
+
+        if (!isValid(docRoot)) {
+            return;
+        }
+        topBar = findChild(docRoot, "TopBar") || (docRoot.paneltype === "CitadelHudTopBar" ? docRoot: null) || findChild(docRoot, "TeamsContainer");
+        if (isValid(topBar) && topBar.GetParent && topBar.paneltype !== "CitadelHudTopBar") {
+            topBar = topBar.GetParent();
+        }
+        if (!isValid(topBar)) {
+            topBar = docRoot;
+        }
+
+        friendlyScore = findChild(topBar, "TeamScoreFriendly") || findChild(docRoot, "TeamScoreFriendly");
+        enemyScore = findChild(topBar, "TeamScoreEnemy") || findChild(docRoot, "TeamScoreEnemy");
+        friendlyLabel = isValid(friendlyScore) ? (findChild(friendlyScore, "TeamScoreFriendlyLabel") || (findByClass(friendlyScore, "ScoreLabel") || [])[0]) : null;
+        enemyLabel = isValid(enemyScore) ? (findChild(enemyScore, "TeamScoreEnemyLabel") || (findByClass(enemyScore, "ScoreLabel") || [])[0]) : null;
+
+        if (isValid(friendlyLabel) && isValid(enemyLabel)) {
+            friendlyNetworth = parseNetworthValue(readText(friendlyLabel));
+            enemyNetworth = parseNetworthValue(readText(enemyLabel));
+        }
+
+        if (friendlyNetworth <= 0 || enemyNetworth <= 0) {
+            teamFriendly = findChild(topBar, "TeamFriendly") || findChild(docRoot, "TeamFriendly");
+            teamEnemy = findChild(topBar, "TeamEnemy") || findChild(docRoot, "TeamEnemy");
+            if (isValid(teamFriendly)) {
+                friendlyPlayers = findByClass(teamFriendly, "ShowRankBarebonesTopbarPlayer") ||
+                    findByClass(teamFriendly, "CitadelHudTopBarPlayer") || [];
+                for (index = 0; index < friendlyPlayers.length; index += 1) {
+                    goldLbl = findChild(friendlyPlayers[index], "HiddenGoldValue") || findChild(friendlyPlayers[index], "SoulsValue");
+                    if (isValid(goldLbl)) {
+                        friendlyNetworth += parseNetworthValue(readText(goldLbl));
+                    }
+                }
+            }
+            if (isValid(teamEnemy)) {
+                enemyPlayers = findByClass(teamEnemy, "ShowRankBarebonesTopbarPlayer") ||
+                    findByClass(teamEnemy, "CitadelHudTopBarPlayer") || [];
+                for (index = 0; index < enemyPlayers.length; index += 1) {
+                    goldLbl = findChild(enemyPlayers[index], "HiddenGoldValue") || findChild(enemyPlayers[index], "SoulsValue");
+                    if (isValid(goldLbl)) {
+                        enemyNetworth += parseNetworthValue(readText(goldLbl));
+                    }
+                }
+            }
+        }
+
+        urnTracker = findChild(topBar, "UrnTracker") || findChild(docRoot, "UrnTracker");
+        if (!isValid(urnTracker)) {
+            return;
+        }
+
+        if (friendlyNetworth <= 0 && enemyNetworth <= 0) {
+            return;
+        }
+
+        higher = Math.max(friendlyNetworth, enemyNetworth);
+        lower = Math.min(friendlyNetworth, enemyNetworth);
+        diffPct = 0;
+        if (higher > 0) {
+            diffPct = ((higher - lower) / higher) * 100;
+            if (friendlyNetworth < enemyNetworth) {
+                diffPct = -diffPct;
+            }
+        }
+
+        gameClockLabel = findChild(topBar, "GameTime") || findChild(docRoot, "GameTime");
+        if (isValid(gameClockLabel) && gameClockLabel.text) {
+            var clockParts = String(gameClockLabel.text).split(":");
+            if (clockParts.length === 2) {
+                gameSec = (parseInt(clockParts[0], 10) || 0) * 60 + (parseInt(clockParts[1], 10) || 0);
+            }
+        }
+        gameMin = gameSec / 60;
+        threshold = gameMin < 15 ? 15: 10;
+        mood = "neutral";
+        if (diffPct >= threshold) {
+            mood = "good";
+        } else if (diffPct <= -threshold) {
+            mood = "bad";
+        }
+
+        displayText = (diffPct > 0 ? "+": "") + diffPct.toFixed(1) + "%";
+
+        setPanelClass(urnTracker, "good", mood === "good");
+        setPanelClass(urnTracker, "bad", mood === "bad");
+        setPanelClass(urnTracker, "neutral", mood === "neutral");
+        setPanelClass(urnTracker, "show", true);
+
+        urnLabel = findChild(urnTracker, "UrnTrackerLabel");
+        if (isValid(urnLabel) && urnLabel.text !== displayText) {
+            urnLabel.text = displayText;
+        }
+    }
+    function updateTopBarNicknames(shared) {
+        var records = shared && shared.missingRecords;
+        var index;
+        var record;
+        var alwaysLabel;
+        var playerNameLabel;
+        var rawName;
+        if (!records) {
+            return;
+        }
+        for (index = 0; index < records.length; index += 1) {
+            record = records[index];
+            if (!record || !isValid(record.root)) {
+                continue;
+            }
+            alwaysLabel = findChild(record.root, "AlwaysPlayerName", "Label") ||
+                (record.root.FindChildrenWithClassTraverse ? (record.root.FindChildrenWithClassTraverse("AlwaysPlayerName") || [])[0]: null);
+            if (!isValid(alwaysLabel)) {
+                continue;
+            }
+            rawName = readText(alwaysLabel);
+            if (!rawName || rawName === "{s:player_name}") {
+                playerNameLabel = findChild(record.root, "PlayerName");
+                if (isValid(playerNameLabel) && playerNameLabel.text && playerNameLabel.text !== "{s:player_name}") {
+                    alwaysLabel.text = playerNameLabel.text;
+                }
+            }
+        }
+    }
     function refreshMissingSession(shared) {
         var records = compactMissingRecords(shared);
         var leader;
@@ -909,12 +1130,14 @@
             for (index = 0; index < records.length; index += 1) {
                 resetMissingPlayer(shared, records[index], true);
             }
-            stopMissingSession(shared);
-            return false;
+        } else {
+            for (index = 0; index < records.length; index += 1) {
+                refreshMissingPlayer(shared, records[index], seconds);
+            }
         }
-        for (index = 0; index < records.length; index += 1) {
-            refreshMissingPlayer(shared, records[index], seconds);
-        }
+        updateTopBarUltimateCooldowns(shared);
+        updateTopBarSoulDifference(shared);
+        updateTopBarNicknames(shared);
         return shared.missingRunning;
     }
     function missingSessionIsCurrent(s, t) {
@@ -935,7 +1158,7 @@
             }
             shared.missingChecks += 1;
             shared.missingLeaderPulse += 1;
-            if (!refreshMissingSession(shared) || shared.missingChecks >= MISSING_WINDOW_MAX_RETRIES) {
+            if (!refreshMissingSession(shared)) {
                 if (shared.missingRunning) {
                     stopMissingSession(shared);
                 }
@@ -1056,13 +1279,31 @@
             scheduleMissingBackup(shared, record);
         }
     }
+    function refreshPlayerCardNickname(playerRoot) {
+        if (!isValid(playerRoot)) {
+            return;
+        }
+        var alwaysLabel = findChild(playerRoot, "AlwaysPlayerName");
+        if (!isValid(alwaysLabel)) {
+            return;
+        }
+        var rawName = readText(alwaysLabel);
+        if (!rawName || rawName === "{s:player_name}") {
+            var playerNameLabel = findChild(playerRoot, "PlayerName");
+            if (isValid(playerNameLabel) && playerNameLabel.text && playerNameLabel.text !== "{s:player_name}") {
+                alwaysLabel.text = playerNameLabel.text;
+            }
+        }
+    }
     function startTopbarWatch(record) {
         var index;
         getState(record && record.root);
         refreshTopbar(record);
+        refreshPlayerCardNickname(record && record.root);
         for (index = 0; index < STARTUP_REFRESH_DELAYS.length; index += 1) {
             schedule(STARTUP_REFRESH_DELAYS[index], function () {
                 refreshTopbar(record);
+                refreshPlayerCardNickname(record && record.root);
             });
         }
     }

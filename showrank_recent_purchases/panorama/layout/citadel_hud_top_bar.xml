@@ -20,15 +20,19 @@
 			<Panel id="TeamScoreFriendly" class="TeamScore">
 				<Panel class="ScoreBG" />
 				<Panel class="ScoreContainer">
-					<Label class="ScoreLabel" html="true" text="{s:team_networth}" />
+					<Label id="TeamScoreFriendlyLabel" class="ScoreLabel" html="true" text="{s:team_networth}" />
 					<Panel class="TeamIcon" />
 				</Panel>
+			</Panel>
+			<Panel id="UrnTracker" class="UrnTracker" hittest="false">
+				<Label id="UrnTrackerLabel" class="UrnTrackerLabel" text="--" />
+				<Panel id="UrnTrackerSoulIcon" class="UrnTrackerSoulIcon" hittest="false" />
 			</Panel>
 			<Panel id="TeamScoreEnemy" class="TeamScore Right">
 				<Panel class="ScoreBG" />
 				<Panel class="ScoreContainer">
 					<Panel class="TeamIcon" />
-					<Label class="ScoreLabel" html="true" text="{s:team_networth}" />
+					<Label id="TeamScoreEnemyLabel" class="ScoreLabel" html="true" text="{s:team_networth}" />
 				</Panel>
 			</Panel>
 		</Panel>

@@ -10,6 +10,18 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'scripts\source2_package_pipeline.ps1')
 
+$addonsCandidates = @(
+    "D:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons",
+    "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons",
+    "C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\addons"
+)
+if (-not $PSBoundParameters.ContainsKey('AddonsPath')) {
+    $detected = $addonsCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+    if ($detected) {
+        $AddonsPath = $detected
+    }
+}
+
 $projectRoot = Join-Path $root 'showrank_recent_purchases'
 $buildRoot = Join-Path $root '_showrank_recent_purchases_build'
 $stageSource = Join-Path $buildRoot 'src'
