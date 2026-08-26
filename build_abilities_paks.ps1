@@ -14,7 +14,18 @@ $vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
     (Join-Path $root "passive_items_mod\compiler\vpkeditcli.exe"),
     (Join-Path $root "vpk cli\vpkeditcli.exe")
 )
-$addons = "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons"
+$addonsCandidates = @(
+    "D:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons",
+    "G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons",
+    "C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\addons"
+)
+$addons = $addonsCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if (-not $addons) {
+    $addons = Join-Path $root "archives"
+    if (-not (Test-Path -LiteralPath $addons)) {
+        New-Item -ItemType Directory -Path $addons -Force | Out-Null
+    }
+}
 $python = (Get-Command py.exe -ErrorAction SilentlyContinue).Source
 $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
 $dateTag = Get-Date -Format 'MM_dd'

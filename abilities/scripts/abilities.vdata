@@ -90349,7 +90349,7 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_TROOPER_ENEMY | CITADEL_UNIT_TARGET_NEUTRAL"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_TRIGGER_POST_CAST_ON_CAST_COMPLETE | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_TRIGGER_POST_CAST_ON_CAST_COMPLETE | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
 		m_flTargetingConeAngle = 20
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/shiv/shiv_killing_blow.psd"
 		m_flMinLeapTime = 0.05
@@ -95954,8 +95954,8 @@
 			m_strCustomAttachmentSource = "attach_suitcase_fx"
 			m_strBulletImpactSound = soundevent:"Pocket.Barrage.Proj.Impact"
 		}
-		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_SHOOTING_DISABLED"
-		m_bitsPreCastEnabledStateMask = "MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
+		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_SHOOTING_DISABLED | MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
+		m_bitsPreCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION | MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
 		_multibase = 
 		[
 			"signature_base",
@@ -116854,7 +116854,7 @@
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/yamato/yamato_crimson_slash.psd"
-		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
+
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strCastSound = soundevent:""
 		m_ImpactParticle = resource_name:"particles/abilities/yamato/yamato_crimson_slash_hit.vpcf"
@@ -139558,7 +139558,7 @@
 		m_skillshotMissParticle = resource_name:"particles/abilities/skillshot_default_miss_owner.vpcf"
 		m_flBossDamageScale = 1.0
 		m_iUpdateTime = 0
-		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
+
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_USE_LAG_COMPENSATION_FOR_UNIT_TARGETING"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
@@ -156095,7 +156095,12 @@
 			}
 			GroundAuraSpacing = 
 			{
-				m_strValue = "1m"
+				m_strValue = "2m"
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_tech_range"
+					_my_subclass_name = "spacingsf"
+				}
 			}
 			AuraLingerDuration = 
 			{
@@ -164010,7 +164015,7 @@
 		m_iUpdateTime = 0
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK | CITADEL_ABILITY_BEHAVIOR_ALWAYS_PREVIEW_RADIUS | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_SHOW_CAST_RANGE_AS_SAT_SPHERE_WHILE_CASTING | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK | CITADEL_ABILITY_BEHAVIOR_ALWAYS_PREVIEW_RADIUS | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_SHOW_CAST_RANGE_AS_SAT_SPHERE_WHILE_CASTING | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/punkgoat/goat_chaingang.psd"
 		m_projectileInfo = 
@@ -172149,6 +172154,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -172386,6 +172392,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -172624,6 +172631,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -172863,6 +172871,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -173105,6 +173114,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -173345,6 +173355,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -175399,6 +175410,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -180839,6 +180851,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -181477,6 +181490,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -181782,6 +181796,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -182447,6 +182462,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -184241,7 +184257,6 @@
 		m_iItemTier = "EModTier_2"
 		m_strCSSClass = "headshotBooster"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/headshot_booster.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -185202,7 +185217,6 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strCSSClass = "spellslingerHeadshots"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/spellslinger_headshots.psd"
-		m_bShowInPassiveItemsArea = true
 		m_ImpactParticle = resource_name:""
 		m_vecTooltipSectionInfo = 
 		[
@@ -186396,7 +186410,6 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strCSSClass = "critshot"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/crit_damage.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -186684,7 +186697,6 @@
 		m_strCSSClass = "pointBlank"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/point_blank.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
-		m_bShowInPassiveItemsArea = true
 		m_vecComponentItems = 
 		[
 			"upgrade_close_range",
@@ -190761,6 +190773,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -191182,6 +191195,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -191367,6 +191381,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -191592,6 +191607,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -192383,6 +192399,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -192946,7 +192963,6 @@
 		m_iItemTier = "EModTier_3"
 		m_strCSSClass = "revitalizer"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_armor/revitalizer.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecComponentItems = 
 		[
 			"upgrade_health",
@@ -195835,6 +195851,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -196204,6 +196221,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -196499,6 +196517,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -196807,6 +196826,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -197375,7 +197395,6 @@
 		m_iItemTier = "EModTier_2"
 		m_strCSSClass = "techArmorPulse"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/tech_shield_pulse.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -198862,6 +198881,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -200120,6 +200140,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -204455,6 +204476,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -205153,6 +205175,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -205452,6 +205475,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -205771,6 +205795,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -206129,6 +206154,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -206439,6 +206465,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -206779,6 +206806,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -208764,6 +208792,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -209115,6 +209144,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -209437,6 +209467,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -209668,6 +209699,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -209979,6 +210011,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -210293,6 +210326,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -210607,6 +210641,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT_OR_GROUND"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -210935,6 +210970,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -211196,6 +211232,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -212532,6 +212569,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -213085,6 +213123,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -213332,6 +213371,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -213649,6 +213689,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = ""
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -213991,6 +214032,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -214288,6 +214330,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -214543,7 +214586,7 @@
 			}
 			TechResist = 
 			{
-				m_strValue = "10"
+				m_strValue = "8"
 				m_eDisplayType = "ETechArmorDamageReduction"
 				m_strCSSClass = "tech_armor_up"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_RESIST"
@@ -214606,6 +214649,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -214886,6 +214930,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -215173,6 +215218,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -215496,6 +215542,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -215827,6 +215874,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -216162,6 +216210,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -216485,6 +216534,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -216804,6 +216854,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -217466,6 +217517,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -217785,7 +217837,6 @@
 		m_bDisabled = false
 		m_strCSSClass = "kineticSash"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/kinetic_sash.psd"
-		m_bShowInPassiveItemsArea = "true"
 		m_vecComponentItems = 
 		[
 			"upgrade_improved_stamina",
@@ -218117,7 +218168,6 @@
 		]
 		m_strCSSClass = "arcaneSurge"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/arcane_surge.psd"
-		m_bShowInPassiveItemsArea = "true"
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -218815,6 +218865,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -219167,6 +219218,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -219585,6 +219637,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -219940,6 +219993,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -220279,6 +220333,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -220595,6 +220650,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -220979,6 +221035,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -221286,6 +221343,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -221518,6 +221576,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -222886,6 +222945,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -223246,6 +223306,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -223593,6 +223654,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -226784,6 +226846,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_DEPLOYED_OBJECT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -226995,7 +227058,7 @@
 			}
 			HealingPerCast = 
 			{
-				m_strValue = "70"
+				m_strValue = "65"
 				m_eDisplayType = "EMaxHealth"
 				m_subclassScaleFunction = subclass:
 				{
@@ -227064,6 +227127,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -233319,6 +233383,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -234796,6 +234861,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -235179,7 +235245,6 @@
 		m_strCSSClass = "ultimateBurst"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/adrenaline_rush.psd"
 		m_bWarnIfNoAffectedAbilities = 1
-		m_bShowInPassiveItemsArea = true
 		m_eShopFilters = "EShopFilterMagicDamage | EShopFilterDisruption"
 		m_strShopIconLarge = panorama:"file://{images}/items/spirit/lightning_scroll.psd"
 		m_vecTooltipSectionInfo = 
@@ -236428,6 +236493,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -237794,6 +237860,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -238715,6 +238782,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -239639,6 +239707,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericThrow"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -239961,6 +240030,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -240271,6 +240341,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -242368,6 +242439,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -242680,6 +242752,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -243687,7 +243760,6 @@
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/fire_rate_plus.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -243961,6 +244033,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -244247,6 +244320,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -272340,7 +272414,7 @@
 		m_skillshotMissParticle = resource_name:"particles/abilities/skillshot_default_miss_owner.vpcf"
 		m_flBossDamageScale = 1.0
 		m_iUpdateTime = 0
-		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
+
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
@@ -272473,7 +272547,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "32"
+				m_strValue = "34"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -272722,11 +272796,11 @@
 				[
 					{
 						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "80"
+						m_strBonus = "70"
 					},
 					{
 						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "0.7"
+						m_strBonus = "0.76"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -272737,11 +272811,11 @@
 				[
 					{
 						m_strPropertyName = "DebuffDuration"
-						m_strBonus = "1.5"
+						m_strBonus = "1.25"
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-18"
+						m_strBonus = "-20"
 					},
 				]
 			},
@@ -273092,12 +273166,12 @@
 			}
 			Damage = 
 			{
-				m_strValue = "165"
+				m_strValue = "140"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "dazzling_orb_damage_sf"
-					m_flStatScale = 0.88
+					m_flStatScale = 0.6
 				}
 				m_strCSSClass = "tech_damage"
 				m_bIsAbilityDamageProperty = true
@@ -273131,7 +273205,7 @@
 			}
 			BounceRadius = 
 			{
-				m_strValue = "17.5m"
+				m_strValue = "16.5m"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_range"
@@ -273219,6 +273293,12 @@
 					{
 						m_strPropertyName = "Damage"
 						m_strBonus = "90"
+					},
+					{
+						m_strPropertyName = "Damage"
+						m_strBonus = "0.45"
+						m_eUpgradeType = "EAddToScale"
+						m_eScaleStatFilter = "ETechPower"
 					},
 				]
 			},
@@ -273730,7 +273810,7 @@
 			}
 			MagicIncreasePerStack = 
 			{
-				m_strValue = "8"
+				m_strValue = "7"
 				m_strCSSClass = "tech_armor_down"
 			}
 			BuffDelay = 
@@ -273809,7 +273889,7 @@
 				[
 					{
 						m_strPropertyName = "MagicIncreasePerStack"
-						m_strBonus = "3"
+						m_strBonus = "4"
 					},
 					{
 						m_strPropertyName = "FireRatePerStack"

@@ -95954,8 +95954,8 @@
 			m_strCustomAttachmentSource = "attach_suitcase_fx"
 			m_strBulletImpactSound = soundevent:"Pocket.Barrage.Proj.Impact"
 		}
-		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_SHOOTING_DISABLED"
-		m_bitsPreCastEnabledStateMask = "MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
+		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_SHOOTING_DISABLED | MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
+		m_bitsPreCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION | MODIFIER_STATE_IN_ABILITY_ALLOW_ZOOM"
 		_multibase = 
 		[
 			"signature_base",
@@ -156095,7 +156095,12 @@
 			}
 			GroundAuraSpacing = 
 			{
-				m_strValue = "1m"
+				m_strValue = "2m"
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_tech_range"
+					_my_subclass_name = "spacingsf"
+				}
 			}
 			AuraLingerDuration = 
 			{
@@ -184241,7 +184246,6 @@
 		m_iItemTier = "EModTier_2"
 		m_strCSSClass = "headshotBooster"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/headshot_booster.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -185202,7 +185206,6 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strCSSClass = "spellslingerHeadshots"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/spellslinger_headshots.psd"
-		m_bShowInPassiveItemsArea = true
 		m_ImpactParticle = resource_name:""
 		m_vecTooltipSectionInfo = 
 		[
@@ -186396,7 +186399,6 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strCSSClass = "critshot"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/crit_damage.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -186684,7 +186686,6 @@
 		m_strCSSClass = "pointBlank"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/point_blank.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
-		m_bShowInPassiveItemsArea = true
 		m_vecComponentItems = 
 		[
 			"upgrade_close_range",
@@ -192946,7 +192947,6 @@
 		m_iItemTier = "EModTier_3"
 		m_strCSSClass = "revitalizer"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_armor/revitalizer.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecComponentItems = 
 		[
 			"upgrade_health",
@@ -196499,6 +196499,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -196807,6 +196808,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -197375,7 +197377,6 @@
 		m_iItemTier = "EModTier_2"
 		m_strCSSClass = "techArmorPulse"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/tech_shield_pulse.psd"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -214543,7 +214544,7 @@
 			}
 			TechResist = 
 			{
-				m_strValue = "10"
+				m_strValue = "8"
 				m_eDisplayType = "ETechArmorDamageReduction"
 				m_strCSSClass = "tech_armor_up"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_RESIST"
@@ -217785,7 +217786,6 @@
 		m_bDisabled = false
 		m_strCSSClass = "kineticSash"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/kinetic_sash.psd"
-		m_bShowInPassiveItemsArea = "true"
 		m_vecComponentItems = 
 		[
 			"upgrade_improved_stamina",
@@ -218117,7 +218117,6 @@
 		]
 		m_strCSSClass = "arcaneSurge"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/arcane_surge.psd"
-		m_bShowInPassiveItemsArea = "true"
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -226995,7 +226994,7 @@
 			}
 			HealingPerCast = 
 			{
-				m_strValue = "70"
+				m_strValue = "65"
 				m_eDisplayType = "EMaxHealth"
 				m_subclassScaleFunction = subclass:
 				{
@@ -227064,6 +227063,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -234796,6 +234796,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -235179,7 +235180,6 @@
 		m_strCSSClass = "ultimateBurst"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/adrenaline_rush.psd"
 		m_bWarnIfNoAffectedAbilities = 1
-		m_bShowInPassiveItemsArea = true
 		m_eShopFilters = "EShopFilterMagicDamage | EShopFilterDisruption"
 		m_strShopIconLarge = panorama:"file://{images}/items/spirit/lightning_scroll.psd"
 		m_vecTooltipSectionInfo = 
@@ -237794,6 +237794,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -238715,6 +238716,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -243687,7 +243689,6 @@
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/fire_rate_plus.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET"
-		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -243961,6 +243962,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
+            m_bShowInPassiveItemsArea = "true"
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -272473,7 +272475,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "32"
+				m_strValue = "34"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -272722,11 +272724,11 @@
 				[
 					{
 						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "80"
+						m_strBonus = "70"
 					},
 					{
 						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "0.7"
+						m_strBonus = "0.76"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -272737,11 +272739,11 @@
 				[
 					{
 						m_strPropertyName = "DebuffDuration"
-						m_strBonus = "1.5"
+						m_strBonus = "1.25"
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-18"
+						m_strBonus = "-20"
 					},
 				]
 			},
@@ -273092,12 +273094,12 @@
 			}
 			Damage = 
 			{
-				m_strValue = "165"
+				m_strValue = "140"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "dazzling_orb_damage_sf"
-					m_flStatScale = 0.88
+					m_flStatScale = 0.6
 				}
 				m_strCSSClass = "tech_damage"
 				m_bIsAbilityDamageProperty = true
@@ -273131,7 +273133,7 @@
 			}
 			BounceRadius = 
 			{
-				m_strValue = "17.5m"
+				m_strValue = "16.5m"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_range"
@@ -273219,6 +273221,12 @@
 					{
 						m_strPropertyName = "Damage"
 						m_strBonus = "90"
+					},
+					{
+						m_strPropertyName = "Damage"
+						m_strBonus = "0.45"
+						m_eUpgradeType = "EAddToScale"
+						m_eScaleStatFilter = "ETechPower"
 					},
 				]
 			},
@@ -273730,7 +273738,7 @@
 			}
 			MagicIncreasePerStack = 
 			{
-				m_strValue = "8"
+				m_strValue = "7"
 				m_strCSSClass = "tech_armor_down"
 			}
 			BuffDelay = 
@@ -273809,7 +273817,7 @@
 				[
 					{
 						m_strPropertyName = "MagicIncreasePerStack"
-						m_strBonus = "3"
+						m_strBonus = "4"
 					},
 					{
 						m_strPropertyName = "FireRatePerStack"
