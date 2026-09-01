@@ -197,7 +197,7 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
     }
 
     // Cancel and Escape button handling for HP Colors modal
-    const cancelHandler = 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { CitadelResumePlaying(); }';
+    const cancelHandler = 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { $.DispatchEvent(&apos;CitadelResumePlaying&apos;, $.GetContextPanel()); }';
     result = result.replace(/<Panel\s+id="EscapeBackground"[^>]*\/>/, `<Panel id="EscapeBackground" onactivate="${cancelHandler}" />`);
     result = result.replace(/<CitadelBindingButton\s+id="EscapeButton"[^>]*\/>/, `<CitadelBindingButton id="EscapeButton" action="MenuBack" onactivate="${cancelHandler}" text="#menu_resume" />`);
   }
@@ -208,7 +208,7 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
   if (enableHpColors) onloadCalls.push('if ($.HPColorsMenuBoot) $.HPColorsMenuBoot();');
 
   const oncancelHandler = enableHpColors
-    ? 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { CitadelResumePlaying(); }'
+    ? 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { $.DispatchEvent(&apos;CitadelResumePlaying&apos;, $.GetContextPanel()); }'
     : 'CitadelResumePlaying()';
 
   let openTag = '<CitadelHudEscapeMenu';
