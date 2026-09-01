@@ -196499,7 +196499,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -196808,7 +196808,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -224717,7 +224717,7 @@
 		m_strCSSClass = "acolytesGlove"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/acolytes_glove.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -225030,7 +225030,7 @@
 		m_strCSSClass = "spiritSnatch"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_tech/spirit_snatch.psd"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_vecComponentItems = 
 		[
 			"upgrade_acolytes_glove",
@@ -225341,7 +225341,7 @@
 		m_iUpdateTime = 1718823919
 		m_strCSSClass = "meleeCharge"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/melee_charge.psd"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_TROOPER_ENEMY | CITADEL_UNIT_TARGET_MINION_ENEMY | CITADEL_UNIT_TARGET_NEUTRAL"
 		m_vecTooltipSectionInfo = 
 		[
@@ -225674,7 +225674,7 @@
 		m_iItemTier = "EModTier_4"
 		m_strCSSClass = "meleeCharge"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/melee_charge.psd"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_TROOPER_ENEMY | CITADEL_UNIT_TARGET_MINION_ENEMY | CITADEL_UNIT_TARGET_NEUTRAL"
 		m_vecTooltipSectionInfo = 
 		[
@@ -226469,7 +226469,7 @@
 		m_iUpdateTime = 1715810508
 		m_strCSSClass = "bulletShield"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_armor/bullet_shield.psd"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -227063,7 +227063,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -231243,7 +231243,7 @@
 		]
 		m_strCSSClass = "veilWalker"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_utility/veil_walker.psd"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -232715,7 +232715,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_SPHERE"
 		m_strCSSClass = "titanicMagazine"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/titanic_magazine.psd"
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_bWarnIfNoAffectedAbilities = 1
 		m_vecDisabledOnHeroes = [  ]
 		m_BuffIndicatorModifier = subclass:
@@ -233001,7 +233001,7 @@
 		m_iUpdateTime = 1718840457
 		m_strCSSClass = "activeReload"
 		m_flGraceTime = 0.3
-		m_bShowInPassiveItemsArea = "true"
+		m_bShowInPassiveItemsArea = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -234796,7 +234796,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -237794,7 +237794,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -238716,7 +238716,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"
@@ -243962,7 +243962,7 @@
 		m_nUpgradeSlotCost = 1
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"
-            m_bShowInPassiveItemsArea = "true"
+            m_bShowInPassiveItemsArea = true
 		m_strCastAnimGraphParam = "e_GenericCast"
 		m_strCastAnimSequenceName = "ability_generic_cast"
 		m_strSelectionNameOverride = "item"

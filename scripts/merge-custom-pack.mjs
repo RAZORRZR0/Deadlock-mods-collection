@@ -63,7 +63,9 @@ export function assembleCustomPack(options) {
     modules = {
       showrank_qol: true,
       poker: false,
-      buff_timer: false,
+      abilities_no_behavior: false,
+      abilities_yes_behavior: true,
+      buff_timer: true,
       hud_3d: false
     }
   } = options;
@@ -177,7 +179,15 @@ export function assembleCustomPack(options) {
       let content = fs.readFileSync(vdataDest, 'utf8');
       const includePattern = /^\s*_include\s*=\s*\r?\n\s*\[\s*\r?\n(?:\s*resource_name:"[^"]+",?\s*\r?\n)+\s*\]\s*\r?\n/m;
       content = content.replace(includePattern, '');
+      content = content.replace(/m_bShowInPassiveItemsArea\s*=\s*"true"/g, 'm_bShowInPassiveItemsArea = true');
+      content = content.replace(/m_bShowInPassiveItemsArea\s*=\s*"false"/g, 'm_bShowInPassiveItemsArea = false');
       fs.writeFileSync(vdataDest, content, 'utf8');
+    }
+
+    // Include HUD styles to place passive/active items under crosshair and make them visible
+    const passiveStylesDir = path.join(repoRoot, 'standalone_redesign/panorama/styles');
+    if (fs.existsSync(passiveStylesDir)) {
+      copyDirSync(passiveStylesDir, path.join(stageSourceDir, 'panorama/styles'));
     }
   }
 
@@ -187,7 +197,7 @@ export function assembleCustomPack(options) {
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   const args = process.argv.slice(2);
   let stageDir = path.join(repoRoot, '_custom_pack_build/src');
-  let selected = 'showrank_qol,poker';
+  let selected = 'showrank_qol,abilities_yes_behavior,buff_timer';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--stage' && args[i + 1]) stageDir = args[i + 1];

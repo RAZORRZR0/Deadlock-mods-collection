@@ -23,6 +23,9 @@ test('showrank_recent_purchases: source contract', () => {
   const topbarXml = fs.readFileSync(path.join(modDir, 'panorama/layout/citadel_hud_top_bar.xml'), 'utf8');
   assert.match(topbarXml, /id="ShowRankBarebonesTeamAverageLayer"/, 'topbar XML includes ShowRank team average ranks');
   assert.match(topbarXml, /id="ShowRankBarebonesNotificationRoot"/, 'topbar XML includes missing notification toast root');
+  assert.match(topbarXml, /id="SpawnNotificationRoot"/, 'topbar XML includes spawn announcement root');
+  assert.match(topbarXml, /spawn_announcements\.vjs_c/, 'topbar XML includes spawn announcement script');
+  assert.match(topbarXml, /spawn_announcements\.vcss_c/, 'topbar XML includes spawn announcement stylesheet');
   assert.match(topbarXml, /id="UrnTracker"/, 'topbar XML includes UrnTracker soul difference panel');
 
 
@@ -37,6 +40,10 @@ test('showrank_recent_purchases: source contract', () => {
 
   const showrankJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/showrank_barebones.js'), 'utf8');
   assert.match(showrankJs, /registerMissingRecord\(missingShared,\s*root\)/, 'showrank runtime registers missing records');
+
+  const spawnAnnouncerJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/spawn_announcements.js'), 'utf8');
+  assert.match(spawnAnnouncerJs, /sinners_sacrifice/, 'spawn announcements include sinners sacrifice');
+  assert.match(spawnAnnouncerJs, /bridge_buffs/, 'spawn announcements include bridge buffs');
 
   const baseTopbarCss = fs.readFileSync(path.join(modDir, 'panorama/styles/base/citadel_hud_top_bar.css'), 'utf8');
   assert.doesNotMatch(baseTopbarCss, /\.connectedToHideout\s+CitadelHudTopBar\s*\{[^}]*visibility:\s*collapse;/, 'base topbar CSS does not collapse CitadelHudTopBar in hideout');
@@ -56,7 +63,7 @@ test('showrank_recent_purchases: compiled VPK archive contract', (t) => {
   }
   const vpkBytes = fs.readFileSync(vpkPath);
   const parsed = parseVpk(vpkBytes);
-  assert.equal(parsed.files.length, 20, 'VPK contains exactly 20 compiled assets');
+  assert.equal(parsed.files.length, 22, 'VPK contains exactly 22 compiled assets');
 
   const expectedPaths = [
     'panorama/layout/citadel_db_page_profile.vxml_c',
@@ -72,13 +79,15 @@ test('showrank_recent_purchases: compiled VPK archive contract', (t) => {
     'panorama/scripts/recent_purchases_redux.vjs_c',
     'panorama/scripts/recent_purchases_redux_data.vjs_c',
     'panorama/scripts/showrank_barebones.vjs_c',
+    'panorama/scripts/spawn_announcements.vjs_c',
     'panorama/styles/base/citadel_hud_hero_shop.vcss_c',
     'panorama/styles/base/citadel_hud_top_bar.vcss_c',
     'panorama/styles/citadel_hud_hero_shop.vcss_c',
     'panorama/styles/citadel_hud_top_bar.vcss_c',
     'panorama/styles/hero_testing_menu.vcss_c',
     'panorama/styles/hud_damage_report.vcss_c',
-    'panorama/styles/showrank_barebones_topbar.vcss_c'
+    'panorama/styles/showrank_barebones_topbar.vcss_c',
+    'panorama/styles/spawn_announcements.vcss_c'
   ].sort();
 
   const actualPaths = parsed.files.map(f => f.path).sort();

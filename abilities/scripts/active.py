@@ -257,25 +257,33 @@ def add_passive_item_flag(file_path, output_path=None, enable_behavior_bits=True
             if not matched_remove and 'm_bShowInPassiveItemsArea' not in block:
                 block = block.replace(
                     'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"',
-                    'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"\n            m_bShowInPassiveItemsArea = "true"'
+                    'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"\n\t\tm_bShowInPassiveItemsArea = true'
                 )
                 block = block.replace(
                     'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"',
-                    'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"\n            m_bShowInPassiveItemsArea = "true"'
+                    'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"\n\t\tm_bShowInPassiveItemsArea = true'
                 )
                 block_modified = True
                 # Only apply passive flag addition to allowed upgrades
                 if matched_add:
                     block = block.replace(
                         'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"',
-                        'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"\n            m_bShowInPassiveItemsArea = "true"'
+                        'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"\n\t\tm_bShowInPassiveItemsArea = true'
                     )
                     block_modified = True
+
+            # Normalize any quoted boolean flags to unquoted
+            if 'm_bShowInPassiveItemsArea = "true"' in block:
+                block = block.replace('m_bShowInPassiveItemsArea = "true"', 'm_bShowInPassiveItemsArea = true')
+                block_modified = True
+            if 'm_bShowInPassiveItemsArea = "false"' in block:
+                block = block.replace('m_bShowInPassiveItemsArea = "false"', 'm_bShowInPassiveItemsArea = false')
+                block_modified = True
 
             # Remove the flag if in REMOVE list
             if matched_remove:
                 if 'm_bShowInPassiveItemsArea' in block:
-                    block = re.sub(r'\n\s*m_bShowInPassiveItemsArea\s*=\s*("true"|true)', '', block)
+                    block = re.sub(r'\n\s*m_bShowInPassiveItemsArea\s*=\s*("true"|true|"false"|false)', '', block)
                     block_modified = True
 
         if block_modified:

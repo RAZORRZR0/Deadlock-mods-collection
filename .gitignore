@@ -33,6 +33,8 @@ _custom_pack_build/
 
 # Local QOLLite 2.2 working copy
 /qollite-source-2.2/
+/QoL_Decomp/
+/QoL(litever)_Decomp/
 
 # Raw ETW / PerfView captures and conversion caches
 *.etl

@@ -181,7 +181,7 @@ CitadelPlayersListEntry .ShowRankBarebonesPlayerListRankImage
 	height: 16px;
 	horizontal-align: center;
 	vertical-align: top;
-	margin-top: 6px;
+	margin-top: 26px;
 	padding: 1px 5px 1px 5px;
 	background-color: #11100ff2;
 	color: #f0e5cf;
@@ -191,6 +191,7 @@ CitadelPlayersListEntry .ShowRankBarebonesPlayerListRankImage
 	text-align: center;
 	text-overflow: shrink;
 	opacity: 1;
+	border-radius: 3px;
 }
 
 CitadelHudTopBarPlayer:not(.HealthVisible) #HeroImageArea

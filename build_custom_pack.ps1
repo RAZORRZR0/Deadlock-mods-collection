@@ -5,7 +5,7 @@
 #>
 param(
     [string]$Modules = "",
-    [string]$PakName = "pak89_dir.vpk",
+    [string]$PakName = "aio.vpk",
     [switch]$Install,
     [string]$AddonsPath = ""
 )
@@ -60,10 +60,10 @@ function Remove-RootIncludeBlock {
 # Module registry
 $availableModules = @(
     @{ Id = "showrank_qol";           Name = "ShowRank + Topbar QoL (Nicknames, Ult CD, Soul Diff) + Shop Purchases + Testing Tools"; Default = $true },
-    @{ Id = "poker";                  Name = "ESC-Menu Table Games (Poker & Bluff Deck)";                                          Default = $true },
+    @{ Id = "poker";                  Name = "ESC-Menu Table Games (Poker & Bluff Deck)";                                          Default = $false },
     @{ Id = "abilities_no_behavior";  Name = "Active & Passive Items in Passive Area (No Filter / Original Active Behavior)";     Default = $false },
-    @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                     Default = $false },
-    @{ Id = "buff_timer";             Name = "Buff Timer & Rejuvenator HUD";                                                       Default = $false },
+    @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                     Default = $true },
+    @{ Id = "buff_timer";             Name = "Buff Timer & Rejuvenator HUD";                                                       Default = $true },
     @{ Id = "hud_3d";                 Name = "3D Hero Dynamic Models HUD";                                                         Default = $false }
 )
 

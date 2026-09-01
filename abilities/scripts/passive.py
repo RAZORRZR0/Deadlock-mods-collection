@@ -55,8 +55,16 @@ def add_passive_item_flag(file_path, output_path=None):
                 if matched_add:
                     block = block.replace(
                         'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"',
-                        'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"\n            m_bShowInPassiveItemsArea = "true"'
+                        'm_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PASSIVE"\n\t\tm_bShowInPassiveItemsArea = true'
                     )
+
+            # Normalize any quoted boolean flags to unquoted
+            if 'm_bShowInPassiveItemsArea = "true"' in block:
+                block = block.replace('m_bShowInPassiveItemsArea = "true"', 'm_bShowInPassiveItemsArea = true')
+                modified = True
+            if 'm_bShowInPassiveItemsArea = "false"' in block:
+                block = block.replace('m_bShowInPassiveItemsArea = "false"', 'm_bShowInPassiveItemsArea = false')
+                modified = True
 
             # Check if the flag was added (true or "true")
             if re.search(r'm_bShowInPassiveItemsArea\s*=\s*("true"|true)', block):
@@ -65,7 +73,7 @@ def add_passive_item_flag(file_path, output_path=None):
             # Remove the flag if in REMOVE list
             if matched_remove:
                 if 'm_bShowInPassiveItemsArea' in block:
-                    block = re.sub(r'\n\s*m_bShowInPassiveItemsArea\s*=\s*("true"|true)', '', block)
+                    block = re.sub(r'\n\s*m_bShowInPassiveItemsArea\s*=\s*("true"|true|"false"|false)', '', block)
                     if not modified:
                         changes += 1
             elif modified:

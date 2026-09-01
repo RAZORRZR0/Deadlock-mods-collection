@@ -48,13 +48,15 @@ $requiredSourceAssets = @(
     'panorama/scripts/recent_purchases_redux.js',
     'panorama/scripts/recent_purchases_redux_data.js',
     'panorama/scripts/showrank_barebones.js',
+    'panorama/scripts/spawn_announcements.js',
     'panorama/styles/base/citadel_hud_hero_shop.css',
     'panorama/styles/base/citadel_hud_top_bar.css',
     'panorama/styles/citadel_hud_hero_shop.css',
     'panorama/styles/citadel_hud_top_bar.css',
     'panorama/styles/hero_testing_menu.css',
     'panorama/styles/hud_damage_report.css',
-    'panorama/styles/showrank_barebones_topbar.css'
+    'panorama/styles/showrank_barebones_topbar.css',
+    'panorama/styles/spawn_announcements.css'
 )
 
 $requiredCompiledAssets = @(
@@ -71,13 +73,15 @@ $requiredCompiledAssets = @(
     'panorama/scripts/recent_purchases_redux.vjs_c',
     'panorama/scripts/recent_purchases_redux_data.vjs_c',
     'panorama/scripts/showrank_barebones.vjs_c',
+    'panorama/scripts/spawn_announcements.vjs_c',
     'panorama/styles/base/citadel_hud_hero_shop.vcss_c',
     'panorama/styles/base/citadel_hud_top_bar.vcss_c',
     'panorama/styles/citadel_hud_hero_shop.vcss_c',
     'panorama/styles/citadel_hud_top_bar.vcss_c',
     'panorama/styles/hero_testing_menu.vcss_c',
     'panorama/styles/hud_damage_report.vcss_c',
-    'panorama/styles/showrank_barebones_topbar.vcss_c'
+    'panorama/styles/showrank_barebones_topbar.vcss_c',
+    'panorama/styles/spawn_announcements.vcss_c'
 )
 
 function Assert-AssetSet {

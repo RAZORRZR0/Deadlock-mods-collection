@@ -7,10 +7,15 @@
 		<include src="s2r://panorama/styles/unit_status_icons.vcss_c" />
 		<include src="s2r://panorama/styles/citadel_hud_game_announcements.vcss_c" />
 		<include src="s2r://panorama/styles/showrank_barebones_topbar.vcss_c" />
+		<include src="s2r://panorama/styles/spawn_announcements.vcss_c" />
 	</styles>
+	<scripts>
+		<include src="s2r://panorama/scripts/spawn_announcements.vjs_c" />
+	</scripts>
 	<CitadelHudTopBar hittest="false">
 		<GlobalClassListener classes="gDetailView gScoreboardOpen" />
 		<Panel id="ShowRankBarebonesNotificationRoot" hittest="false" />
+		<Panel id="SpawnNotificationRoot" class="SpawnNotificationRoot" hittest="false" />
 		<Panel id="GradientBacker" />
 		<Panel class="GameClock">
 			<Label class="GameTime" id="GameTime" text="{s:game_clock}" />

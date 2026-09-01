@@ -765,4 +765,47 @@
 	margin-left: 1px;
 }
 
+/* ==========================================================================
+   Symmetrical Topbar Team Flow Alignment (Supports 1-6 players without gaps)
+   ========================================================================== */
+#TeamFriendly .PlayerContents,
+.friend .PlayerContents,
+.team1 .PlayerContents,
+CitadelHudTopBarTeam:first-child .PlayerContents
+{
+	width: 100%;
+	horizontal-align: right;
+}
+
+#TeamFriendly #PlayersContainer,
+.friend #PlayersContainer,
+.team1 #PlayersContainer,
+CitadelHudTopBarTeam:first-child #PlayersContainer
+{
+	width: fit-children !important;
+	horizontal-align: right !important;
+	flow-children: right !important;
+}
+
+#TeamEnemy .PlayerContents,
+.enemy .PlayerContents,
+.team2 .PlayerContents,
+CitadelHudTopBarTeam:last-child .PlayerContents
+{
+	width: 100%;
+	horizontal-align: left;
+}
+
+#TeamEnemy #PlayersContainer,
+.enemy #PlayersContainer,
+.team2 #PlayersContainer,
+CitadelHudTopBarTeam:last-child #PlayersContainer
+{
+	width: fit-children !important;
+	horizontal-align: left !important;
+	flow-children: right !important;
+}
+
+
+
 
