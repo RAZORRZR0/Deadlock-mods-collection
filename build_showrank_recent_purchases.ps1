@@ -145,6 +145,12 @@ try {
     New-Item -ItemType Directory -Force -Path $stageSource | Out-Null
     Copy-Item -Path (Join-Path $projectRoot 'panorama') -Destination $stageSource -Recurse -Force
 
+    $compositionScript = Join-Path $root 'scripts\profile-stats-community-composition.js'
+    if (Test-Path -LiteralPath $compositionScript) {
+        & node $compositionScript '--host-root' $projectRoot $stageSource
+        if ($LASTEXITCODE -ne 0) { throw "Profile Stats Community composition failed with exit code $LASTEXITCODE" }
+    }
+
     $requiredOutputPaths = @($requiredCompiledAssets | ForEach-Object { Join-Path $stageCompiled $_ })
 
     Write-Host "Compiling Panorama assets via Source 2 resourcecompiler..." -ForegroundColor Cyan

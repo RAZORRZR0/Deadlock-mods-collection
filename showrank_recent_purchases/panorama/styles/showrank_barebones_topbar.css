@@ -181,7 +181,7 @@ CitadelPlayersListEntry .ShowRankBarebonesPlayerListRankImage
 	height: 16px;
 	horizontal-align: center;
 	vertical-align: top;
-	margin-top: 26px;
+	margin-top: 6px;
 	padding: 1px 5px 1px 5px;
 	background-color: #11100ff2;
 	color: #f0e5cf;
@@ -191,7 +191,6 @@ CitadelPlayersListEntry .ShowRankBarebonesPlayerListRankImage
 	text-align: center;
 	text-overflow: shrink;
 	opacity: 1;
-	border-radius: 3px;
 }
 
 CitadelHudTopBarPlayer:not(.HealthVisible) #HeroImageArea
@@ -253,3 +252,4 @@ CitadelHudTopBarPlayer.Disconnected #ShowRankBarebonesMissingIndicator
 	visibility: collapse;
 }
 
+/* PROFILE_STATS_COMMUNITY_STYLES: profile_stats_community/panorama/styles/profile_stats_community.css */

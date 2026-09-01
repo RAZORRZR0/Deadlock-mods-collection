@@ -59,12 +59,13 @@ function Remove-RootIncludeBlock {
 
 # Module registry
 $availableModules = @(
-    @{ Id = "showrank_qol";           Name = "ShowRank + Topbar QoL (Nicknames, Ult CD, Soul Diff) + Shop Purchases + Testing Tools"; Default = $true },
-    @{ Id = "poker";                  Name = "ESC-Menu Table Games (Poker & Bluff Deck)";                                          Default = $false },
-    @{ Id = "abilities_no_behavior";  Name = "Active & Passive Items in Passive Area (No Filter / Original Active Behavior)";     Default = $false },
-    @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                     Default = $true },
-    @{ Id = "buff_timer";             Name = "Buff Timer & Rejuvenator HUD";                                                       Default = $true },
-    @{ Id = "hud_3d";                 Name = "3D Hero Dynamic Models HUD";                                                         Default = $false }
+    @{ Id = "showrank_qol";           Name = "ShowRank + Topbar QoL (Nicknames, Ult CD, Soul Diff) + Shop Purchases + Testing Tools + Community Stats"; Default = $true },
+    @{ Id = "hp_colors_v2";           Name = "HP Colors Rewrite v2 (Custom Healthbar Colors, Stamina Boxes, Ability Rules & In-Game ESC Editor)";        Default = $true },
+    @{ Id = "poker";                  Name = "ESC-Menu Table Games (Poker & Bluff Deck)";                                                              Default = $false },
+    @{ Id = "abilities_no_behavior";  Name = "Active & Passive Items in Passive Area (No Filter / Original Active Behavior)";                         Default = $false },
+    @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                                         Default = $true },
+    @{ Id = "buff_timer";             Name = "Buff Timer & Rejuvenator HUD";                                                                           Default = $true },
+    @{ Id = "hud_3d";                 Name = "3D Hero Dynamic Models HUD";                                                                             Default = $false }
 )
 
 $selected = @{}
@@ -79,11 +80,12 @@ if ($Modules) {
     foreach ($p in $parts) {
         $clean = $p.Trim().ToLower()
         if ($clean -match '^(1|showrank|qol)')            { $selected["showrank_qol"] = $true }
-        if ($clean -match '^(2|poker)')                    { $selected["poker"] = $true }
-        if ($clean -match '^(3|active_no_filter|pak05)')  { $selected["abilities_no_behavior"] = $true }
-        if ($clean -match '^(4|active_yes_filter|pak03)') { $selected["abilities_yes_behavior"] = $true }
-        if ($clean -match '^(5|buff)')                     { $selected["buff_timer"] = $true }
-        if ($clean -match '^(6|3d|hud_3d)')                { $selected["hud_3d"] = $true }
+        if ($clean -match '^(2|hp_colors|hpv2|hp)')        { $selected["hp_colors_v2"] = $true }
+        if ($clean -match '^(3|poker)')                    { $selected["poker"] = $true }
+        if ($clean -match '^(4|active_no_filter|pak05)')  { $selected["abilities_no_behavior"] = $true }
+        if ($clean -match '^(5|active_yes_filter|pak03)') { $selected["abilities_yes_behavior"] = $true }
+        if ($clean -match '^(6|buff)')                     { $selected["buff_timer"] = $true }
+        if ($clean -match '^(7|3d|hud_3d)')                { $selected["hud_3d"] = $true }
         if ($clean -eq 'all') { foreach ($k in @($selected.Keys)) { $selected[$k] = $true } }
     }
 } else {
