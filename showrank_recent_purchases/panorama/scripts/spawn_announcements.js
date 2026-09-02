@@ -382,7 +382,7 @@
             return null;
         }
         var rawText = String(timeLabel.text).replace(/<[^>]+>/g, "").trim();
-        var match = rawText.match(/(?:(d+):)?(d{1,2}):(d{2})/);
+        var match = rawText.match(/(?:(\d+):)?(\d{1,2}):(\d{2})/);
         if (!match) {
             return null;
         }

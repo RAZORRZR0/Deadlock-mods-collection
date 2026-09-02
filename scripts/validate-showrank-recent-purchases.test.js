@@ -40,10 +40,18 @@ test('showrank_recent_purchases: source contract', () => {
 
   const showrankJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/showrank_barebones.js'), 'utf8');
   assert.match(showrankJs, /registerMissingRecord\(missingShared,\s*root\)/, 'showrank runtime registers missing records');
+  assert.match(showrankJs, /updateTopBarUltimateCooldowns/, 'showrank runtime updates topbar ultimate cooldowns');
+  assert.match(showrankJs, /updateTopBarSoulDifference/, 'showrank runtime updates live soul difference');
+  assert.match(showrankJs, /updateTopBarNicknames/, 'showrank runtime updates player nicknames');
+  assert.match(showrankJs, /refreshPlayerCardNickname/, 'showrank runtime refreshes player card nicknames');
+
+  const topbarRankCss = fs.readFileSync(path.join(modDir, 'panorama/styles/showrank_barebones_topbar.css'), 'utf8');
+  assert.match(topbarRankCss, /#ShowRankBarebonesMissingIndicator\s+Label\s*\{[^}]*margin-top:\s*26px;/, 'missing indicator is positioned below nickname text');
 
   const spawnAnnouncerJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/spawn_announcements.js'), 'utf8');
   assert.match(spawnAnnouncerJs, /sinners_sacrifice/, 'spawn announcements include sinners sacrifice');
   assert.match(spawnAnnouncerJs, /bridge_buffs/, 'spawn announcements include bridge buffs');
+  assert.match(spawnAnnouncerJs, /match\(\/\(\?:\(\\d\+\):/i, 'clock regex correctly parses numeric digits');
 
   const baseTopbarCss = fs.readFileSync(path.join(modDir, 'panorama/styles/base/citadel_hud_top_bar.css'), 'utf8');
   assert.doesNotMatch(baseTopbarCss, /\.connectedToHideout\s+CitadelHudTopBar\s*\{[^}]*visibility:\s*collapse;/, 'base topbar CSS does not collapse CitadelHudTopBar in hideout');
