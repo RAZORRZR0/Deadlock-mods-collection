@@ -277,31 +277,29 @@ export function assembleCustomPack(options) {
     }
 
     // Scripts
-    const hpScripts = [
-      'hp_colors_v2_contract.js',
-      'hp_colors_v2_state.js',
-      'hp_colors_v2_menu.js',
-      'unit_status_v2_colors.js',
-      'unit_status_v2_segment_align.js'
-    ];
-    for (const s of hpScripts) {
-      const src = path.join(hpDir, 'panorama/scripts', s);
-      const dest = path.join(stageSourceDir, 'panorama/scripts', s);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      if (fs.existsSync(src)) {
-        fs.copyFileSync(src, dest);
+    const hpScriptsDir = path.join(hpDir, 'panorama/scripts');
+    if (fs.existsSync(hpScriptsDir)) {
+      for (const f of fs.readdirSync(hpScriptsDir)) {
+        if (f.endsWith('.js')) {
+          fs.copyFileSync(path.join(hpScriptsDir, f), path.join(stageSourceDir, 'panorama/scripts', f));
+        }
       }
     }
 
     // Styles
-    const hpStyles = ['hp_colors_v2_menu.css', 'unit_status_v2.css'];
-    for (const s of hpStyles) {
-      const src = path.join(hpDir, 'panorama/styles', s);
-      const dest = path.join(stageSourceDir, 'panorama/styles', s);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      if (fs.existsSync(src)) {
-        fs.copyFileSync(src, dest);
+    const hpStylesDir = path.join(hpDir, 'panorama/styles');
+    if (fs.existsSync(hpStylesDir)) {
+      for (const f of fs.readdirSync(hpStylesDir)) {
+        if (f.endsWith('.css')) {
+          fs.copyFileSync(path.join(hpStylesDir, f), path.join(stageSourceDir, 'panorama/styles', f));
+        }
       }
+    }
+
+    // Images
+    const hpImagesDir = path.join(hpDir, 'panorama/images');
+    if (fs.existsSync(hpImagesDir)) {
+      copyDirSync(hpImagesDir, path.join(stageSourceDir, 'panorama/images'));
     }
 
     const hpEscapeSrc = path.join(hpDir, 'panorama/layout/hud_escape_menu.xml');

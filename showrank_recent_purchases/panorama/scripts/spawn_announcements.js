@@ -20,6 +20,7 @@
         { id: "weak_camps", name: "Weak Camps", initialTime: 120, repeatInterval: null },
         { id: "breakables", name: "Crates & Statues", initialTime: 180, repeatInterval: null },
         { id: "medium_camps", name: "Medium Camps", initialTime: 300, repeatInterval: null },
+        { id: "tunnel_breakables", name: "Tunnel Breakables", initialTime: 300, repeatInterval: 300 },
         { id: "bridge_buffs", name: "Bridge Buffs", initialTime: 300, repeatInterval: 300 },
         { id: "strong_camps", name: "Strong Camps", initialTime: 480, repeatInterval: null },
         { id: "sinners_sacrifice", name: "Sinner's Sacrifice", initialTime: 480, repeatInterval: null },

@@ -80,7 +80,7 @@ test('assembleCustomPack: stages combined assets with HP Colors v2 and Community
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/hp_colors_v2_state.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/hp_colors_v2_menu.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/unit_status_v2_colors.js')), true);
-  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/unit_status_v2_segment_align.js')), true);
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/test_topbar_pickups.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/styles/hp_colors_v2_menu.css')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/styles/unit_status_v2.css')), true);
 
