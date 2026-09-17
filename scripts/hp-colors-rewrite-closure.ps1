@@ -62,6 +62,12 @@ function Get-HpColorsRewriteClosureContract {
         'qollock_hp_colors_bridge.js' {
             return @('ToggleSettingsWindow', 'HPColorsMenuBoot', 'HPColorsMenuCancel')
         }
+        'hp_colors_thirdeye_bridge.js' {
+            return @('HPColorsThirdEyeCloseWindow', 'HPColorsMenuBoot', 'HPColorsMenuCancel')
+        }
+        'hp_colors_thirdeye_window.js' {
+            return @('HPColorsThirdEyeCloseWindow', 'HPColorsMenuCancel', 'ThirdEye', 'setOpen', 'isOpen')
+        }
         default {
             throw "No Closure ADVANCED output contract for Rewrite script: $ScriptName"
         }
@@ -98,16 +104,18 @@ function Invoke-HpColorsRewriteClosureAdvanced {
         [Parameter(Mandatory = $true)][string]$WorkRoot
     )
 
-    $scriptPaths = @()
-    foreach ($relativePath in $ScriptRelativePaths) {
-        $scriptPath = Join-Path $StageSourceRoot $relativePath
-        if (-not (Test-Path -LiteralPath $scriptPath)) {
-            throw "Rewrite script missing from Closure stage: $scriptPath"
+    $scriptPaths = @(
+        foreach ($relativePath in $ScriptRelativePaths) {
+            $scriptPath = Join-Path $StageSourceRoot $relativePath
+            if (-not (Test-Path -LiteralPath $scriptPath)) {
+                throw "Rewrite script missing from Closure stage: $scriptPath"
+            }
+            $scriptPath
         }
-        $scriptPaths += $scriptPath
-    }
+    )
 
     $externsPath = Join-Path $WorkRoot 'hp-colors-rewrite-closure.externs.js'
+
     New-HpColorsRewriteClosureExterns -ScriptPaths $scriptPaths -Path $externsPath | Out-Null
     try {
         foreach ($scriptPath in $scriptPaths) {
@@ -157,30 +165,45 @@ function Invoke-HpColorsRewriteClosureTests {
     $isV2 = Test-Path -LiteralPath (
         Join-Path $SourceRoot 'panorama\scripts\hp_colors_v2_contract.js'
     )
-    $testFilter = if ($isV2) {
-        'validate-hp-colors-rewrite-v2-*.test.js'
+    if ($isV2) {
+        $testPaths = @(
+            @(
+                'validate-hp-colors-rewrite-v2-baseline.test.js'
+                'validate-hp-colors-rewrite-v2-editor.test.js'
+                'validate-hp-colors-rewrite-v2-parity.test.js'
+                'validate-hp-colors-rewrite-v2-state.test.js'
+                'validate-hp-colors-rewrite-v2-style.test.js'
+            ) | ForEach-Object {
+                $testPath = Join-Path $RepositoryRoot "scripts\$_"
+                if (-not (Test-Path -LiteralPath $testPath)) {
+                    throw "HP Colors Rewrite v2 validator not found: $testPath"
+                }
+                $testPath
+            }
+        )
     }
     else {
-        'validate-hp-colors-rewrite-*.test.js'
+        $testPaths = @(
+            Get-ChildItem -LiteralPath (Join-Path $RepositoryRoot 'scripts') -Filter 'validate-hp-colors-rewrite-*.test.js' |
+                Where-Object {
+                    $_.Name -ne 'validate-hp-colors-rewrite-qollock.test.js' -and
+                    $_.Name -notlike 'validate-hp-colors-rewrite-v2-*'
+                } |
+                Sort-Object Name |
+                ForEach-Object { $_.FullName }
+        )
     }
-    $testPaths = @(
-        Get-ChildItem -LiteralPath (Join-Path $RepositoryRoot 'scripts') -Filter $testFilter |
-            Where-Object {
-                $_.Name -ne 'validate-hp-colors-rewrite-qollock.test.js' -and
-                ($isV2 -or $_.Name -notlike 'validate-hp-colors-rewrite-v2-*')
-            } |
-            Sort-Object Name |
-            ForEach-Object { $_.FullName }
-    )
     if ($testPaths.Count -eq 0) {
         throw 'No HP Colors Rewrite behavioral tests found'
     }
 
     $previousSourceRoot = $env:HP_COLORS_REWRITE_SOURCE_ROOT
     $previousQollockRoot = $env:HP_COLORS_REWRITE_QOLLOCK_SOURCE_ROOT
+    $previousV2QollockRoot = $env:HP_COLORS_REWRITE_V2_QOLLOCK_SOURCE_ROOT
     try {
         $env:HP_COLORS_REWRITE_SOURCE_ROOT = $SourceRoot
         Remove-Item Env:HP_COLORS_REWRITE_QOLLOCK_SOURCE_ROOT -ErrorAction SilentlyContinue
+        Remove-Item Env:HP_COLORS_REWRITE_V2_QOLLOCK_SOURCE_ROOT -ErrorAction SilentlyContinue
         & node --test @testPaths
         if ($LASTEXITCODE -ne 0) {
             throw "Closure ADVANCED Rewrite behavioral tests failed with exit code $LASTEXITCODE"
@@ -188,8 +211,14 @@ function Invoke-HpColorsRewriteClosureTests {
 
         if (-not [string]::IsNullOrWhiteSpace($QollockSourceRoot)) {
             Remove-Item Env:HP_COLORS_REWRITE_SOURCE_ROOT -ErrorAction SilentlyContinue
-            $env:HP_COLORS_REWRITE_QOLLOCK_SOURCE_ROOT = $QollockSourceRoot
-            & node --test (Join-Path $RepositoryRoot 'scripts\validate-hp-colors-rewrite-qollock.test.js')
+            if ($isV2) {
+                $env:HP_COLORS_REWRITE_V2_QOLLOCK_SOURCE_ROOT = $QollockSourceRoot
+                & node --test (Join-Path $RepositoryRoot 'scripts\validate-hp-colors-rewrite-v2-qollock.test.js')
+            }
+            else {
+                $env:HP_COLORS_REWRITE_QOLLOCK_SOURCE_ROOT = $QollockSourceRoot
+                & node --test (Join-Path $RepositoryRoot 'scripts\validate-hp-colors-rewrite-qollock.test.js')
+            }
             if ($LASTEXITCODE -ne 0) {
                 throw "Closure ADVANCED QOLLOCK bridge test failed with exit code $LASTEXITCODE"
             }
@@ -207,6 +236,12 @@ function Invoke-HpColorsRewriteClosureTests {
         }
         else {
             $env:HP_COLORS_REWRITE_QOLLOCK_SOURCE_ROOT = $previousQollockRoot
+        }
+        if ($null -eq $previousV2QollockRoot) {
+            Remove-Item Env:HP_COLORS_REWRITE_V2_QOLLOCK_SOURCE_ROOT -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:HP_COLORS_REWRITE_V2_QOLLOCK_SOURCE_ROOT = $previousV2QollockRoot
         }
     }
     Write-Host '  Closure ADVANCED behavioral tests passed.' -ForegroundColor Green

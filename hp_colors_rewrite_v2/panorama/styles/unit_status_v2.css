@@ -48,18 +48,15 @@
 
 #UnitStatus
 {
-	width: fit-children;
-	height: fit-children;
-	width: 1000px;
-	height: 1000px;
+	width: 2000px;
+	height: 2000px;
 	flow-children: down;
-	vertical-align: bottom;
 	horizontal-align: middle;
 	vertical-align: center;
 	padding: 0px;
 	overflow: noclip;
 	margin-top: -700px;
-	margin-right: -53.625px;
+	margin-right: -105.075px;
 }
 .boss_tier1 #UnitStatus
 {
@@ -113,6 +110,7 @@
 	z-index: 3;
 	flow-children: left;
 	visibility: visible;
+	margin-left: 422.5px;
 }
 
 
@@ -239,12 +237,9 @@
 {
 	font-size: 120px;
 	color: UnitPowerLevelColor_Default;
-	visibility: visible;
-	text-align: center;
 	font-weight: bold;
 	font-family: sans;
 	text-transform: uppercase;
-	vertical-align: bottom;
 	text-shadow: 0px 0px 10px 12 DropshadowColor;
 	text-align: center;
 	vertical-align: middle;
@@ -256,8 +251,6 @@
 #bounty_gold_label
 {
 	font-size: 100px;
-	color: UnitPowerLevelColor_Default;
-	visibility: visible;
 	color: #46e2ac;
 	font-weight: bold;
 	font-family: sans;
@@ -325,14 +318,13 @@
 
 #UnitHealthbarContainer
 {
-	vertical-align: middle;
 	opacity-mask: none;
 	height: 120px;
 	width: 750px;
 	max-width: 750px;
 	vertical-align: middle;
 	overflow: noclip;
-	margin-left: 200px;
+	margin-left: 0px;
 	margin-bottom: 200px;
 	background-color: rgb(67, 12, 12);
 }
@@ -345,9 +337,10 @@
 	horizontal-align: middle;
 	vertical-align: center;
 	margin-top: -700px;
-	margin-right: -53.625px;
+	margin-right: -105.075px;
 	overflow: noclip;
 	ignore-parent-flow: true;
+	z-index: 30;
 }
 
 #hp_counter_anchor
@@ -424,7 +417,7 @@
 {
 	margin-top: 230px;
 	overflow: noclip;
-	horizontal-align: left;
+	horizontal-align: middle;
 	vertical-align: middle;
 	z-index: 0;
 	pre-transform-rotate2d: 0deg;
@@ -591,7 +584,6 @@
 {
 	height: 100%;
 	width: 100%;
-	width: 100%;
 	horizontal-align: left;
 	flow-children: right;
 	padding: 0px;
@@ -600,14 +592,11 @@
 
 .healthbar_empty #unit_healthbar_active_parent
 {
-	background-color: rgb(0, 0, 0);
-	background-color: rgb(74, 15, 15);
 	background-color: offBlack;
 }
 
 .friend .healthbar_empty #unit_healthbar_active_parent
 {
-	background-color: rgb(0, 0, 0);
 	background-color: offBlack;
 }
 
@@ -1185,16 +1174,17 @@
 	100% { brightness: 0.25; }
 }
 
-/* Rewrite V1 uses 70% of a 300px canvas. This 1000px canvas needs 21%. */
+/* Keep the 210px level badge unchanged inside the 2000px UnitStatus canvas. */
 .NP_playerlevel_container
 {
-	height: 21%;
+	height: 10.5%;
 	width: height-percentage(100%);
 	border: 20px solid Team1Color;
 	border-radius: 50%;
 	vertical-align: middle;
 	margin-top: 24px;
 	margin-right: 8px;
+	margin-left: 422.5px;
 	transform: translateX(-161px);
 	z-index: 200;
 	visibility: collapse;
@@ -1336,5 +1326,43 @@
 	background-color: #FF2222;
 	z-index: 100;
 	visibility: collapse;
+}
+
+
+/* HPV2 timer overlay: scoped to the accessory nodes owned by Rewrite v2. */
+.HPV2UltimateArtwork,
+#HPV2UltimateOverlay,
+#HPV2UltimateDark,
+#HPV2UltimateFill
+{
+	width: 100%;
+	height: 100%;
+}
+
+#HPV2UltimateOverlay
+{
+	visibility: collapse;
+	horizontal-align: center;
+	vertical-align: middle;
+	overflow: noclip;
+	z-index: 4;
+}
+
+.HPV2UltimateArtwork
+{
+	brightness: 2;
+}
+
+#HPV2UltimateDark
+{
+	brightness: 0.01;
+	background-image: url("s2r://panorama/images/hpv2/ultimate_progress.vtex");
+	background-size: 100%;
+}
+
+#HPV2UltimateFill
+{
+	visibility: visible;
+	clip: radial(50% 50%, 0deg, 0deg);
 }
 

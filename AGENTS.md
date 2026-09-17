@@ -48,6 +48,7 @@ Important lanes:
 - `hp_color_debug/`, `hp_colors_minimal*_debug/` — diagnostic variants; follow their local contracts instead of copying them into production lanes.
 - `topbar_rank/`, `showrank/`, `showrank_recent_purchases/` — rank surfaces, topbar HUD, profile/player-list hooks, combined ByteNode purchase notifications, and build variants.
 - `topbar_status_buffs/` — healthbar-to-topbar status-effect bridge.
+- `test_hpv2/` — standalone pak04 pickup indicators; read `test_hpv2/AGENTS.md` before changing its runtime, relay layouts, or `build_test_hpv2.ps1`.
 - `buff_timer_virgin/`, `recent_purchase/`, `3d hud/` — independent Panorama HUD/shop overrides.
 - `abilities/scripts/` — mutable VData baselines and Python text transforms.
 - `scripts/` — shared packaging helpers (`source2_package_pipeline.ps1`, `pack_vpk.mjs`, `inspect_vpk.mjs`), HP codecs/contracts, VM adapters, and preset-store utilities.

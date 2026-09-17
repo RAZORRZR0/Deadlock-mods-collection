@@ -1,71 +1,64 @@
-# HP Colors Rewrite v2 design
+# HP Colors Rewrite v2 layout contract
 
-## Decision
+## Healthbar geometry
 
-Use the engine's `maxhp_segment_1`, `maxhp_segment_2`, and `maxhp_segment_3` classes as the main alignment signal. During segment 2, count the apostrophe pip glyphs in the cached label text. Change only `#UnitStatus.style.marginRight`.
+`#UnitStatus` is a fixed `2000px × 2000px` canvas. CSS centers `#UnitHealthbarsContainer` in that canvas. Runtime reads the live segment stack and bar geometry, then places the scale origin at the visible bar center. Do not replace this with a fixed percentage because max-HP layouts change the bar's position inside the stack.
 
-The endpoint mapping comes from the supplied inspector screenshots and captured logs:
+The engine owns `UnitHealthbarContainer.width` and `max-width`. Rewrite never writes them. Max-HP changes can change the live width without changing the preset, so the existing health sample also reads `actuallayoutwidth` and reapplies layout only when that width changes.
 
-- segment 1 uses `-200px`
-- segment 2 starts at `-150px` with 8 pips
-- segment 2 interpolates linearly to `100px` at 16 pips
-- segment 3 uses `100px`
+Do not derive alignment from pip count, `maxhp_segment_*` classes, fill width, or health percentage. Those values describe health state, not the rendered bar boundary.
 
-The same endpoints and unrotated container geometry apply to allies. Friend-specific status margins and healthbar transforms would bypass that contract, so production omits them.
+While customization is active, write X/Y translation explicitly, including zero after Layout Reset. Clearing the inline transform can defer the visible reset until another layout update. Restore the captured stock transform only when releasing ownership.
 
-The healthbar container uses the supplied `230px` top margin, left alignment, zero rotation, `1.1` scale, and `z-index: 0`.
+## HP readout stacking
 
-V1 appearance is restored independently of geometry. The stock sliced background frame, missing-health plate, fill texture, and inset fill shadow are present, while the v2 alignment values remain unchanged.
+`#hp_counter_container` and `#UnitStatus` are root siblings. The counter container appears first in XML, so its own `z-index: 30` raises both HP labels above the later stock panel. Keep the stacking value on the sibling container. A child label or `#hp_counter_anchor` cannot reliably escape its parent's sibling layer.
 
-## Current four-setting contract
+## Level and ultimate alignment
 
-The session-scoped settings are exactly `{enabled:true, enemyColor:"#FD4949", allyColor:"#FFEFD7", pipsVisible:true}`. Contract version is `1`. Edits stay in memory; there is no persistence or preset store. Reset restores those defaults and publishes them immediately.
+The level badge and `#UnitInfoContainer` have independent X/Y offsets. Width scaling always preserves their relation to the rendered bar edge. Anchoring additionally follows bar translation:
 
-The protocol uses `ClientUI_FireOutput` and the root attribute `hp_colors_v2_config`. The serialized payload shape is exactly `{magic_word,version,revision,values}`, with `magic_word: "HP_COLORS_V2_CONFIG"` and `version: 1`. Every session change publishes immediately.
+```text
+scaleOffsetX = (825 - liveBarWidth × scaleX) / 2
+anchorOffsetX = scaleOffsetX + (anchored ? positionX : 0)
+levelMarginLeft = 422.5 + anchorOffsetX + levelOffsetX × widthScale / 100
+ultimateMarginLeft = 422.5 + anchorOffsetX + ultOffsetX × widthScale / 100
+scaleX = 1.1 × widthScale / 100
+```
 
-The Escape-menu editor owns controls and the shared native HSL picker. The contract owns defaults, revisioned state, reset, validation, and publication. The color consumer owns cached fill and ultimate-icon `washColor`, pip-label `visibility`, and the custom HP counter; disabled, neutral, or unknown state clears or hides owned output. It writes no geometry and no icon visibility. The segment aligner owns only the existing margin interpolation.
+`pre-transform-scale2d` scales the bar before its translation. X translation is already in parent pixels; multiplying it by `scaleX` makes the indicators drift as width increases.
 
-The Panorama scripts remain strict IIFEs using `var`, Source 2 `$`, and `$.Schedule` seconds. No pulse, hero routing, conditions, browser APIs, persistence, presets, or `GameUI` calls belong in this lane.
+The renderer measures the live bar center and each indicator's original center. It also applies vertical scale compensation, so both indicators visibly move as bar height changes. When anchoring is enabled, it converts the center difference into Panorama's centered-margin coordinates, then adds `positionY × 2` and the indicator's own Y offset. When anchoring is disabled, it ignores bar translation but still follows bar scale.
 
-The bar remains `height: 120px` and uses a trial `width: 750px`, 50% wider than the original 500px baseline and extending right from the unchanged left margin. Direct `{i:health}` and `{i:maxHealth}` bindings do not resolve in the world-space overlay. The color consumer reads the engine pip string from `panel.text` or its `text` attribute, derives max HP from that string and current HP from the live fill/parent width ratio, and writes a custom counter above the bar only when its text changes. `#StatusEffects` remains shifted upward by 60px. Segment interpolation, ally parity, v1 stock texture styling, and removed critical visuals remain unchanged.
+At the default `750px` live width, the scaled bar begins at local X `587.5`. The `300px` UnitInfo panel begins at `422.5`, placing its center at `572.5`, or `15px` left of the bar. This gap keeps the ultimate icon off the bar and leaves low-percentage kill markers visible.
 
-## Alignment runtime cost
+With anchoring disabled, bar X/Y offsets do not move the indicators. Width scaling still preserves their bar-edge relationship and scales each indicator's X offset by `widthScale / 100`. Their Y offsets remain independent. Reset enables anchoring and restores every accessory offset to zero.
 
-The alignment script caches `#UnitStatus`, `#UnitHealthbarsContainer`, and the pip label. A stable 0.25-second tick performs one context identity check, checks at most three segment classes, reads the cached pip text, and counts its characters without allocating an array. It performs no tree search, style write, or console output while segment and relevant pip count are unchanged.
+## Kill marker
 
-On a segment change, or a pip-count change while segment 2 is active, it computes one margin and writes only when the value changes.
+The kill marker remains a child of `UnitHealthbarContainer`. Its threshold uses the health-parent width and its configured percentage. Accessory alignment must not cover the marker. Do not compensate by changing marker percentage or width.
 
-## Alignment boundaries
+## Runtime cost
 
-The script does not read health width, damage, healing, layout bounds, or engine game APIs. It does not write width, scale, transforms, fill layers, or panel position. Damage and healing cannot trigger an alignment write unless the engine changes the max-HP segment or segment-2 pip text.
+Bar width is sampled in the existing health pass. A changed width marks that bar dirty; cached style writes suppress unchanged assignments. Production contains no geometry traversal, geometry formatter, or `[DEBUG-HPV2-CENTER]` output.
 
-The layout does not create `#CriticalIndicator`. The stylesheet contains no `.health_critical` selectors, critical text texture, or critical animation keyframes. Low-health state therefore cannot move, recolor, flash, or add text to the bar.
+`resolveParts()` resolves the nearest bar ancestors in one guarded walk, retaining the eight-level ID and twelve-level WindowRoot limits. Child discovery still runs on each scan so reparenting, replacement, and late panels remain detectable. Scan and paint cadence are unchanged.
+
+`applyBarGeometry()` owns bar scale/translation and indicator alignment inside the renderer script. It samples the vertical bar center once for both indicators and does not allocate a geometry result object.
 
 ## Package
 
-The intended production package contains exactly these eight compiled assets:
+The production package contains exactly these eight compiled assets:
 
 - `panorama/layout/hud_escape_menu.vxml_c`
 - `panorama/layout/unit_status_overlay_v2.vxml_c`
 - `panorama/styles/hp_colors_v2_menu.vcss_c`
 - `panorama/styles/unit_status_v2.vcss_c`
 - `panorama/scripts/hp_colors_v2_contract.vjs_c`
+- `panorama/scripts/hp_colors_v2_state.vjs_c`
 - `panorama/scripts/hp_colors_v2_menu.vjs_c`
 - `panorama/scripts/unit_status_v2_colors.vjs_c`
-- `panorama/scripts/unit_status_v2_segment_align.vjs_c`
 
-## Verification status
+## Release check
 
-The current eight-asset source has not passed validator, build, deployment, or live checks. No current eight-asset VPK or deployed hash is recorded. The former three-asset package and hash remain historical and superseded; see `HANDOFF.md`.
-
-Pending checks:
-
-- `node --test scripts/validate-hp-colors-rewrite-v2-baseline.test.js`
-- `powershell -ExecutionPolicy Bypass -File build_hp_colors_rewrite_v2.ps1`
-- Verify the fresh VPK contains exactly these eight assets, then verify source and deployed SHA-256 match.
-- Fully restart Deadlock and run the live checks in `HANDOFF.md`.
-
-## Prior verified alignment proof
-
-The prior alignment-only VM test covered initial segment 1, eight unchanged ticks, segment 2 at 8, 12, and 16 pips, the segment-3 handoff at the same `100px` margin, cached traversal behavior, and destroyed-context shutdown.
-
+Run the Rewrite v2 validators and build with `-SkipDeploy`. After deployment, restart Deadlock and check `800`, `2100`, and `4100` max HP at default and changed widths. The level badge and ultimate icon must keep their left-edge gap, an `18%` kill marker must remain visible, reset must use the current max-HP width, and the console must contain no Rewrite exceptions.

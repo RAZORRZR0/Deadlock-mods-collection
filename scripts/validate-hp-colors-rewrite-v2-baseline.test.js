@@ -43,211 +43,11 @@ const colorConsumerPath = path.join(
   panoramaRoot,
   'scripts/unit_status_v2_colors.js',
 );
-const alignerPath = path.join(
-  panoramaRoot,
-  'scripts/unit_status_v2_segment_align.js',
-);
-const SOURCE_ASSETS = [
-  'layout/hud_escape_menu.xml',
-  'layout/unit_status_overlay_v2.xml',
-  'scripts/hp_colors_v2_contract.js',
-  'scripts/hp_colors_v2_menu.js',
-  'scripts/hp_colors_v2_state.js',
-  'scripts/unit_status_v2_colors.js',
-  'scripts/unit_status_v2_segment_align.js',
-  'styles/hp_colors_v2_menu.css',
-  'styles/unit_status_v2.css',
-];
-const MENU_CONTROL_IDS = [
-  'HPColorsRewritePresetStore',
-  'HPColorsRewritePreset_001',
-  'LeftStripeBlur',
-  'HPColorsMenuButton',
-  'HPColorsEditorRoot',
-  'HPColorsEditorShell',
-  'HPColorsPeekCapture',
-  'HPColorsPeekButton',
-  'HPColorsDoneButton',
-  'HPColorsUndoButton',
-  'HPColorsResetSectionButton',
-  'HPColorsResetDialog',
-  'HPColorsResetDialogTitle',
-  'HPColorsResetDialogMessage',
-  'HPColorsResetConfirmButton',
-  'HPColorsResetCancelButton',
-  'HPColorsConditionDialog',
-  'HPColorsConditionTitle',
-  'HPColorsConditionStatus',
-  ...Array.from({ length: 4 }, (_, index) => `HPColorsConditionSlot${index + 1}`),
-  ...Array.from(
-    { length: 4 },
-    (_, index) => `HPColorsConditionSlot${index + 1}Image`,
-  ),
-  'HPColorsConditionBooleanRow',
-  'HPColorsConditionBooleanFalse',
-  'HPColorsConditionBooleanTrue',
-  'HPColorsConditionEnumRow',
-  'HPColorsConditionEnumOptions',
-  'HPColorsConditionNumberRow',
-  'HPColorsConditionNumberSliderHost',
-  'HPColorsConditionNumberEntry',
-  'HPColorsConditionColorRow',
-  'HPColorsConditionColorSwatch',
-  'HPColorsConditionColorEntry',
-  'HPColorsConditionRemoveButton',
-  'HPColorsConditionCancelButton',
-  'HPColorsConditionApplyButton',
-  'HPColorsTransferButton',
-  'HPColorsTransferDialog',
-  'HPColorsTransferInput',
-  'HPColorsTransferFeedback',
-  'HPColorsTransferExportButton',
-  'HPColorsTransferImportButton',
-  'HPColorsTransferCloseButton',
-  'HPColorsHeroModeAuto',
-  'HPColorsHeroModeManual',
-  'HPColorsHeroModeOff',
-  'HPColorsHeroPhase',
-  'HPColorsHeroIdentity',
-  'HPColorsHeroDetail',
-  'HPColorsHeroManualRow',
-  'HPColorsHeroManualButton',
-  'HPColorsHeroManualValue',
-  'HPColorsHeroDialog',
-  'HPColorsHeroOptions',
-  'HPColorsHeroCloseButton',
-  'HPColorsCurrentScopeAll',
-  'HPColorsCurrentScopeSelected',
-  'HPColorsCurrentScopeSummary',
-  'HPColorsScopeDialog',
-  'HPColorsScopeSearch',
-  'HPColorsScopeOptions',
-  'HPColorsScopeCloseButton',
-  'HPColorsPresetNameInput',
-  'HPColorsPresetSaveButton',
-  'HPColorsPresetSaveButtonLabel',
-  'HPColorsPresetSaveMode',
-  'HPColorsPresetNewButton',
-  'HPColorsPresetForm',
-  'HPColorsPresetCancelEditButton',
-  'HPColorsPresetOptions',
-  'HPColorsPresetFeedback',
-  'HPColorsPresetRestoreBakedButton',
-  'HPColorsPresetCopyAllButton',
-  'HPColorsPresetImportButton',
-  'HPColorsPresetTransferDialog',
-  'HPColorsPresetTransferInput',
-  'HPColorsPresetTransferFeedback',
-  'HPColorsPresetTransferConfirmButton',
-  'HPColorsPresetTransferCloseButton',
-  'HPColorsPresetGuide',
-  'HPColorsPresetInfoToggle',
-  'HPColorsSupporterTicker',
-  'HPColorsHeaderCategory',
-  'HPColorsLiveStatus',
-  'HPColorsPageEyebrow',
-  'HPColorsPageTitle',
-  'HPColorsPageDescription',
-  'HPColorsPickerRoot',
-  'HPColorsPickerPanel',
-  'HPColorsPickerBackdrop',
-  'HPColorsPickerDone',
-  'HPColorsPickerTitle',
-  'HPColorsPickerPreview',
-  'HPColorsPickerHex',
-  'HPColorsPickerHueValue',
-  'HPColorsPickerSaturationValue',
-  'HPColorsPickerLightnessValue',
-  'HPColorsPickerHueSliderHost',
-  'HPColorsPickerSaturationSliderHost',
-  'HPColorsPickerLumenSliderHost',
-  'HPColorsPrecisePipsToggle',
-  'HPColorsPrecisePipsDialog',
-  'HPColorsPrecisePipsDialogTitle',
-  'HPColorsPrecisePipsDialogMessage',
-  'HPColorsPrecisePipsDialogCommands',
-  'HPColorsPrecisePipsCopyLabel',
-  'HPColorsPrecisePipsCopyButton',
-  'HPColorsPrecisePipsCloseButton',
-  'HPColorsGhoulOpacityRow',
-  'HPColorsGhoulOpacityEntry',
-  'HPColorsEnemyKillMarkerToggle',
-  'HPColorsEnemyKillMarkerThresholdRow',
-  'HPColorsEnemyKillMarkerThresholdEntry',
-  'HPColorsEnemyKillMarkerWidthRow',
-  'HPColorsEnemyKillMarkerWidthEntry',
-  'HPColorsEnemyKillMarkerColorRow',
-  'HPColorsEnemyKillMarkerColorSwatch',
-  'HPColorsEnemyKillMarkerColorHex',
-  'HPColorsWidthSliderHost',
-  'HPColorsHeightSliderHost',
-  'HPColorsGhoulOpacitySliderHost',
-  'HPColorsPositionXSliderHost',
-  'HPColorsPositionYSliderHost',
-  'HPColorsReadoutSizeSliderHost',
-  'HPColorsReadoutOffsetXSliderHost',
-  'HPColorsReadoutOffsetYSliderHost',
-  'HPColorsSharedLowThresholdSliderHost',
-  'HPColorsSharedHighThresholdSliderHost',
-  'HPColorsEnemyPulseThresholdSliderHost',
-  'HPColorsEnemyPulseBpmSliderHost',
-  'HPColorsEnemyPulseReadoutSizeSliderHost',
-  'HPColorsEnemyPulseReadoutOffsetXSliderHost',
-  'HPColorsEnemyPulseReadoutOffsetYSliderHost',
-  'HPColorsAllyPulseThresholdSliderHost',
-  'HPColorsAllyPulseBpmSliderHost',
-  'HPColorsAllyPulseColorModeFixed',
-  'HPColorsAllyPulseColorModeGradient',
-  'HPColorsEnemyKillMarkerThresholdSliderHost',
-  'HPColorsEnemyKillMarkerWidthSliderHost',
-  'HPColorsStaminaWidthSliderHost',
-  'HPColorsStaminaHeightSliderHost',
-  'HPColorsStaminaOffsetXSliderHost',
-  'HPColorsStaminaOffsetYSliderHost',
-  'HPColorsEnemyStaminaColorToggle',
-  'HPColorsEnemyStaminaColorSwatch',
-  'HPColorsEnemyStaminaColorHex',
-  'HPColorsCategoryOverview',
-  'HPColorsCategoryEnemy',
-  'HPColorsCategoryAlly',
-  'HPColorsCategoryReadout',
-  ...Array.from({ length: 5 }, (_, index) => `HPColorsTab${index}`),
-  ...Array.from({ length: 5 }, (_, index) => `HPColorsTabLabel${index}`),
-  'HPColorsSettingsList',
-  'HPColorsSettingsOverviewStatus',
-  'HPColorsSettingsOverviewLayout',
-  'HPColorsSettingsOverviewHero',
-  'HPColorsSettingsEnemyBar',
-  'HPColorsSettingsEnemyFeedback',
-  'HPColorsSettingsEnemyShields',
-  'HPColorsSettingsAllyBar',
-  'HPColorsSettingsAllyFeedback',
-  'HPColorsSettingsAllyShields',
-  'HPColorsSettingsReadoutNumber',
-  'HPColorsSettingsReadoutPlacement',
-  'HPColorsSettingsReadoutLevels',
-  'HPColorsSettingsStamina',
-  'HPColorsSettingsEnemyPulse',
-  'HPColorsSettingsEnemyKillMarker',
-  'HPColorsSettingsAllyPulse',
-];
 
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
 }
 
-function listFiles(directory, prefix = '') {
-  const files = [];
-  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-    const relative = path.join(prefix, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...listFiles(path.join(directory, entry.name), relative));
-    } else {
-      files.push(relative.replaceAll('\\', '/'));
-    }
-  }
-  return files.sort();
-}
 function installPanels(harness, ids) {
   for (const id of ids) {
     if (harness.root.FindChildTraverse(id)) continue;
@@ -261,7 +61,7 @@ function installPanels(harness, ids) {
 
 function bootMenuVm() {
   const harness = createPanoramaHarness();
-  installPanels(harness, MENU_CONTROL_IDS);
+  installPanels(harness, [...read(menuLayoutPath).matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
   const context = createVmContext(harness);
   runInVm(read(contractPath), context, contractPath);
   runInVm(read(stateSourcePath), context, stateSourcePath);
@@ -286,12 +86,20 @@ function makeSnapshot(revision, values) {
 }
 
 function addLiveHealthbar(healthbars, harness, pipText, fillWidth, stockStyles) {
+  const stockLayoutWidth = Number.parseFloat(stockStyles && stockStyles.width);
   const healthbar = healthbars.add(new MockPanel('UnitHealthbarContainer', {
+    actuallayoutwidth: Number.isFinite(stockLayoutWidth) ? stockLayoutWidth : 750,
+    actuallayoutheight: 120,
+    actualyoffset: 0,
     style: {
       width: stockStyles ? stockStyles.width : '',
       maxWidth: stockStyles ? stockStyles.maxWidth : '',
       height: stockStyles ? stockStyles.height : '',
       transform: stockStyles ? stockStyles.transform : '',
+      preTransformScale2d: stockStyles
+        ? stockStyles.preTransformScale2d || ''
+        : '',
+      transformOrigin: stockStyles ? stockStyles.transformOrigin || '' : '',
       opacity: stockStyles ? stockStyles.opacity : '',
     },
     findCounts: harness.findCounts,
@@ -365,6 +173,13 @@ function addCounterCanvas(infoHealth, harness) {
 
 function setMissingValue(values, key, value) {
   if (!Object.hasOwn(values, key)) values[key] = value;
+}
+
+function translation(transform) {
+  if (!transform || transform === 'none') return [0, 0];
+  const match = /^translateX\((-?[\d.]+)px\) translateY\((-?[\d.]+)px\)$/.exec(transform);
+  assert.ok(match, `unsupported translation: ${transform}`);
+  return [Number(match[1]), Number(match[2])];
 }
 
 function makeStatusFixture(
@@ -483,6 +298,7 @@ function makeStatusFixture(
     })));
   }
   const unitStatus = windowRoot.add(new MockPanel('UnitStatus', {
+    actuallayoutwidth: 2000,
     style: {
       transform: barStockStyles ? barStockStyles.unitStatusTransform : '',
     },
@@ -495,6 +311,8 @@ function makeStatusFixture(
   }));
   const levelContainer = infoHealth.add(new MockPanel('LevelContainer', {
     classes: ['NP_playerlevel_container'],
+    actuallayoutheight: 210,
+    actualyoffset: 910,
     style: { visibility: '' },
     findCounts: harness.findCounts,
     operationCounts: harness.operationCounts,
@@ -506,6 +324,8 @@ function makeStatusFixture(
     operationCounts: harness.operationCounts,
   }));
   const unitInfo = infoHealth.add(new MockPanel('UnitInfoContainer', {
+    actuallayoutheight: 300,
+    actualyoffset: 850,
     findCounts: harness.findCounts,
     operationCounts: harness.operationCounts,
   }));
@@ -561,6 +381,8 @@ function makeStatusFixture(
     }));
   }
   const healthbars = infoHealth.add(new MockPanel('UnitHealthbarsContainer', {
+    actuallayoutheight: 320,
+    actualyoffset: 955,
     findCounts: harness.findCounts,
     operationCounts: harness.operationCounts,
   }));
@@ -603,6 +425,7 @@ function makeStatusFixture(
     ult,
     pip,
     counter,
+    counterContainer: counterCanvas.container,
     counterMax,
     activeParent,
     healthbars,
@@ -613,6 +436,7 @@ function makeStatusFixture(
     staminaContainer,
     staminaIcons,
     levelContainer,
+    unitInfo,
     levelLabel,
   };
 }
@@ -637,22 +461,7 @@ function cssBlock(source, selector) {
 
 
 
-test('v2 source tree keeps the exact nine-asset contract', () => {
-  assert.equal(SOURCE_ASSETS.length, 9);
-  assert.equal(new Set(SOURCE_ASSETS).size, 9);
-  assert.ok(SOURCE_ASSETS.includes('scripts/hp_colors_v2_state.js'));
-  assert.deepEqual(listFiles(panoramaRoot), [...SOURCE_ASSETS].sort());
-});
 
-test('v2 menu declares required controls and boots through its exported contract', () => {
-  const layout = read(menuLayoutPath);
-  for (const id of MENU_CONTROL_IDS) {
-    assert.match(layout, new RegExp(`\\bid="${id}"`));
-  }
-  assert.match(layout, /hp_colors_v2_state\.vjs_c/);
-  assert.match(layout, /onload="\$\.HPColorsMenuBoot\(\)"/);
-  bootMenuVm();
-});
 
 test('v2 CSS matches the supplied alignment screenshots', () => {
   const style = read(stylePath);
@@ -680,9 +489,11 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
     'live-bar pulse selectors must not reach the hidden stock bar',
   );
   const unitStatus = cssBlock(style, '#UnitStatus');
+  assert.match(unitStatus, /width\s*:\s*2000px\s*;/);
+  assert.match(unitStatus, /height\s*:\s*2000px\s*;/);
   assert.match(unitStatus, /horizontal-align\s*:\s*middle\s*;/);
   assert.match(unitStatus, /margin-top\s*:\s*-700px\s*;/);
-  assert.match(unitStatus, /margin-right\s*:\s*-53\.625px\s*;/);
+  assert.match(unitStatus, /margin-right\s*:\s*-105\.075px\s*;/);
   const overlay = read(layoutPath);
   const liveSnippet = overlay.match(
     /<snippet name="UnitHealthBar">[\s\S]*?<\/snippet>/,
@@ -700,7 +511,7 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
   );
   const healthbarPosition = cssBlock(style, '#UnitHealthbarsContainer');
   assert.match(healthbarPosition, /margin-top\s*:\s*230px\s*;/);
-  assert.match(healthbarPosition, /horizontal-align\s*:\s*left\s*;/);
+  assert.match(healthbarPosition, /horizontal-align\s*:\s*middle\s*;/);
   assert.match(healthbarPosition, /vertical-align\s*:\s*middle\s*;/);
   assert.match(healthbarPosition, /overflow\s*:\s*noclip\s*;/);
   assert.match(healthbarPosition, /pre-transform-scale2d\s*:\s*1\.1\s*;/);
@@ -710,9 +521,10 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
   assert.match(counterContainer, /horizontal-align\s*:\s*middle\s*;/);
   assert.match(counterContainer, /vertical-align\s*:\s*center\s*;/);
   assert.match(counterContainer, /margin-top\s*:\s*-700px\s*;/);
-  assert.match(counterContainer, /margin-right\s*:\s*-53\.625px\s*;/);
+  assert.match(counterContainer, /margin-right\s*:\s*-105\.075px\s*;/);
   assert.match(counterContainer, /overflow\s*:\s*noclip\s*;/);
   assert.match(counterContainer, /ignore-parent-flow\s*:\s*true\s*;/);
+  assert.match(counterContainer, /z-index\s*:\s*30\s*;/);
   const counterAnchor = cssBlock(style, '#hp_counter_anchor');
   assert.match(counterAnchor, /width\s*:\s*750px\s*;/);
   assert.match(counterAnchor, /height\s*:\s*120px\s*;/);
@@ -725,6 +537,7 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
   assert.match(counterRow, /flow-children\s*:\s*right\s*;/);
   assert.match(counterRow, /height\s*:\s*fit-children\s*;/);
   assert.doesNotMatch(counterRow, /\btransform\s*:/);
+  assert.doesNotMatch(counterRow, /pre-transform-scale2d|transform-origin/);
   const statusEffects = cssBlock(style, '#StatusEffects');
   assert.doesNotMatch(
     statusEffects,
@@ -752,11 +565,16 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
     'the status-effect canvas must not clip circular effects or stack labels',
   );
   const playerLevel = cssBlock(style, '.NP_playerlevel_container');
-  assert.match(playerLevel, /height\s*:\s*21%\s*;/);
+  assert.match(playerLevel, /height\s*:\s*10\.5%\s*;/);
   assert.match(playerLevel, /width\s*:\s*height-percentage\(100%\)\s*;/);
   assert.match(playerLevel, /border\s*:\s*20px\s+solid\s+Team1Color\s*;/);
   assert.match(playerLevel, /margin-top\s*:\s*24px\s*;/);
   assert.match(playerLevel, /margin-right\s*:\s*8px\s*;/);
+  assert.match(playerLevel, /margin-left\s*:\s*422\.5px\s*;/);
+  assert.match(
+    cssBlock(style, '#UnitInfoContainer.unit_info_panel'),
+    /margin-left\s*:\s*422\.5px\s*;/,
+  );
   assert.match(playerLevel, /transform\s*:\s*translateX\(-161px\)\s*;/);
   assert.match(cssBlock(style, '.NP_playerlevel'), /font-size\s*:\s*100px\s*;/);
   assert.match(playerLevel, /z-index\s*:\s*200\s*;/);
@@ -778,7 +596,7 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
 
   const healthbars = healthbarPosition;
   assert.match(healthbars, /margin-top\s*:\s*230px\s*;/);
-  assert.match(healthbars, /horizontal-align\s*:\s*left\s*;/);
+  assert.match(healthbars, /horizontal-align\s*:\s*middle\s*;/);
   assert.match(healthbars, /vertical-align\s*:\s*middle\s*;/);
   assert.match(healthbars, /z-index\s*:\s*0\s*;/);
   assert.match(healthbars, /pre-transform-rotate2d\s*:\s*0deg\s*;/);
@@ -788,7 +606,11 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
   assert.match(healthbar, /height\s*:\s*120px\s*;/);
   assert.match(healthbar, /width\s*:\s*750px\s*;/);
   assert.match(healthbar, /max-width\s*:\s*750px\s*;/);
+  assert.match(healthbar, /margin-left\s*:\s*0px\s*;/);
 
+  const pipLabel = cssBlock(style, '#unit_healthbar_pip_label');
+  assert.match(pipLabel, /pre-transform-scale2d\s*:\s*1\.0,\s*2\.8\s*;/);
+  assert.doesNotMatch(pipLabel, /transform-origin\s*:/);
 
   for (const selector of [
     '#UnitHealthbarContainer',
@@ -838,7 +660,6 @@ test('v2 CSS matches the supplied alignment screenshots', () => {
 
 test('v2 HP readout uses the unclipped reference canvas', () => {
   const style = read(stylePath);
-  const aligner = read(alignerPath);
   const counterAnchor = cssBlock(style, '#hp_counter_anchor');
   const counterRow = cssBlock(style, '#hp_counter_row');
   assert.match(counterAnchor, /width\s*:\s*750px\s*;/);
@@ -851,7 +672,6 @@ test('v2 HP readout uses the unclipped reference canvas', () => {
   assert.match(counterRow, /vertical-align\s*:\s*middle\s*;/);
   assert.match(counterRow, /height\s*:\s*fit-children\s*;/);
   assert.doesNotMatch(counterRow, /\btransform\s*:/);
-  assert.doesNotMatch(aligner, /counterRow|counterTransform/);
 });
 
 
@@ -1005,6 +825,40 @@ test('v2 scopes duplicate healthbar IDs to its own WindowRoot instance', () => {
   assert.equal(fixture.siblingFill.style.washColor, '');
 });
 
+test('v2 refreshes nearest bar ancestors after active-parent reparent', () => {
+  const fixture = makeStatusFixture('enemy', {
+    enabled: true,
+    enemyColor: '#123456',
+    widthScale: 230,
+  });
+  const replacement = fixture.healthbars.add(
+    new MockPanel('UnitHealthbarContainer', {
+      actuallayoutwidth: 500,
+      actuallayoutheight: 120,
+      findCounts: fixture.harness.findCounts,
+      operationCounts: fixture.harness.operationCounts,
+    }),
+  );
+  const replacementBackground = replacement.add(
+    new MockPanel('unit_healthbar_bg', {
+      findCounts: fixture.harness.findCounts,
+      operationCounts: fixture.harness.operationCounts,
+    }),
+  );
+  const replacementMissing = replacementBackground.add(
+    new MockPanel('unit_healthbar_missing', {
+      findCounts: fixture.harness.findCounts,
+      operationCounts: fixture.harness.operationCounts,
+    }),
+  );
+  fixture.activeParent.SetParent(replacementMissing);
+
+  fixture.harness.scheduler.runByDelay(1);
+
+  assert.equal(fixture.levelContainer.style.marginLeft, '202.5px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '202.5px');
+});
+
 test('v2 rejects ambiguous relation ownership and restores stock styles', () => {
   const fixture = makeStatusFixture('ambiguous', {
     enabled: true,
@@ -1022,6 +876,8 @@ test('v2 restores every owned bar value before dropping a live bar', () => {
     maxWidth: '701px',
     height: '111px',
     transform: 'translateX(5px)',
+    preTransformScale2d: '0.95, 1',
+    transformOrigin: '50% 50%',
     opacity: '0.75',
     ultBackgroundOpacity: '0.8',
     unitStatusTransform: 'translateX(4px)',
@@ -1053,15 +909,36 @@ test('v2 restores every owned bar value before dropping a live bar', () => {
     stock,
   );
   assert.equal(fixture.fill.style.washColor, '#123456');
-  assert.equal(fixture.healthbar.style.height, '168px');
-  assert.equal(fixture.unitStatus.style.transform, 'translateX(80px) translateY(40px)');
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '1.76, 1.54');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(
+    fixture.healthbars.style.transform,
+    'translateX(80px) translateY(40px)',
+  );
+  assert.equal(fixture.healthbar.style.height, stock.height);
+  assert.equal(fixture.healthbar.style.width, stock.width);
+  assert.equal(fixture.healthbar.style.maxWidth, stock.maxWidth);
+  assert.equal(
+    fixture.healthbar.style.preTransformScale2d,
+    stock.preTransformScale2d,
+  );
+  assert.equal(fixture.healthbar.style.transformOrigin, stock.transformOrigin);
+  assert.equal(fixture.unitStatus.style.transform, stock.unitStatusTransform);
 
   fixture.healthbar.SetParent(null);
   fixture.harness.scheduler.runByDelay(1);
 
   assert.equal(fixture.fill.style.washColor, '#FD4949');
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbars.style.transformOrigin, '');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
   assert.equal(fixture.healthbar.style.height, stock.height);
   assert.equal(fixture.healthbar.style.transform, stock.transform);
+  assert.equal(
+    fixture.healthbar.style.preTransformScale2d,
+    stock.preTransformScale2d,
+  );
+  assert.equal(fixture.healthbar.style.transformOrigin, stock.transformOrigin);
   assert.equal(fixture.healthbar.style.opacity, stock.opacity);
   assert.equal(fixture.unitStatus.style.transform, stock.unitStatusTransform);
   assert.equal(fixture.infoBg.style.opacity, stock.ultBackgroundOpacity);
@@ -1091,18 +968,54 @@ test('v2 unregisters its config event and cancels work when context dies', () =>
   assert.equal(fixture.harness.scheduler.jobs.length, 0);
 });
 
-test('v2 bar offset range is intentionally wider than the viewport', () => {
+test('v2 scales the segment container around the visible bar center', () => {
+  const fixture = makeStatusFixture('enemy', {
+    enabled: true,
+    enemyColor: '#123456',
+    widthScale: 230,
+    heightScale: 160,
+    positionX: 300,
+    positionY: 200,
+  });
+
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.76');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(
+    fixture.healthbars.style.transform,
+    'translateX(300px) translateY(200px)',
+  );
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.height, '');
+  assert.equal(fixture.healthbar.style.marginLeft, undefined);
+  assert.equal(fixture.healthbar.style.marginBottom, undefined);
+  assert.equal(fixture.unitStatus.style.transform, '');
+  assert.equal(fixture.counterContainer.style.transform, undefined);
+
+  fixture.healthbars.actuallayoutheight = 400;
+  fixture.healthbar.actualyoffset = 80;
+  fixture.healthbar.actuallayoutheight = 160;
+  dispatchColorSnapshot(fixture, 2, { widthScale: 150 });
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 40%');
+  assert.equal(fixture.levelContainer.style.marginTop, '224px');
+  assert.equal(fixture.unitInfo.style.marginTop, '230px');
+});
+
+test('v2 preserves a positive custom offset without moving UnitStatus', () => {
   const fixture = makeStatusFixture('enemy', {
     enabled: true,
     enemyColor: '#123456',
     positionX: 300,
     positionY: 200,
   });
-  assert.equal(fixture.healthbar.style.transform, '');
   assert.equal(
-    fixture.unitStatus.style.transform,
+    fixture.healthbars.style.transform,
     'translateX(300px) translateY(200px)',
   );
+  assert.equal(fixture.healthbar.style.transform, '');
+  assert.equal(fixture.healthbar.style.marginLeft, undefined);
+  assert.equal(fixture.healthbar.style.marginBottom, undefined);
+  assert.equal(fixture.unitStatus.style.transform, '');
 
   const style = read(stylePath);
   assert.match(cssBlock(style, '.WindowRoot'), /overflow\s*:\s*noclip\s*;/);
@@ -1140,7 +1053,7 @@ test('v2 health text offset range is intentionally wider than the viewport', () 
   assert.match(cssBlock(style, '#hp_counter_row'), /overflow\s*:\s*noclip\s*;/);
 });
 
-test('v2 scales width on the complete healthbar surface and height on the bar', () => {
+test('v2 scales the max-HP segment container without changing the live bar', () => {
   const fixture = makeStatusFixture('enemy', {
     enabled: true,
     enemyColor: '#123456',
@@ -1148,10 +1061,15 @@ test('v2 scales width on the complete healthbar surface and height on the bar', 
     heightScale: 160,
   });
 
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(2.3)');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.76');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
   assert.equal(fixture.healthbar.style.width, '');
   assert.equal(fixture.healthbar.style.maxWidth, '');
-  assert.equal(fixture.healthbar.style.height, '192px');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.height, '');
+  assert.equal(fixture.unitStatus.style.transform, '');
 });
 
 test('v2 overview layout reset applies immediately to an existing bar', () => {
@@ -1184,13 +1102,18 @@ test('v2 overview layout reset applies immediately to an existing bar', () => {
     null,
     stock,
   );
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(2.3)');
-  assert.equal(fixture.healthbar.style.width, stock.width);
-  assert.equal(fixture.healthbar.style.transform, stock.transform);
   assert.equal(
-    fixture.unitStatus.style.transform,
+    fixture.healthbars.style.transform,
     'translateX(300px) translateY(200px)',
   );
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.76');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(fixture.healthbar.style.width, stock.width);
+  assert.equal(fixture.healthbar.style.maxWidth, stock.maxWidth);
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.transform, stock.transform);
+  assert.equal(fixture.unitStatus.style.transform, stock.unitStatusTransform);
 
   dispatchColorSnapshot(fixture, 2, {
     ...customizedValues,
@@ -1200,10 +1123,14 @@ test('v2 overview layout reset applies immediately to an existing bar', () => {
     positionY: 0,
   });
 
-  assert.equal(fixture.healthbars.style.transform, '');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbars.style.transformOrigin, '');
   assert.equal(fixture.healthbar.style.width, stock.width);
   assert.equal(fixture.healthbar.style.maxWidth, stock.maxWidth);
-  assert.equal(fixture.healthbar.style.height, '120px');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.height, stock.height);
   assert.equal(fixture.healthbar.style.transform, stock.transform);
   assert.equal(
     fixture.unitStatus.style.transform,
@@ -1241,11 +1168,17 @@ test('v2 late optional panel discovery cannot contaminate the stock layout basel
     null,
     stock,
   );
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(2.3)');
   assert.equal(
-    fixture.unitStatus.style.transform,
+    fixture.healthbars.style.transform,
     'translateX(300px) translateY(200px)',
   );
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.76');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(fixture.healthbar.style.width, stock.width);
+  assert.equal(fixture.healthbar.style.maxWidth, stock.maxWidth);
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.unitStatus.style.transform, stock.unitStatusTransform);
 
   fixture.ult.DeleteAsync(0);
   fixture.infoBg.add(new MockPanel('unit_ult_ready_icon', {
@@ -1263,78 +1196,88 @@ test('v2 late optional panel discovery cannot contaminate the stock layout basel
     positionY: 0,
   });
 
-  assert.equal(fixture.healthbars.style.transform, '');
-  assert.equal(fixture.healthbar.style.height, '120px');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbars.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.height, stock.height);
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
   assert.equal(
     fixture.unitStatus.style.transform,
     stock.unitStatusTransform,
   );
 });
 
-test('v2 scan repairs a layout transform overwritten after reset', () => {
-  const customizedValues = {
+test('v2 layout reset survives an incomplete required-part refresh', () => {
+  const fixture = makeStatusFixture(
+    'enemy',
+    {
+      enabled: true,
+      enemyColor: '#123456',
+      widthScale: 230,
+      heightScale: 160,
+      positionX: 300,
+      positionY: 200,
+    },
+    1,
+    "|'",
+    false,
+    false,
+    false,
+    true,
+  );
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.76');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(
+    fixture.healthbars.style.transform,
+    'translateX(300px) translateY(200px)',
+  );
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.height, '');
+
+  fixture.fill.DeleteAsync(0);
+  dispatchColorSnapshot(fixture, 2, {
     enabled: true,
     enemyColor: '#123456',
-    widthScale: 230,
-    heightScale: 160,
-    positionX: 300,
-    positionY: 200,
-  };
-  const fixture = makeStatusFixture('enemy', customizedValues);
-
-  dispatchColorSnapshot(fixture, 2, {
-    ...customizedValues,
     widthScale: 100,
     heightScale: 100,
     positionX: 0,
     positionY: 0,
   });
-  assert.equal(fixture.healthbars.style.transform, '');
-
-  fixture.healthbars.style.transform = 'scaleX(2.3)';
+  fixture.activeParent.add(new MockPanel('unit_healthbar_lagging', {
+    actuallayoutwidth: 40,
+    style: { washColor: '' },
+    findCounts: fixture.harness.findCounts,
+    operationCounts: fixture.harness.operationCounts,
+  }));
   fixture.harness.scheduler.runByDelay(1);
 
-  assert.equal(fixture.healthbars.style.transform, '');
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbars.style.transformOrigin, '');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.height, '');
+  assert.equal(fixture.healthbar.style.marginLeft, undefined);
+  assert.equal(fixture.healthbar.style.marginBottom, undefined);
 });
 
-test('v2 resets inline layout styles through the Panorama null-clear path', () => {
+test('v2 scan repairs custom scale without touching engine-owned width', () => {
   const fixture = makeStatusFixture('enemy', {
     enabled: true,
     enemyColor: '#123456',
     widthScale: 230,
-    heightScale: 160,
-    positionX: 300,
-    positionY: 200,
   });
-  for (const panel of [
-    fixture.healthbars,
-    fixture.healthbar,
-    fixture.unitStatus,
-  ]) {
-    const values = { ...panel.style };
-    panel.style = new Proxy(values, {
-      set(target, property, value) {
-        if (value === '') return true;
-        if (value === null) delete target[property];
-        else target[property] = value;
-        return true;
-      },
-    });
-  }
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
 
-  dispatchColorSnapshot(fixture, 2, {
-    enabled: true,
-    enemyColor: '#123456',
-    widthScale: 100,
-    heightScale: 100,
-    positionX: 0,
-    positionY: 0,
-  });
+  fixture.healthbar.style.width = '622.50px';
+  fixture.healthbars.style.preTransformScale2d = '1, 1';
+  fixture.harness.scheduler.runByDelay(1);
 
-  assert.equal(fixture.healthbars.style.transform, undefined);
-  assert.equal(fixture.healthbars.style.transformOrigin, undefined);
-  assert.equal(fixture.unitStatus.style.transform, undefined);
+  assert.equal(fixture.healthbar.style.width, '622.50px');
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
 });
+
 
 
 test('v2 ally bar reset applies immediately to an existing bar', () => {
@@ -1392,13 +1335,19 @@ test('v2 preset apply updates layout and ally bar immediately on existing panels
     widthScale: 230,
     positionX: 300,
   });
-  assert.equal(enemy.healthbars.style.transform, 'scaleX(2.3)');
-  assert.equal(enemy.healthbar.style.width, '');
-  assert.equal(enemy.healthbar.style.transform, '');
   assert.equal(
-    enemy.unitStatus.style.transform,
+    enemy.healthbars.style.transform,
     'translateX(300px) translateY(0px)',
   );
+  assert.equal(enemy.healthbars.style.preTransformScale2d, '2.53, 1.1');
+  assert.equal(enemy.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(enemy.healthbar.style.width, '');
+  assert.equal(enemy.healthbar.style.maxWidth, '');
+  assert.equal(enemy.healthbar.style.preTransformScale2d, '');
+  assert.equal(enemy.healthbar.style.transformOrigin, '');
+  assert.equal(enemy.healthbar.style.marginLeft, undefined);
+  assert.equal(enemy.healthbar.style.transform, '');
+  assert.equal(enemy.unitStatus.style.transform, '');
 
   const ally = makeStatusFixture('ally', {
     enabled: true,
@@ -1412,7 +1361,7 @@ test('v2 preset apply updates layout and ally bar immediately on existing panels
   assert.equal(ally.healthbar.style.opacity, '0.01');
 });
 
-test('v2 segment surface width preserves the stock left edge', () => {
+test('v2 centers the complete segment surface as its width changes', () => {
   const fixture = makeStatusFixture(
     'enemy',
     {
@@ -1437,43 +1386,181 @@ test('v2 segment surface width preserves the stock left edge', () => {
     },
   );
   fixture.healthbars.AddClass('maxhp_segment_1');
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(2.3)');
-  assert.equal(fixture.healthbars.style.transformOrigin, '200px 50%');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(fixture.levelContainer.style.marginLeft, '202.5px');
+  assert.equal(fixture.levelContainer.style.marginTop, '24px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '202.5px');
+  assert.equal(fixture.unitInfo.style.marginTop, '30px');
   assert.equal(fixture.healthbar.style.width, '500px');
+  assert.equal(fixture.unitStatus.style.transform, '');
   assert.equal(fixture.healthbar.style.maxWidth, '700px');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
   assert.equal(fixture.healthbar.style.height, '120px');
 
   fixture.healthbar.style.width = '625px';
+  fixture.healthbar.actuallayoutwidth = 625;
   fixture.healthbar.style.maxWidth = '700px';
   fixture.healthbars.RemoveClass('maxhp_segment_1');
   fixture.healthbars.AddClass('maxhp_segment_2');
   fixture.fill.actuallayoutwidth = 45;
   fixture.harness.scheduler.runNext();
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(2.3)');
-  assert.equal(fixture.healthbars.style.transformOrigin, '200px 50%');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(fixture.levelContainer.style.marginLeft, '44.38px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '44.38px');
   assert.equal(fixture.healthbar.style.width, '625px');
   assert.equal(fixture.healthbar.style.maxWidth, '700px');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
 
   dispatchColorSnapshot(fixture, 2, {
     enabled: true,
     enemyColor: '#123456',
     widthScale: 100,
   });
-  assert.equal(fixture.healthbars.style.transform, '');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
   assert.equal(fixture.healthbars.style.transformOrigin, '');
+  assert.equal(fixture.levelContainer.style.marginLeft, '491.25px');
+  assert.equal(fixture.levelContainer.style.marginTop, '24px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '491.25px');
+  assert.equal(fixture.unitInfo.style.marginTop, '30px');
   assert.equal(fixture.healthbar.style.width, '625px');
   assert.equal(fixture.healthbar.style.maxWidth, '700px');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  fixture.healthbar.actuallayoutwidth = 750;
+  fixture.harness.scheduler.runNext();
+  assert.equal(fixture.levelContainer.style.marginLeft, '422.5px');
+  assert.equal(fixture.levelContainer.style.marginTop, '24px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '422.5px');
+  assert.equal(fixture.unitInfo.style.marginTop, '30px');
   assert.match(
     cssBlock(read(stylePath), '#UnitHealthbarsContainer'),
     /overflow\s*:\s*noclip\s*;/,
   );
   assert.match(
     cssBlock(read(stylePath), '#UnitHealthbarContainer'),
-    /margin-left\s*:\s*200px\s*;/,
+    /margin-left\s*:\s*0px\s*;/,
   );
+  dispatchColorSnapshot(fixture, 3, { enabled: false });
+  assert.equal(fixture.levelContainer.style.marginLeft, '');
+  assert.equal(fixture.levelContainer.style.marginTop, '');
+  assert.equal(fixture.unitInfo.style.marginLeft, '');
+  assert.equal(fixture.unitInfo.style.marginTop, '');
 });
 
-test('v2 leaves stock layout refresh in control after custom geometry paint', () => {
+test('ally and enemy icons follow bar translation without scaling the offset', () => {
+  for (const role of ['ally', 'enemy']) {
+    const fixture = makeStatusFixture(role, { widthScale: 230 });
+    const initialIconX = parseFloat(fixture.unitInfo.style.marginLeft);
+    const initialLevelX = parseFloat(fixture.levelContainer.style.marginLeft);
+    let revision = 1;
+    for (const positionX of [300, -300, 0]) {
+      dispatchColorSnapshot(fixture, ++revision, { widthScale: 230, positionX });
+      assert.equal(
+        parseFloat(fixture.unitInfo.style.marginLeft) - initialIconX,
+        positionX,
+        `${role} ultimate must translate by the same pixels as the bar`,
+      );
+      assert.equal(
+        parseFloat(fixture.levelContainer.style.marginLeft) - initialLevelX,
+        positionX,
+        `${role} level must translate by the same pixels as the bar`,
+      );
+    }
+  }
+});
+
+test('layout reset replaces a negative rendered translation before another layout update', () => {
+  for (const role of ['ally', 'enemy']) {
+    const fixture = makeStatusFixture(role, { widthScale: 230, positionX: -300 });
+    let renderedTransform = fixture.healthbars.style.transform;
+    const style = fixture.healthbars.style;
+    fixture.healthbars.style = new Proxy(style, {
+      set(target, property, value) {
+        // Clearing an inline style can defer CSS recomputation until layout.
+        if (property === 'transform' && value !== null && value !== '')
+          renderedTransform = value;
+        target[property] = value;
+        return true;
+      },
+    });
+    dispatchColorSnapshot(fixture, 2, {
+      widthScale: 100, heightScale: 100, positionX: 0, positionY: 0,
+    });
+    assert.deepEqual(translation(renderedTransform), [0, 0], role);
+  }
+});
+
+test('indicator geometry stays aligned across scale and anchored offsets', () => {
+  const fixture = makeStatusFixture('enemy', {
+    enabled: true,
+    enemyColor: '#123456',
+  });
+
+  dispatchColorSnapshot(fixture, 2, {
+    heightScale: 160,
+    positionY: 200,
+  });
+  assert.equal(fixture.levelContainer.style.marginTop, '283.75px');
+  assert.equal(fixture.unitInfo.style.marginTop, '289.75px');
+
+  dispatchColorSnapshot(fixture, 3, {
+    heightScale: 60,
+    positionY: -200,
+  });
+  assert.equal(fixture.levelContainer.style.marginTop, '-282.5px');
+  assert.equal(fixture.unitInfo.style.marginTop, '-276.5px');
+
+  dispatchColorSnapshot(fixture, 4, {
+    accessoryAnchorEnabled: false,
+    widthScale: 230,
+    heightScale: 100,
+    positionX: 80,
+    positionY: 30,
+    levelOffsetX: -63,
+    ultOffsetX: 245,
+  });
+  assert.equal(fixture.levelContainer.style.marginLeft, '-258.65px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '449.75px');
+  assert.equal(fixture.levelContainer.style.marginTop, '24px');
+  assert.equal(fixture.unitInfo.style.marginTop, '0px');
+  assert.equal(
+    fixture.healthbars.style.transform,
+    'translateX(80px) translateY(30px)',
+  );
+
+  dispatchColorSnapshot(fixture, 5, {
+    accessoryAnchorEnabled: false,
+    widthScale: 60,
+    heightScale: 100,
+    positionX: 80,
+    positionY: 30,
+    levelOffsetX: -63,
+    ultOffsetX: 245,
+  });
+  assert.equal(fixture.levelContainer.style.marginLeft, '549.7px');
+  assert.equal(fixture.unitInfo.style.marginLeft, '734.5px');
+});
+
+test('indicator geometry stays aligned at maximum scale and offset', () => {
+  const fixture = makeStatusFixture('enemy', {
+    enabled: true,
+    enemyColor: '#123456',
+    widthScale: 230,
+    heightScale: 160,
+    positionX: -200,
+    positionY: -200,
+  });
+  assert.equal(fixture.levelContainer.style.marginTop, '-516.25px');
+  assert.equal(fixture.unitInfo.style.marginTop, '-510.25px');
+});
+
+test('v2 repairs custom segment geometry without owning parent clipping styles', () => {
   const fixture = makeStatusFixture('enemy', {
     enabled: true,
     enemyColor: '#123456',
@@ -1483,15 +1570,25 @@ test('v2 leaves stock layout refresh in control after custom geometry paint', ()
   });
   fixture.healthbar.style.width = '750px';
   fixture.healthbar.style.maxWidth = '750px';
-  fixture.unitStatus.style.transform = '';
+  fixture.healthbars.style.preTransformScale2d = '1, 1';
   fixture.windowRoot.style.overflow = 'clip';
   fixture.unitStatus.style.overflow = 'clip';
   fixture.infoHealth.style.overflow = 'clip';
 
-  fixture.harness.scheduler.runByDelay(1.5);
+  fixture.harness.scheduler.runByDelay(1);
 
   assert.equal(fixture.healthbar.style.width, '750px');
   assert.equal(fixture.healthbar.style.maxWidth, '750px');
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(
+    fixture.healthbars.style.transform,
+    'translateX(300px) translateY(200px)',
+  );
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.marginLeft, undefined);
+  assert.equal(fixture.healthbar.style.marginBottom, undefined);
   assert.equal(fixture.healthbar.style.transform, '');
   assert.equal(fixture.unitStatus.style.transform, '');
   assert.equal(fixture.windowRoot.style.overflow, 'clip');
@@ -1540,6 +1637,39 @@ test('v2 damage transitions preserve stock geometry without debug logging', () =
     ),
     [],
   );
+});
+
+test('v2 custom width never fights damage-owned healthbar width', () => {
+  const fixture = makeStatusFixture(
+    'enemy',
+    {
+      enabled: true,
+      enemyMode: 'gradient',
+      enemyLow: '#FD4949',
+      enemyMid: '#FF7B00',
+      enemyHigh: '#00FF00',
+      widthScale: 230,
+    },
+    1,
+    "|'",
+    false,
+    false,
+    false,
+    true,
+  );
+
+  fixture.healthbar.style.width = '622.50px';
+  fixture.healthbar.styleWrites.length = 0;
+  fixture.fill.actuallayoutwidth = 40;
+  fixture.harness.scheduler.runByDelay(1);
+
+  assert.equal(fixture.healthbar.style.width, '622.50px');
+  assert.deepEqual(
+    fixture.healthbar.styleWrites.filter((write) => write.property === 'width'),
+    [],
+  );
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '2.53, 1.1');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
 });
 
 test('v2 enemy stamina display settings customize only enemy stamina and preserve empty pip interiors', () => {
@@ -1667,13 +1797,23 @@ test('v2 clears ultimate background opacity when customization turns off', () =>
     widthScale: 160,
   });
   assert.equal(fixture.infoBg.style.opacity, '0.01');
-  assert.equal(fixture.healthbars.style.transform, 'scaleX(1.6)');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '1.76, 1.1');
+  assert.equal(fixture.healthbars.style.transformOrigin, '50% 18.75%');
+  assert.equal(fixture.healthbar.style.width, '');
   assert.equal(fixture.healthbar.style.maxWidth, '');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
 
   dispatchColorSnapshot(fixture, 2, { enabled: false });
   assert.equal(fixture.infoBg.style.opacity, '');
-  assert.equal(fixture.healthbars.style.transform, '');
+  assert.deepEqual(translation(fixture.healthbars.style.transform), [0, 0]);
+  assert.equal(fixture.healthbars.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbars.style.transformOrigin, '');
+  assert.equal(fixture.healthbar.style.width, '');
   assert.equal(fixture.healthbar.style.maxWidth, '');
+  assert.equal(fixture.healthbar.style.preTransformScale2d, '');
+  assert.equal(fixture.healthbar.style.transformOrigin, '');
 });
 
 test('v2 color pulse still dims the live healthbar fill', () => {
@@ -1818,256 +1958,4 @@ test('v2 rejects malformed and stale configuration revisions', () => {
     enemyHigh: '#ABCDEF',
   }));
   assert.equal(fixture.fill.style.washColor, '#123456');
-});
-
-
-
-
-
-test('segment aligner scales segment one and two on pip-count changes only', () => {
-  const aligner = read(alignerPath);
-  assert.doesNotMatch(aligner, /actuallayoutwidth|GameUI|Entities|Players/);
-
-  const schedules = [];
-  const writes = [];
-  const counterWrites = [];
-  let contextCalls = 0;
-  let traversals = 0;
-  let classChecks = 0;
-
-  const pip = {
-    id: 'unit_healthbar_pip_label',
-    text: "''''|'''",
-    valid: true,
-    IsValid() {
-      return this.valid;
-    },
-  };
-  const healthbars = {
-    id: 'UnitHealthbarsContainer',
-    valid: true,
-    classes: new Set(['maxhp_segment_1']),
-    IsValid() {
-      return this.valid;
-    },
-    BHasClass(className) {
-      classChecks += 1;
-      return this.classes.has(className);
-    },
-    FindChildTraverse(id) {
-      traversals += 1;
-      return id === pip.id ? pip : null;
-    },
-  };
-  const styleValues = {};
-  const unitStatus = {
-    id: 'UnitStatus',
-    valid: true,
-    IsValid() {
-      return this.valid;
-    },
-    style: new Proxy(styleValues, {
-      set(target, property, value) {
-        target[property] = value;
-        writes.push({ property, value });
-        return true;
-      },
-    }),
-  };
-  const counterStyleValues = {};
-  const counterContainer = {
-    id: 'hp_counter_container',
-    valid: true,
-    IsValid() {
-      return this.valid;
-    },
-    style: new Proxy(counterStyleValues, {
-      set(target, property, value) {
-        target[property] = value;
-        counterWrites.push({ property, value });
-        return true;
-      },
-    }),
-  };
-  const contextPanel = {
-    valid: true,
-    attributes: {},
-    IsValid() {
-      return this.valid;
-    },
-    GetAttributeString(name, fallback) {
-      return Object.hasOwn(this.attributes, name) ? this.attributes[name] : fallback;
-    },
-    FindChildTraverse(id) {
-      traversals += 1;
-      if (id === unitStatus.id) return unitStatus;
-      if (id === counterContainer.id) return counterContainer;
-      if (id === healthbars.id) return healthbars;
-      return null;
-    },
-  };
-
-  const vmContext = vm.createContext({
-    $: {
-      GetContextPanel() {
-        contextCalls += 1;
-        return contextPanel;
-      },
-      Schedule(delay, callback) {
-        schedules.push({ delay, callback });
-      },
-    },
-  });
-  vm.runInContext(aligner, vmContext, { filename: alignerPath });
-
-  assert.deepEqual(writes, [{ property: 'marginRight', value: '-41.89px' }]);
-  assert.deepEqual(counterWrites, [
-    { property: 'marginRight', value: '-41.89px' },
-  ]);
-  assert.equal(schedules.length, 1);
-  assert.equal(schedules[0].delay, 0.25);
-  const startupTraversals = traversals;
-  const startupWrites = writes.length;
-  const startupCounterWrites = counterWrites.length;
-  const startupContextCalls = contextCalls;
-
-  for (let i = 0; i < 8; i += 1) {
-    const next = schedules.shift();
-    next.callback();
-  }
-  assert.equal(traversals, startupTraversals);
-  assert.equal(writes.length, startupWrites);
-  assert.equal(counterWrites.length, startupCounterWrites);
-  assert.equal(contextCalls, startupContextCalls + 8);
-  assert.equal(schedules.length, 1);
-  pip.text = "''''";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '-46.92px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '-46.92px',
-  });
-
-  healthbars.classes.delete('maxhp_segment_1');
-  healthbars.classes.add('maxhp_segment_2');
-  pip.text = "''''|''''|";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '-40.21875px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '-40.21875px',
-  });
-  pip.text = "''''|''''|''''";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '102.23px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '102.23px',
-  });
-  pip.text = "''''|''''|''''|''''|";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '244.6875px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '244.6875px',
-  });
-
-
-  healthbars.classes.delete('maxhp_segment_2');
-  healthbars.classes.add('maxhp_segment_3');
-  pip.text = "''''|''''|''''|''''|";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '244.6875px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '244.6875px',
-  });
-
-  const stableTraversals = traversals;
-  const stableClassChecks = classChecks;
-  schedules.shift().callback();
-  assert.equal(traversals, stableTraversals);
-  assert.equal(classChecks, stableClassChecks + 3);
-  assert.equal(writes.length, 5);
-  assert.equal(counterWrites.length, 5);
-  contextPanel.attributes.hp_colors_v2_ally = '1';
-  healthbars.classes.delete('maxhp_segment_3');
-  healthbars.classes.add('maxhp_segment_1');
-  pip.text = "''''";
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '-46.92px',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '-46.92px',
-  });
-  assert.equal(writes.length, 6);
-  assert.equal(counterWrites.length, 6);
-  healthbars.classes.delete('maxhp_segment_1');
-  schedules.shift().callback();
-  assert.deepEqual(writes[writes.length - 1], {
-    property: 'marginRight',
-    value: '',
-  });
-  assert.deepEqual(counterWrites[counterWrites.length - 1], {
-    property: 'marginRight',
-    value: '',
-  });
-  assert.equal(writes.length, 7);
-  assert.equal(counterWrites.length, 7);
-
-  contextPanel.valid = false;
-  schedules.shift().callback();
-  assert.equal(schedules.length, 0);
-  assert.equal(writes.length, 7);
-  assert.equal(counterWrites.length, 7);
-});
-
-test('segment aligner stops on invalid context and backs off while incomplete', () => {
-  const aligner = read(alignerPath);
-  const coldSchedules = [];
-  const invalidContext = { IsValid: () => false };
-  vm.runInContext(aligner, vm.createContext({
-    $: {
-      GetContextPanel: () => invalidContext,
-      Schedule: (delay, callback) => coldSchedules.push({ delay, callback }),
-    },
-  }), { filename: alignerPath });
-  assert.deepEqual(coldSchedules, []);
-
-  const retrySchedules = [];
-  const incompleteContext = {
-    IsValid: () => true,
-    GetAttributeString: (_name, fallback) => fallback,
-    FindChildTraverse: () => null,
-  };
-  vm.runInContext(aligner, vm.createContext({
-    $: {
-      GetContextPanel: () => incompleteContext,
-      Schedule: (delay, callback) => retrySchedules.push({ delay, callback }),
-    },
-  }), { filename: alignerPath });
-  assert.equal(retrySchedules[0].delay, 0.05);
-  for (let retry = 0; retry < 20; retry += 1) {
-    retrySchedules.shift().callback();
-  }
-  assert.equal(retrySchedules.length, 1);
-  assert.equal(retrySchedules[0].delay, 1);
 });

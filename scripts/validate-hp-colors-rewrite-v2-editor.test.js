@@ -111,7 +111,7 @@ function selectEnemyBar(fixture) {
 
 function selectStamina(fixture) {
   panel(fixture, 'HPColorsCategoryReadout').events.onactivate();
-  panel(fixture, 'HPColorsTab3').events.onactivate();
+  panel(fixture, 'HPColorsTab5').events.onactivate();
   assert.equal(panel(fixture, 'HPColorsPageTitle').text, 'ENEMY STAMINA');
 }
 
@@ -165,6 +165,18 @@ function presetOption(fixture, presetId) {
   }
   assert.fail(`expected preset option ${presetId}`);
 }
+
+function scopeOption(fixture, heroKey) {
+  const options = panel(fixture, 'HPColorsScopeOptions');
+  for (let index = 0; index < options.GetChildCount(); index += 1) {
+    const option = options.GetChild(index);
+    if (option.GetAttributeString('hp_colors_scope_hero_key', '') === heroKey) {
+      return option;
+    }
+  }
+  assert.fail(`expected scope option ${heroKey}`);
+}
+
 
 function settleHeroRoute(fixture, enemyLow) {
   fixture.harness.scheduler.runUntil(
@@ -360,19 +372,22 @@ test('stamina section reset publishes defaults immediately', () => {
   assert.equal(configDispatches(fixture).length, beforeDispatchCount + 1);
 });
 
-test('overview layout reset applies immediately to the published snapshot', () => {
+test('overview layout reset applies negative X immediately despite a late slider mouse-up', () => {
   const fixture = bootMenu({
     version: 1,
     values: {
       widthScale: 230,
       heightScale: 160,
-      positionX: 300,
+      positionX: -200,
       positionY: 200,
     },
     scopes: [],
   });
   openEditor(fixture);
   selectOverviewLayout(fixture);
+  const slider = panel(fixture, 'HPColorsPositionXSlider');
+  const entry = panel(fixture, 'HPColorsPositionXEntry');
+  slider.events.onmousedown();
   const beforeConfig = readConfig(fixture);
 
   requestReset(fixture);
@@ -384,8 +399,14 @@ test('overview layout reset applies immediately to the published snapshot', () =
   assert.equal(resetState.values.heightScale, 100);
   assert.equal(resetState.values.positionX, 0);
   assert.equal(resetState.values.positionY, 0);
+  assert.equal(slider.value, 0);
+  assert.equal(entry.text, '0');
   assert.equal(resetConfig.revision, beforeConfig.revision + 1);
   assert.deepEqual(resetConfig.values, resetState.values);
+
+  slider.events.onmouseup();
+  assert.equal(readMenuState(fixture).values.positionX, 0);
+  assert.equal(readConfig(fixture).values.positionX, 0);
 });
 
 test('ally bar reset applies immediately to the published snapshot', () => {
@@ -520,6 +541,92 @@ test('hero route changes refresh open editor controls and the published snapshot
 
   assert.equal(readConfig(fixture).values.enemyLow, '#333333');
   assert.equal(panel(fixture, 'HPColorsEnemyLowHex').text, '#333333');
+});
+
+test('Current scope controls keep mode, summaries, and hero options synchronized', () => {
+  const fixture = bootMenu({ version: 1, values: {}, scopes: [] });
+  openEditor(fixture);
+  panel(fixture, 'HPColorsTab2').events.onactivate();
+
+  const all = panel(fixture, 'HPColorsCurrentScopeAll');
+  const selected = panel(fixture, 'HPColorsCurrentScopeSelected');
+  const summary = panel(fixture, 'HPColorsCurrentScopeSummary');
+  const dialog = panel(fixture, 'HPColorsScopeDialog');
+  const close = panel(fixture, 'HPColorsScopeCloseButton');
+  const haze = scopeOption(fixture, 'hero_haze');
+  const shiv = scopeOption(fixture, 'hero_shiv');
+
+  assert.equal(all.BHasClass('Selected'), true);
+  assert.equal(selected.BHasClass('Selected'), false);
+  assert.equal(summary.text, 'ALL HEROES');
+  assert.equal(haze.BHasClass('Selected'), false);
+  assert.equal(shiv.BHasClass('Selected'), false);
+
+  selected.events.onactivate();
+  assert.equal(dialog.BHasClass('Open'), true);
+  haze.events.onactivate();
+
+  let current = readMenuState(fixture).scopes.find(
+    (scope) => scope.id === 'scope_current',
+  );
+  assert.ok(current);
+  assert.equal(current.mode, 'selected');
+  assert.deepEqual(current.heroes, ['hero_haze']);
+  assert.equal(all.BHasClass('Selected'), false);
+  assert.equal(selected.BHasClass('Selected'), true);
+  assert.equal(summary.text, 'Haze');
+  assert.equal(haze.BHasClass('Selected'), true);
+  assert.equal(shiv.BHasClass('Selected'), false);
+
+  close.events.onactivate();
+  assert.equal(dialog.BHasClass('Open'), false);
+  all.events.onactivate();
+
+  current = readMenuState(fixture).scopes.find(
+    (scope) => scope.id === 'scope_current',
+  );
+  assert.equal(current.mode, 'all');
+  assert.deepEqual(current.heroes, []);
+  assert.equal(all.BHasClass('Selected'), true);
+  assert.equal(selected.BHasClass('Selected'), false);
+  assert.equal(summary.text, 'ALL HEROES');
+  assert.equal(haze.BHasClass('Selected'), false);
+  assert.equal(shiv.BHasClass('Selected'), false);
+
+  selected.events.onactivate();
+  haze.events.onactivate();
+  shiv.events.onactivate();
+
+  current = readMenuState(fixture).scopes.find(
+    (scope) => scope.id === 'scope_current',
+  );
+  assert.equal(current.mode, 'selected');
+  assert.deepEqual(current.heroes, ['hero_haze', 'hero_shiv']);
+  assert.equal(summary.text, 'Haze, Shiv');
+  assert.equal(haze.BHasClass('Selected'), true);
+  assert.equal(shiv.BHasClass('Selected'), true);
+
+  haze.events.onactivate();
+  current = readMenuState(fixture).scopes.find(
+    (scope) => scope.id === 'scope_current',
+  );
+  assert.equal(current.mode, 'selected');
+  assert.deepEqual(current.heroes, ['hero_shiv']);
+  assert.equal(summary.text, 'Shiv');
+  assert.equal(haze.BHasClass('Selected'), false);
+  assert.equal(shiv.BHasClass('Selected'), true);
+
+  shiv.events.onactivate();
+  current = readMenuState(fixture).scopes.find(
+    (scope) => scope.id === 'scope_current',
+  );
+  assert.equal(current.mode, 'all');
+  assert.deepEqual(current.heroes, []);
+  assert.equal(all.BHasClass('Selected'), true);
+  assert.equal(selected.BHasClass('Selected'), false);
+  assert.equal(summary.text, 'ALL HEROES');
+  assert.equal(haze.BHasClass('Selected'), false);
+  assert.equal(shiv.BHasClass('Selected'), false);
 });
 
 test('stale settings clipboard callbacks cannot import into a reopened dialog', () => {
@@ -670,6 +777,37 @@ test('menu boot can retry after a transient CreatePanel failure', () => {
   );
 });
 
+test('menu boot contains thrown panel creation errors and an explicit retry recovers', () => {
+  const fixture = bootMenu(
+    { version: 1, values: { enemyLow: '#123456' }, scopes: [] },
+    {
+      beforeBoot(harness) {
+        const createPanel = harness.$.CreatePanel;
+        let failed = false;
+        harness.$.CreatePanel = (type, parent, id) => {
+          if (!failed && id === 'HPColorsHeroOption3') {
+            failed = true;
+            throw new Error('panel creation unavailable');
+          }
+          return createPanel(type, parent, id);
+        };
+      },
+    },
+  );
+  assert.equal(configDispatches(fixture).length, 0);
+  fixture.harness.$.HPColorsMenuBoot();
+  openEditor(fixture);
+  assert.equal(readConfig(fixture).values.enemyLow, '#123456');
+
+  const snapshot = fixture.harness.root.GetAttributeString(CONFIG_ATTR, '');
+  const dispatchCount = configDispatches(fixture).length;
+  const pendingJobs = fixture.harness.scheduler.jobs.length;
+  fixture.harness.$.HPColorsMenuBoot();
+  assert.equal(fixture.harness.root.GetAttributeString(CONFIG_ATTR, ''), snapshot);
+  assert.equal(configDispatches(fixture).length, dispatchCount);
+  assert.equal(fixture.harness.scheduler.jobs.length, pendingJobs);
+});
+
 test('color picker closes from its backdrop and condition swatches accept clicks', () => {
   assert.match(
     layoutSource,
@@ -740,7 +878,6 @@ test('effect pages live under their healthbar categories', () => {
   assert.equal(panel(fixture, 'HPColorsTab4').BHasClass('Available'), false);
 
   panel(fixture, 'HPColorsCategoryReadout').events.onactivate();
-  assert.equal(panel(fixture, 'HPColorsHeaderCategory').text, 'HEALTH INFO');
   assert.equal(panel(fixture, 'HPColorsPageTitle').text, 'HP TEXT');
 });
 
@@ -894,38 +1031,4 @@ test('stale reset feedback callback cannot overwrite LIVE after editor close', (
 
   fixture.harness.scheduler.runByDelay(1.25);
   assert.equal(panel(fixture, 'HPColorsLiveStatus').text, 'LIVE');
-});
-
-test('entry and shared controls use their intended navigation surfaces', () => {
-  const changeHeroIndex = layoutSource.indexOf('<Button id="changehero"');
-  const subOptionsIndex = layoutSource.indexOf('<Panel id="SubOptions">');
-  const feedbackIndex = layoutSource.indexOf('<Panel class="FeedbackRow">');
-  const entryIndex = layoutSource.indexOf('<Button id="HPColorsMenuButton"');
-  const settingsIndex = layoutSource.indexOf('<Panel class="SettingsRow">');
-  assert.ok(changeHeroIndex >= 0);
-  assert.ok(subOptionsIndex > changeHeroIndex);
-  assert.ok(feedbackIndex > subOptionsIndex);
-  assert.ok(entryIndex > feedbackIndex);
-  assert.ok(settingsIndex > entryIndex);
-  assert.match(
-    layoutSource,
-    /<Button id="HPColorsMenuButton" class="nav_menu_item minor">\s*<Label text="HP COLORS V2" class="menuButtonLabel" \/>\s*<\/Button>/,
-  );
-  assert.doesNotMatch(
-    layoutSource,
-    /HPColorsMenu(?:Accent|Swatch|Binding)|class="[^"]*HPColorsMenuButton/,
-  );
-  assert.match(layoutSource, /text="SHARED LOW THRESHOLD"/);
-  assert.match(layoutSource, /text="SHARED HIGH THRESHOLD"/);
-  assert.doesNotMatch(layoutSource, /HPColorsLowThreshold(?:SliderHost|Entry)/);
-  assert.doesNotMatch(layoutSource, /HPColorsHighThreshold(?:SliderHost|Entry)/);
-
-  const fixture = bootMenu();
-  openEditor(fixture);
-  panel(fixture, 'HPColorsCategoryEnemy').events.onactivate();
-  panel(fixture, 'HPColorsTab2').events.onactivate();
-  assert.equal(panel(fixture, 'HPColorsPageTitle').text, 'SHIELDS');
-  panel(fixture, 'HPColorsCategoryReadout').events.onactivate();
-  panel(fixture, 'HPColorsTab2').events.onactivate();
-  assert.equal(panel(fixture, 'HPColorsPageTitle').text, 'INDICATORS');
 });

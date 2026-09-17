@@ -2,7 +2,7 @@
 
 ## Goal
 
-Rebuild HP Colors behind small, independently verifiable seams. The current rewrite owns the v1 healthbar renderer, a deep send/read Anita state module, ESC editor adapters, live settings transfer, transient hero identity, session-scoped hero settings, and session preset save/application.
+The rewrite owns the live v2 healthbar renderer, a session-scoped send/read state module, ESC editor adapters, live settings transfer, transient hero identity, scoped settings, and preset save/application.
 
 The layout overrides are based on current stock files in `SteamDatabase/GameTracking-Deadlock/game/citadel/pak01_dir/panorama/layout`. The rewrite changes them only by adding its script/style includes and owned panels.
 
@@ -43,12 +43,12 @@ The layout overrides are based on current stock files in `SteamDatabase/GameTrac
 
 Implemented source files:
 
-- `panorama/layout/unit_status_overlay_v2.xml` preserves v2's live-bar geometry and loads the color renderer plus the segment aligner.
-- `panorama/scripts/unit_status_v2_colors.js` discovers and observes the live v2 healthbar inside its overlay context.
+- `panorama/layout/unit_status_overlay_v2.xml` preserves v2's live-bar geometry and loads the color renderer.
+- `panorama/scripts/unit_status_v2_colors.js` discovers and observes the live v2 healthbar, centers the complete segment container, and gives the level badge and ultimate icon independent X/Y offsets with optional left-edge anchoring.
 
 ### Data path
 
-Each probe reads its local healthbar panels directly. Health samples drive colors, readout, pulse, kill-marker geometry, and local pip/level state. Production does not serialize or emit per-bar pip, width, shield, or health-percentage diagnostics.
+Each probe reads its local healthbar panels directly. Health samples drive colors, readout, pulse, kill-marker geometry, local pip/level state, and width-dependent accessory alignment. Production emits no per-bar geometry diagnostics.
 
 Replacement panels increment the local generation and reset cached sampling and presentation state.
 
@@ -67,6 +67,8 @@ Implemented source files:
 - `panorama/styles/hp_colors_v2_menu.css` owns the Ritual Stripe presentation.
 
 The v1 menu interactions are preserved by source parity. Rewrite v2 still needs a fresh in-game check.
+
+Menu startup resolves panels and creates controls before binding events or publishing settings. Missing controls and thrown creation errors leave startup available for an explicit retry. Repeated boot after success does not republish settings or start duplicate watches.
 
 ## Milestone 3: core healthbar customization
 
@@ -108,7 +110,8 @@ Implemented controls:
 
 - Independent stock team-color endpoints for enemy and ally high health; unknown teams retain each relation's configured high color.
 - Full-ghoul-healthbar opacity applies independently of bar colors.
-- Horizontal and vertical translation of the complete healthbar stack without moving or scaling unit, ultimate, or level icons.
+- Horizontal and vertical translation of the complete healthbar stack. The unit stays fixed. One shared toggle makes the level badge and ultimate icon follow the bar's measured left edge or remain at their stock positions.
+- Independent horizontal and vertical offsets for the level badge and ultimate icon. These offsets apply in both anchor modes.
 - One shared ultimate-ready icon rule: Follow Bar uses each customized relation's final bar color; Custom applies one color to enemy and ally icons even when their bar-color toggle is off.
 
 The renderer classifies relation, team, player, building, sentry, boss, and creature-class ghoul facts in the existing ancestry pass. Neutral classification remains authoritative. Building and boss facts restrict player-only level and kill-marker behavior. Sentry and minion facts select stock dimensions. Ghoul opacity applies one value to the cached `UnitHealthbarContainer` and `unit_info_bg`. Zero uses `opacity: 0.01` to preserve engine width updates. The slider and number entry stay disabled until custom ghoul opacity is enabled.
@@ -124,11 +127,12 @@ The v1 implementation passed its focused automated and in-game checks before thi
 5. Require neutral and unclassified bars to remain stock.
 6. Require late/replaced bars to receive the current snapshot.
 7. Enable team-high color on both teams; require the stock team color only above the high threshold and the configured high color for unknown-team bars.
-8. Move Bar X Offset and Bar Y Offset through positive, negative, and zero values; require only the complete bar stack to move while unit, ultimate, or level icons retain stock placement.
-9. Test ultimate-icon Follow Bar and Custom modes on enemies and allies. Require shared Custom changes to update both relations even when bar coloring is off, while neutral, unclassified, and bypassed icons return to stock.
-10. Drag each native Hue, Saturation, and Lumen slider; require the slider value, canonical hex, and visible bars to update live, then require one Undo to restore the color from before that slider gesture.
-11. Exercise Reset Section confirmation, Cancel, already-default feedback, and Undo. Require Reset Section and Undo to stay hidden on Presets, return on settings pages, and Escape to dismiss the reset dialog or palette before closing the editor.
-12. Exit and require config/role/data logs with no rewrite exceptions.
+8. At 230% Bar Width, move Bar X Offset through `0`, `300`, and `-300` on ally and enemy bars. With indicator anchoring enabled, require the bar, level badge, and ultimate icon to move by the same distance. Test Y offsets and independent indicator offsets too.
+9. Disable indicator anchoring. Bar position changes must leave the indicators in place; width changes must still preserve their scaled bar-edge relationship. Test each indicator's X/Y controls independently.
+10. Test ultimate-icon Follow Bar and Custom modes on enemies and allies. Require shared Custom changes to update both relations even when bar coloring is off, while neutral, unclassified, and bypassed icons return to stock.
+11. Drag each native Hue, Saturation, and Lumen slider; require the slider value, canonical hex, and visible bars to update live, then require one Undo to restore the color from before that slider gesture.
+12. Exercise Reset Section confirmation, Cancel, already-default feedback, and Undo. Reset Layout after a negative X offset and require the bar to return immediately, without damage, another slider change, or a later layout update. Require Reset Section and Undo to stay hidden on Presets, return on settings pages, and Escape to dismiss the reset dialog or palette before closing the editor.
+13. With indicator anchoring enabled, test `800`, `2100`, and `4100` max HP at default and changed widths. Require the level badge and ultimate icon to keep their left-edge gap, an `18%` kill marker to remain visible, reset to use the current live width, and the console to contain no Rewrite exceptions.
 
 
 ## Milestone 7: HP readout
@@ -138,7 +142,7 @@ Implemented controls:
 - Show or hide the enemy HP number.
 - Current/max HP, percentage, and current-only formats.
 - Font chooser with Default (`Retail Demo, Noto Sans, sans-serif`), Oracle (`VALVEOracle, Reaver, sans-serif`), and Pulp (`VALVEPulp, Noto Sans, sans-serif`). Runtime writes the expanded families because stock `sans`, `oracle`, and `block` are compile-time CSS aliases.
-- Text size plus direct horizontal (`-405px…405px`) and portable vertical (`-35px…840px`, default `500px`) offsets.
+- Text size plus direct horizontal (`-405px...405px`, default `-30px`) and portable vertical (`-35px...840px`, default `434px`) offsets.
 - Bar-derived or custom low/mid/high text colors. Bar Color inherits the enemy bar's Fixed/Gradient mode and shared thresholds. Custom enables its own Fixed/Gradient choice. The always-editable shared threshold pair lives under Enemy → Bar and also drives ally bars and custom HP text. The white label is tinted through `washColor`, matching the bar and legacy rendering path instead of assigning a darker flat `color`.
 - Optional team coloring for only the maximum-HP value. Current HP and the separator keep the active text color. Unknown teams keep that same text color.
 
@@ -175,7 +179,7 @@ The marker is a rewrite-owned, non-interactive overlay directly under `UnitHealt
 
 ## Milestone 10: rewrite-native live transfer
 
-The editor copies a compact single-line code prefixed with `HPCR2`. Current exports always use `{"v":[...],"c":{...}}`: `v` contains sparse `[settingIndex, value]` pairs and `c` contains the complete typed ability-condition map, including `{}` when no conditions exist. Historical array-only `HPCR2[...]` inputs remain accepted as complete snapshots with zero conditions, so importing a nonconditional code clears conditions instead of inheriting them from the current hero scope. Export orders pairs by ascending index and omits values equal to shipped defaults. Indexes use the closed, append-only `DEFAULTS` order; unknown indexes, duplicate indexes, malformed values, invalid condition keys, ineligible settings, invalid slots or tiers, and mismatched condition value types reject the whole import before mutation. A valid import replaces the current editable values and conditions atomically, publishes once only when effective values change, and creates one Undo entry.
+The editor copies a compact single-line `HPCR2` code containing legacy `v` value pairs and `c` conditions plus an `hpv2` extension with version `1`, extension `values`, and extension `conditions`. Copy Settings includes every current setting and condition, including stamina, accessory placement, and pickup/ultimate timers. Sparse pairs omit codec defaults; an empty extension still resets a destination's V2 settings to those defaults. Historical array-only and `{v,c}` inputs remain accepted and preserve destination V2 settings and conditions they never contained. Invalid values, duplicate or unknown slots, malformed extensions, and invalid conditions reject the whole import before mutation. Valid imports replace the editable snapshot atomically and remain undoable. New extended codes require the updated V2 runtime or builder; older importers may reject them.
 
 ## Milestone 11: hero identity and match lifecycle
 
@@ -227,6 +231,8 @@ The former split Hero / Presets dashboard is now one full-width Preset Library. 
 
 The Preset Library can copy the selected record or a deterministic baked-before-user repository bundle as an `HPCRP1` clipboard code. Bundles include hidden baked state and selection but never include the synthetic Current scope row. Web-builder single and bundle exports explicitly hide baked **Rewrite Default** whenever they contain an All Heroes user preset, and XML first-boot hydration preserves that repository state. Import validates the entire code before mutation, preserves names, All Heroes/Selected Heroes scope, stable hero keys, frozen settings, baked display names, and canonical typed ability conditions, then appends user records with fresh monotonic IDs. Copy and import are repository-only: they never apply settings, enter Undo, increment revision, or dispatch configuration.
 
+HPCRP1 hero lists may arrive in any order and are normalized to catalogue order on import. Unknown IDs, duplicate IDs, and non-string entries reject the entire bundle without changing the repository.
+
 ## Milestone 17: confirmed section reset
 
 **Reset Section** now opens a blocking confirmation dialog for the active settings tab. Opening, cancelling, and already-default requests do not mutate menu state, enter Undo, increment revision, or dispatch configuration. Confirming resets the captured tab keys through the canonical replacement path, creates one Undo entry, and relies on effective-value equality to suppress irrelevant publication.
@@ -251,15 +257,15 @@ Focused regressions cover strict import validation, all slots, tier thresholds a
 
 Rewrite v2 can resize and reposition the three enemy stamina boxes independently of the healthbar. Width, height, horizontal offset, vertical offset, and optional custom color are preset-scoped settings exposed in both the in-game editor and HPv2 web builder. Custom color applies to filled interiors and every border; `PipEmpty` and transient depleted states keep a black interior. Ally and neutral stamina remain stock, and disabling Rewrite or enemy ownership clears every inline stamina style.
 
-The six stamina values use a versioned `hpv2` extension inside HPCRP1 records. Existing HPCRP1 and legacy HPCR2 codes remain valid and retain stock stamina defaults. Focused runtime, codec, package-builder, preview, desktop, and mobile checks cover extension round-trips, exact geometry, empty-state transitions, reset behavior, and generated VPK hydration. A fresh-restart in-game smoke remains required for live Panorama confirmation.
+The stamina and accessory controls use the versioned `hpv2` extension in HPCRP1 records and current HPCR2 settings codes. Older HPCRP1 records without the extension use default V2 settings; legacy HPCR2 imports preserve the destination's V2 settings. A fresh-restart in-game smoke remains required for live Panorama confirmation.
 
 ## Milestone 20: feedback rendering fixes
 
-The enemy pulse now animates both halves of the `current / maximum` HP readout. Ally custom pulse color has the same Fixed and Gradient modes as enemy pulse color, with Fixed replacing the active bar color and Gradient animating an overlay over the normal ally color. This v2-only mode is stored in the HPCRP1 `hpv2` extension and does not change HPCR2.
+The enemy pulse now animates both halves of the `current / maximum` HP readout. Ally custom pulse color has the same Fixed and Gradient modes as enemy pulse color, with Fixed replacing the active bar color and Gradient animating an overlay over the normal ally color. This V2-only mode is stored in the `hpv2` extension for both HPCRP1 and HPCR2.
 
 Disabling enemy level display now reproduces v1 flow centering by shifting the ultimate indicator, healthbar, and HP readout left by half of the removed level badge's effective width. The existing enemy stamina page already provides width, height, two-axis position, and custom filled/border color controls while leaving ally and neutral stamina stock.
 
-Bar and HP-text offset ranges remain wider than the visible viewport by design. They support unusual UI scales and compositions; the root, healthbar, and readout panels use `overflow: noclip`, so only the screen edge crops an element moved offscreen.
+Bar and HP-text offset ranges remain wider than the visible viewport by design. Bar width scales the complete live stack around the measured bar center; runtime never writes the engine-owned `width` or `max-width`. Anchored indicators follow X translation without multiplying it by width scale. Layout Reset writes zero translation explicitly instead of waiting for cleared-style recomputation. The existing health pass samples live width and updates alignment when width or configured layout changes. Production emits no geometry records.
 
 ## Priority 8 runtime measurement baseline
 
@@ -268,6 +274,52 @@ The 2026-08-15 detect-only diagnostic build recorded 37m35s of live gameplay. Ni
 The menu emitted 38 summaries and observed seven lifecycle changes, including three active-match exits. No rewrite script or runtime exceptions occurred. A targeted follow-up recorded an unchanged effective revision and preserved the active `user_0001` preset across one active-to-lobby exit. This predates immediate explicit Apply and is retained only as lifecycle evidence.
 
 The evidence does not justify a style watchdog, an explicit match-reset generation/acknowledgement path, or more clean-state work. The temporary counters were removed after recording the baseline. Repeat this measurement only if new live evidence contradicts it.
+
+## Refactor validation (2026-09-05)
+
+Confirmation requests now use distinct, single-use tokens; a cancelled reset or preset-removal request cannot confirm a later request. Removed unused private state and baseline fields, duplicate scope rendering, and the ancestor helper superseded by the consolidated discovery walk.
+
+`node scripts/measure-hp-colors-rewrite-v2-refactor.js --output <report.json>` measures equal ten-second synthetic windows after a one-second warmup. Set `HP_COLORS_REWRITE_SOURCE_ROOT` to compare a preserved source tree. Scenarios cover stable/active enemies, allies, no bars, replacement, layout reset, width editing, scope editing, and state updates.
+
+The preserved before/after runs reduced renderer parent reads from 550 to 370 per stable/active context, scope-editor class reads from 17,930 to 13,930, and newly frozen objects from 1,500 to 1,100 across 100 state edits. Observable snapshots, callback counts, and style writes were unchanged. Serialization work was unchanged. These are VM operation counts, not native CPU or FPS results; fresh live A/B captures and in-game smoke checks remain required for performance acceptance.
+
+## Release 2.0.3
+
+Native style caching compares unchanged requests against the post-assignment native readback. It avoids repeated writes caused by normalized colors, numbers, and transforms while retaining engine-change and replacement-panel repair. Alias restoration clears the owning base property and reapplies unaffected inline siblings, avoiding rejected null alias assignments. If neither an alias nor its base getter exposes a change, the cache cannot detect it.
+
+Ordinary preset Apply updates existing rows instead of rebuilding their controls. Menu setup remains explicitly retryable after incomplete or failed panel creation. Temporary profiling, benchmark logging, timing switches, and their test fixtures have been removed; actionable boot/dispatch error messages remain.
+
+The normal wrapper builds standalone pak02 by default. With ShowRank Barebones pak89 installed, use `build_hp_colors_rewrite_v2.ps1 -ShowRankBarebones` to compose its Escape open/out handlers while preserving HP editor cancellation. This changes only the staged layout; the canonical runtime remains independent of ShowRank.
+
+The QOLLOCK wrapper copies the same canonical runtime, derives packed assets from its package contract, and preserves the pinned pak03 dependency. Use `build_hp_colors_rewrite_v2_qollock.ps1 -RefreshFromInstalledQollock` when intentionally updating compatibility against a supplied pak03. Both wrappers accept `-SkipDeploy` for archive-only builds.
+
+Install only one pak02 variant and fully restart Deadlock. The normal archive contains standalone pak02 only; the QOLLOCK archive requires the matching pak03 and does not bundle it. Barebones remains an opt-in build option, not an archive payload. The prior roughly 35-minute Barebones live capture had no logged style-write failures, and the user confirmed correct rendering. Automated release checks do not substitute for a fresh in-game check of the final packages.
+
+## Third Eye compatibility
+
+`build_hp_colors_rewrite_v2_thirdeye.ps1` builds the Rewrite v2 + Third Eye compatibility pak02. It runs `scripts/compose-hp-colors-rewrite-v2-thirdeye.js` with the pinned `hp_colors_rewrite_v2_thirdeye/source_snapshots/` inputs, copies the canonical HPv2 runtime at build time, and emits the extra `hp_colors_thirdeye_bridge.vjs_c`, `hp_colors_thirdeye_window.vjs_c`, and `features/topbar_ult_cooldown/feature.vjs_c` assets. The patched window is generated by `scripts/patch-hp-colors-thirdeye-window.js`; the canonical Rewrite runtime remains unmodified.
+
+Install the generated HPv2 preset-builder pak01, this compatibility pak02, and the unchanged Third Eye package at a lower priority (the verified package uses `pak47_dir.vpk`; a lower-priority pak03+ slot also works). The package pin is recorded in `hp_colors_rewrite_v2_thirdeye/thirdeye-source-pin.json`. `-ThirdEyePakPath <path>` validates a supplied package's SHA-256 and required Source 2 assets; `-SkipDeploy` can build from the pinned snapshots without an installed Third Eye package.
+
+Use only one pak02 variant. Do not combine Third Eye with ShowRank Barebones or a QOLLOCK/ShowRank triple stack. The compatibility Escape XML preserves HPColorsMenuBoot/HPColorsMenuCancel nested-cancel behavior, composes Third Eye close handling for Escape, backdrop, and EscapeButton, and closes Third Eye before HP COLORS opens. A fresh Deadlock restart is required after replacing any VPK.
+
+The topbar cooldown feature is generated from the pinned Third Eye source with one lookup fallback: HPv2 temporarily moves `UltimateStatus` under `HPV2PickupIndicators` while pickup icons are active. Third Eye must read the native cooldown through that wrapper as well as directly under `StatusRow`. The original feature toggle, polling interval, labels, and CSS visibility rules remain unchanged. The shared pickup renderer centers either supported cooldown label beneath the ultimate and restores its prior alignment when pickups expire.
+
+Run `node --test scripts/validate-hp-colors-rewrite-v2-thirdeye.test.js` for the delayed-hook, nested-cancel, and topbar cooldown reparenting regressions. After rebuilding, copy the generated compatibility Escape XML into the web builder's `public/templates/hpv2_hp_colors_rewrite_thirdeye/panorama/layout/hud_escape_menu.xml`. The browser preset and runtime must use the same merged layout. Before release, restart Deadlock and check both editors, nested dialogs, Escape/backdrop/Resume, preset hydration, and Third Eye's topbar cooldown before, during, and after HPv2 pickup icons; automated checks do not prove live rendering.
+
+
+## Pickup and ultimate timers
+
+The canonical pak02 now includes the combined timer runtime previously tested in `test_hp_colors_v2_showrank/`. HUD Details exposes pickup colors, background darkness, glyph color, size, spacing, and offsets, plus world ultimate cooldown visibility, scale, darkness, and Follow Icon / Fixed / Gradient progress colors. Timer settings and conditions use appended `hpv2` extension slots in both HPCRP1 and current HPCR2 exports; legacy codes remain accepted.
+
+The event-driven sibling relay, native progress sampling, identity/freshness guards, one-time disabled-pickup clearing, and unchanged ultimate-style suppression are retained. Ultimate scaling includes the backing background. The ultimate texture uses lossless PNG passthrough with one mip and no LOD.
+
+The native ultimate-ready icon takes priority. Snapshot updates and cleanup hide the custom overlay unless the native icon is present and collapsed; the timer no longer hides native ready artwork.
+
+Both normal and QOLLOCK builds include the timers. Do not install the standalone pickup pak04 alongside either pak02. ShowRank remains an optional staged composition, not a canonical dependency. Both wrappers write root `pak02_dir.vpk`, so preserve the normal package before building QOLLOCK.
+
+Use `-SkipDeploy -SkipPanoramaTests` for compile-only builds without mocked Panorama checks. Timer behavior checks and package checks still run. Latest live rendering and lifecycle behavior remain unverified; no FPS improvement is claimed.
+
 
 ## Remaining limits and live checks
 

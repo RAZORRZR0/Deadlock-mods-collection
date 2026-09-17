@@ -150,6 +150,11 @@ class MockPanel {
         const prop = String(property);
         incrementCounter(this.operationCounts, 'styleWrites');
         this.__styleWrites.push({ property: prop, value });
+        if (value === null && ['margin', 'font', 'animation', 'border'].includes(prop)) {
+          for (const key of Object.keys(target)) {
+            if (key.startsWith(prop) && (prop !== 'border' || /^border(?:(?:Top|Right|Bottom|Left))?(?:Color|Width|Style)$/.test(key))) target[key] = '';
+          }
+        }
         target[property] = value === null ? '' : value;
         return true;
       },
@@ -302,6 +307,15 @@ class MockPanel {
     if (key === 'text') return this.text || fallback || '';
     if (key === 'id') return this.id || fallback || '';
     return fallback || '';
+  }
+  FindChild(id) {
+    incrementCounter(this.operationCounts, 'traversal');
+    incrementCounter(this.operationCounts, 'childrenReads');
+    if (!this.valid) return null;
+    for (const child of this.children) {
+      if (child && child.IsValid && child.IsValid() && child.id === id) return child;
+    }
+    return null;
   }
   FindChildTraverse(id) {
     incrementCounter(this.operationCounts, 'traversal');

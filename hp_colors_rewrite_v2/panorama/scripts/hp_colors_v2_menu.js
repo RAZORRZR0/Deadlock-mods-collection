@@ -16,7 +16,6 @@
   var PRESET_STORE_CONTRACT = "HPCRP1";
   var PRESET_STORE_VERSION = "1";
   var PRESET_STORE_MAX_HEX_LENGTH = 524288;
-  var presetStoreBootMessageShown = false;
   var PRECISE_PIPS_ENABLE_TEXT =
     '"citadel_unit_status_health_per_minor_pip" "10"\n' +
     '"citadel_unit_status_health_per_pip" "10"\n' +
@@ -58,9 +57,9 @@
           name: "LAYOUT",
           title: "BAR LAYOUT",
           description:
-            "Resize and move the healthbar stack only. Unit, ultimate, and level icons keep their stock size and position.",
+            "Resize and move the healthbar stack. Indicators track its scale; anchoring also applies its X/Y offsets.",
           pageId: "HPColorsSettingsOverviewLayout",
-          keys: ["widthScale", "heightScale", "positionX", "positionY"],
+          keys: ["widthScale", "heightScale", "positionX", "positionY", "accessoryAnchorEnabled"],
         },
         {
           name: "PRESETS",
@@ -201,7 +200,7 @@
       ],
     },
     {
-      name: "HEALTH INFO",
+      name: "HUD DETAILS",
       tabs: [
         {
           name: "HP TEXT",
@@ -231,17 +230,56 @@
           keys: ["readoutOffsetX", "readoutOffsetY"],
         },
         {
-          name: "INDICATORS",
-          title: "INDICATORS",
+          name: "PIPS & LEVEL",
+          title: "HEALTH PIPS & PLAYER LEVEL",
           description:
-            "Control enemy health pips and levels plus the shared ultimate-ready icon color rule.",
+            "Set health pips, level visibility, and level badge position.",
           pageId: "HPColorsSettingsReadoutLevels",
           keys: [
             "pipsVisible",
             "precisePipsEnabled",
             "levelsVisible",
+            "levelOffsetX",
+            "levelOffsetY",
+          ],
+        },
+        {
+          name: "PICKUPS",
+          title: "TOPBAR PICKUP TIMERS",
+          description:
+            "Show and style gun, movement, spirit, and survival timers beside the topbar ultimate icons.",
+          pageId: "HPColorsSettingsPickupTimers",
+          keys: [
+            "pickupTimersEnabled",
+            "pickupGunColor",
+            "pickupMovementColor",
+            "pickupSpiritColor",
+            "pickupSurvivalColor",
+            "pickupBackgroundDarkness",
+            "pickupGlyphColor",
+            "pickupSize",
+            "pickupSpacing",
+            "pickupOffsetX",
+            "pickupOffsetY",
+          ],
+        },
+        {
+          name: "ULTIMATE",
+          title: "ULTIMATE ICON & TIMER",
+          description:
+            "Set the base icon color, progress override, position, and cooldown visibility.",
+          pageId: "HPColorsSettingsUltimateTimer",
+          keys: [
             "ultMode",
             "ultCustom",
+            "ultimateTimerColorMode",
+            "ultimateTimerUnavailableColor",
+            "ultimateTimerAvailableColor",
+            "ultimateTimerEnabled",
+            "ultimateTimerSize",
+            "ultimateTimerDarkness",
+            "ultOffsetX",
+            "ultOffsetY",
           ],
         },
         {
@@ -283,6 +321,8 @@
     allyDelta: true,
     allyBulletShield: true,
     ultCustom: true,
+    ultimateTimerUnavailableColor: true,
+    ultimateTimerAvailableColor: true,
     readoutLow: true,
     readoutMid: true,
     readoutHigh: true,
@@ -290,6 +330,11 @@
     enemyKillMarkerColor: true,
     allyPulseColor: true,
     enemyStaminaColor: true,
+    pickupGunColor: true,
+    pickupMovementColor: true,
+    pickupSpiritColor: true,
+    pickupSurvivalColor: true,
+    pickupGlyphColor: true,
   };
   var COLOR_TITLES = {
     enemyLow: "ENEMY LOW",
@@ -304,13 +349,20 @@
     allyHealing: "ALLY HEALING",
     allyDelta: "ALLY RECENT DAMAGE",
     allyBulletShield: "ALLY SHIELD",
-    ultCustom: "ULTIMATE ICON",
+    ultCustom: "BASE ULTIMATE ICON COLOR",
+    ultimateTimerUnavailableColor: "ULTIMATE PROGRESS UNAVAILABLE",
+    ultimateTimerAvailableColor: "ULTIMATE PROGRESS READY",
     readoutLow: "HEALTH TEXT LOW",
     readoutMid: "HEALTH TEXT MID",
     readoutHigh: "HEALTH TEXT HIGH",
     enemyPulseColor: "ENEMY PULSE COLOR",
     enemyKillMarkerColor: "ENEMY KILL MARKER COLOR",
     enemyStaminaColor: "ENEMY STAMINA COLOR",
+    pickupGunColor: "PICKUP GUN COLOR",
+    pickupMovementColor: "PICKUP MOVEMENT COLOR",
+    pickupSpiritColor: "PICKUP SPIRIT COLOR",
+    pickupSurvivalColor: "PICKUP SURVIVAL COLOR",
+    pickupGlyphColor: "PICKUP GLYPH COLOR",
   };
 
   var TOGGLE_CONTROLS = [
@@ -329,6 +381,10 @@
     },
     { id: "HPColorsPipsVisibleToggle", key: "pipsVisible" },
     { id: "HPColorsLevelsVisibleToggle", key: "levelsVisible" },
+    {
+      id: "HPColorsAccessoryAnchorToggle",
+      key: "accessoryAnchorEnabled",
+    },
     {
       id: "HPColorsEnemyStaminaColorToggle",
       key: "enemyStaminaColorEnabled",
@@ -359,6 +415,8 @@
       id: "HPColorsAllyPulseColorToggle",
       key: "allyPulseColorEnabled",
     },
+    { id: "HPColorsPickupTimersToggle", key: "pickupTimersEnabled" },
+    { id: "HPColorsUltimateTimerToggle", key: "ultimateTimerEnabled" },
   ];
   var MODE_CONTROLS = [
     { id: "HPColorsEnemyModeFixed", key: "enemyMode", value: "fixed" },
@@ -375,6 +433,21 @@
     },
     { id: "HPColorsUltModeFollow", key: "ultMode", value: "follow" },
     { id: "HPColorsUltModeCustom", key: "ultMode", value: "custom" },
+    {
+      id: "HPColorsUltimateTimerColorModeFollow",
+      key: "ultimateTimerColorMode",
+      value: "follow",
+    },
+    {
+      id: "HPColorsUltimateTimerColorModeFixed",
+      key: "ultimateTimerColorMode",
+      value: "fixed",
+    },
+    {
+      id: "HPColorsUltimateTimerColorModeGradient",
+      key: "ultimateTimerColorMode",
+      value: "gradient",
+    },
     {
       id: "HPColorsEnemyPulseColorModeFixed",
       key: "enemyPulseColorMode",
@@ -477,6 +550,20 @@
     { base: "HPColorsHeight", key: "heightScale", min: 60, max: 160 },
     { base: "HPColorsPositionX", key: "positionX", min: -300, max: 300 },
     { base: "HPColorsPositionY", key: "positionY", min: -200, max: 200 },
+    { base: "HPColorsUltOffsetX", key: "ultOffsetX", min: -300, max: 300 },
+    { base: "HPColorsUltOffsetY", key: "ultOffsetY", min: -200, max: 200 },
+    {
+      base: "HPColorsLevelOffsetX",
+      key: "levelOffsetX",
+      min: -300,
+      max: 300,
+    },
+    {
+      base: "HPColorsLevelOffsetY",
+      key: "levelOffsetY",
+      min: -200,
+      max: 200,
+    },
     { base: "HPColorsStaminaWidth", key: "staminaWidth", min: 40, max: 220 },
     {
       base: "HPColorsStaminaHeight",
@@ -577,6 +664,49 @@
       min: 1,
       max: 100,
     },
+    {
+      base: "HPColorsPickupBackgroundDarkness",
+      key: "pickupBackgroundDarkness",
+      min: 0,
+      max: 100,
+    },
+    {
+      base: "HPColorsPickupSize",
+      key: "pickupSize",
+      min: 12,
+      max: 64,
+    },
+    {
+      base: "HPColorsPickupSpacing",
+      key: "pickupSpacing",
+      min: 0,
+      max: 16,
+    },
+    {
+      base: "HPColorsPickupOffsetX",
+      key: "pickupOffsetX",
+      min: -200,
+      max: 200,
+    },
+    {
+      base: "HPColorsPickupOffsetY",
+      key: "pickupOffsetY",
+      min: -100,
+      max: 100,
+    },
+    {
+      base: "HPColorsUltimateTimerSize",
+      key: "ultimateTimerSize",
+      min: 25,
+      max: 200,
+      increment: 5,
+    },
+    {
+      base: "HPColorsUltimateTimerDarkness",
+      key: "ultimateTimerDarkness",
+      min: 0,
+      max: 100,
+    },
   ];
   var COLOR_CONTROLS = [
     { base: "HPColorsEnemyLow", key: "enemyLow" },
@@ -587,6 +717,14 @@
     { base: "HPColorsEnemyShield", key: "enemyBulletShield" },
     { base: "HPColorsEnemyStaminaColor", key: "enemyStaminaColor" },
     { base: "HPColorsUltCustom", key: "ultCustom" },
+    {
+      base: "HPColorsUltimateTimerUnavailableColor",
+      key: "ultimateTimerUnavailableColor",
+    },
+    {
+      base: "HPColorsUltimateTimerAvailableColor",
+      key: "ultimateTimerAvailableColor",
+    },
     { base: "HPColorsAllyLow", key: "allyLow" },
     { base: "HPColorsAllyMid", key: "allyMid" },
     { base: "HPColorsAllyHigh", key: "allyHigh" },
@@ -599,6 +737,11 @@
     { base: "HPColorsReadoutLow", key: "readoutLow" },
     { base: "HPColorsReadoutMid", key: "readoutMid" },
     { base: "HPColorsReadoutHigh", key: "readoutHigh" },
+    { base: "HPColorsPickupGunColor", key: "pickupGunColor" },
+    { base: "HPColorsPickupMovementColor", key: "pickupMovementColor" },
+    { base: "HPColorsPickupSpiritColor", key: "pickupSpiritColor" },
+    { base: "HPColorsPickupSurvivalColor", key: "pickupSurvivalColor" },
+    { base: "HPColorsPickupGlyphColor", key: "pickupGlyphColor" },
   ];
   var REQUIRED_UI_PANEL_KEYS = (
     "menuButton editorRoot editorShell peekCapture peekButton doneButton " +
@@ -652,7 +795,6 @@
   var replayGeneration = 0;
   var replayRunning = false;
   var replayDispatches = 0;
-  var serializedSnapshotRaw = "";
   var serializedReplayPayload = "";
   var lastClipboardCopied = null;
   Object.defineProperties(state, {
@@ -668,12 +810,6 @@
         var view = currentView();
         if (!view) return {};
         return view.currentScope ? view.currentScope.conditions : view.conditions;
-      },
-    },
-    history: {
-      get: function () {
-        var view = currentView();
-        return { length: view && view.undoAvailable ? 1 : 0 };
       },
     },
   });
@@ -711,15 +847,10 @@
       if (effect.type === "session_replace") {
         writeMenuState(effect.raw);
       } else if (effect.type === "effective_publish") {
-        var payload = serializeChange(
-          effect.settingId,
-          effect.raw,
-          effect.revision,
-          effect.values,
-        );
+        var payload = serializeChange(effect.revision, effect.values);
         writeRootSnapshot(payload);
-        cacheReplayPayload(payload, payload);
-        dispatchChange(effect.settingId, payload, payload);
+        serializedReplayPayload = payload;
+        dispatchChange(payload);
         refreshSnapshotReplay();
       } else if (effect.type === "clipboard_write") {
         lastClipboardCopied = executeClipboardEffect(effect);
@@ -1394,13 +1525,8 @@
   }
 
   function heroDisplayName(heroKey, heroes) {
-    var list = heroes;
-    if (!list) {
-      var view = currentView();
-      list = view && view.heroes ? view.heroes : [];
-    }
-    for (var index = 0; index < list.length; index++) {
-      if (list[index].key === heroKey) return list[index].name;
+    for (var index = 0; index < heroes.length; index++) {
+      if (heroes[index].key === heroKey) return heroes[index].name;
     }
     return "";
   }
@@ -1527,43 +1653,47 @@
       : HERO_POLL_ACTIVE_SEC;
   }
 
+  function identityPoll(generation) {
+    if (generation !== identity.watchGeneration || !isValid(ui.absoluteRoot))
+      return;
+    var view = currentView();
+    if (!view || !view.identity) return;
+    var previousPhase = view.identity.phase;
+    var nextPhase = readLifecyclePhase();
+    if (nextPhase !== previousPhase) {
+      clearIdentityPanelRefs();
+      var lifecycleResult = sendState({
+        type: "lifecycle_observe",
+        epoch: view.identity.epoch + 1,
+        phase: nextPhase,
+      });
+      refreshEditorAfterIdentityChange(lifecycleResult);
+      renderIdentity();
+      sampleAbilityTiers();
+      restartIdentityWatch();
+      return;
+    }
+    view = currentView();
+    if (
+      view.identity.mode === HERO_MODE_AUTO &&
+      view.identity.phase === HERO_PHASE_ACTIVE
+    ) {
+      var heroResult = sendState({
+        type: "hero_observe",
+        epoch: view.identity.epoch,
+        heroName: readLocalHeroName(),
+      });
+      refreshEditorAfterIdentityChange(heroResult);
+    }
+    renderIdentity();
+    sampleAbilityTiers();
+    scheduleIdentityTick(generation, identityPollDelay());
+  }
+
   function scheduleIdentityTick(generation, delay) {
     try {
-      $.Schedule(delay, function identityTick() {
-        if (generation !== identity.watchGeneration || !isValid(ui.absoluteRoot))
-          return;
-        var view = currentView();
-        if (!view || !view.identity) return;
-        var previousPhase = view.identity.phase;
-        var nextPhase = readLifecyclePhase();
-        if (nextPhase !== previousPhase) {
-          clearIdentityPanelRefs();
-          var lifecycleResult = sendState({
-            type: "lifecycle_observe",
-            epoch: view.identity.epoch + 1,
-            phase: nextPhase,
-          });
-          refreshEditorAfterIdentityChange(lifecycleResult);
-          renderIdentity();
-          sampleAbilityTiers();
-          restartIdentityWatch();
-          return;
-        }
-        view = currentView();
-        if (
-          view.identity.mode === HERO_MODE_AUTO &&
-          view.identity.phase === HERO_PHASE_ACTIVE
-        ) {
-          var heroResult = sendState({
-            type: "hero_observe",
-            epoch: view.identity.epoch,
-            heroName: readLocalHeroName(),
-          });
-          refreshEditorAfterIdentityChange(heroResult);
-        }
-        renderIdentity();
-        sampleAbilityTiers();
-        scheduleIdentityTick(generation, identityPollDelay());
+      $.Schedule(delay, function () {
+        identityPoll(generation);
       });
     } catch {}
   }
@@ -1665,7 +1795,6 @@
       mode: mode,
       heroes: mode === HERO_SCOPE_SELECTED && row ? row.heroes : [],
     });
-    renderCurrentScope();
     renderPresetOptions();
     syncControls();
   }
@@ -1696,7 +1825,6 @@
       mode: next.length ? HERO_SCOPE_SELECTED : HERO_SCOPE_ALL,
       heroes: next,
     });
-    renderCurrentScope();
     renderPresetOptions();
     syncControls();
   }
@@ -2547,6 +2675,27 @@
     setPresetFeedback("CREATED " + name.toUpperCase() + ".", false);
   }
 
+  function refreshPresetActivity() {
+    if (presetFormOpen || presetInlineRenameId || presetDeleteConfirmId) {
+      renderPresetOptions();
+      return;
+    }
+    if (!isValid(ui.presetOptions)) return;
+    var repository = currentView().repository;
+    var rows = ui.presetOptions.Children();
+    for (var index = 0; index < rows.length; index++) {
+      var row = rows[index];
+      var id = row.GetAttributeString("hp_colors_preset_id", "");
+      var active = id === repository.activeId;
+      setClass(row, "Selected", id === repository.selectedId);
+      setClass(row, "Active", active);
+      setText(
+        row.FindChildTraverse("HPColorsPresetOptionStatus" + index),
+        active ? "ACTIVE" : "",
+      );
+    }
+  }
+
   function requestPresetApplication(id, savedFirst) {
     var preset = findPresetRecord(String(id || ""));
     if (!preset) {
@@ -2569,7 +2718,7 @@
       );
       return false;
     }
-    renderPresetOptions();
+    refreshPresetActivity();
     syncControls();
     setPresetFeedback(
       (savedFirst ? "SAVED & APPLIED " : "APPLIED ") +
@@ -2821,15 +2970,12 @@
   }
 
 
-  function serializeChange(settingId, raw, revision, values) {
-    var view = values ? null : currentView();
-    var effectiveValues =
-      values || (view && view.effectiveValues ? view.effectiveValues : {});
+  function serializeChange(revision, values) {
     return JSON.stringify({
       magic_word: CONFIG_MAGIC,
       version: CONFIG_VERSION,
       revision: Number(revision) || 0,
-      values: effectiveValues,
+      values: values,
     });
   }
 
@@ -2854,19 +3000,6 @@
     }
   }
 
-  function cacheReplayPayload(raw, replayPayload) {
-    if (!raw) return;
-    serializedSnapshotRaw = raw;
-    var view = replayPayload ? null : currentView();
-    serializedReplayPayload =
-      replayPayload ||
-      serializeChange(
-        "*",
-        raw,
-        view ? view.effectiveRevision : 0,
-        view ? view.effectiveValues : {},
-      );
-  }
 
 
   function readRootAttribute(name) {
@@ -2886,15 +3019,6 @@
     }
   }
 
-  function logPresetStoreTransition() {
-    if (presetStoreBootMessageShown) return;
-    presetStoreBootMessageShown = true;
-    try {
-      $.Msg(
-        "[HP Colors Rewrite] preset store unavailable; using session/default state",
-      );
-    } catch {}
-  }
 
   function decodePresetStoreText(encoded) {
     var text = String(encoded || "");
@@ -2923,7 +3047,6 @@
       readPanelAttribute(store, PRESET_STORE_VERSION_ATTR) !==
         PRESET_STORE_VERSION
     ) {
-      logPresetStoreTransition();
       return "";
     }
     var label = null;
@@ -2932,12 +3055,10 @@
         store.FindChildTraverse && store.FindChildTraverse(PRESET_LABEL_ID);
     } catch {}
     if (!isValid(label) || !panelHasClass(label, PRESET_ENTRY_CLASS)) {
-      if (isValid(label)) logPresetStoreTransition();
       return "";
     }
     var decoded = decodePresetStoreText(readPanelText(label));
     if (decoded === null) {
-      logPresetStoreTransition();
       return "";
     }
     return decoded;
@@ -2972,12 +3093,9 @@
     }
   }
 
-  function dispatchChange(settingId, raw, serialized) {
+  function dispatchChange(serializedPayload) {
     try {
-      $.DispatchEvent(
-        EVENT_CHANNEL,
-        serialized || serializeChange(settingId, raw),
-      );
+      $.DispatchEvent(EVENT_CHANNEL, serializedPayload);
     } catch (error) {
       $.Msg("[HP Colors Rewrite] settings dispatch failed: " + String(error));
     }
@@ -2989,26 +3107,26 @@
     return REPLAY_IDLE_SEC;
   }
 
+  function snapshotReplay(generation) {
+    var view = currentView();
+    if (
+      !replayRunning ||
+      generation !== replayGeneration ||
+      !view ||
+      !view.effectiveValues ||
+      !view.effectiveValues.enabled ||
+      !isValid(ui.absoluteRoot)
+    )
+      return;
+    replayDispatches += 1;
+    dispatchChange(serializedReplayPayload);
+    scheduleSnapshotReplay(generation);
+  }
+
   function scheduleSnapshotReplay(generation) {
     try {
       $.Schedule(replayDelay(), function () {
-        var view = currentView();
-        if (
-          !replayRunning ||
-          generation !== replayGeneration ||
-          !view ||
-          !view.effectiveValues ||
-          !view.effectiveValues.enabled ||
-          !isValid(ui.absoluteRoot)
-        )
-          return;
-        replayDispatches += 1;
-        dispatchChange(
-          "*",
-          serializedSnapshotRaw,
-          serializedReplayPayload,
-        );
-        scheduleSnapshotReplay(generation);
+        snapshotReplay(generation);
       });
     } catch {
       replayRunning = false;
@@ -3023,7 +3141,7 @@
       replayDispatches = 0;
       return;
     }
-    if (!serializedSnapshotRaw || !serializedReplayPayload) return;
+    if (!serializedReplayPayload) return;
     replayDispatches = 0;
     if (replayRunning) return;
     replayRunning = true;
@@ -3949,6 +4067,18 @@
       "Active",
       values.ultMode === "custom",
     );
+    var ultimateTimerProgressColors =
+      values.ultimateTimerColorMode !== "follow";
+    setClass(
+      controlPanel("HPColorsUltimateTimerUnavailableColorRow"),
+      "Active",
+      ultimateTimerProgressColors,
+    );
+    setClass(
+      controlPanel("HPColorsUltimateTimerAvailableColorRow"),
+      "Active",
+      ultimateTimerProgressColors,
+    );
 
     setEnabled(controlPanel("HPColorsSharedLowThresholdSlider"), true);
     setEnabled(controlPanel("HPColorsSharedLowThresholdEntry"), true);
@@ -4226,7 +4356,7 @@
     }
     for (var categoryIndex = 0; categoryIndex < CATEGORY_BUTTON_IDS.length; categoryIndex++)
       ui.categoryButtons.push(find(CATEGORY_BUTTON_IDS[categoryIndex]));
-    for (var tabIndex = 0; tabIndex < 5; tabIndex++) {
+    for (var tabIndex = 0; tabIndex < 6; tabIndex++) {
       ui.tabButtons.push(find("HPColorsTab" + tabIndex));
       ui.tabLabels.push(find("HPColorsTabLabel" + tabIndex));
     }
@@ -4366,59 +4496,7 @@
     bindConditionEditorControls();
   }
 
-  function boot() {
-    if (state.booted) return;
-    if (!resolvePanels()) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: required panel missing");
-      return;
-    }
-    if (
-      !$.HPColorsV2StateFactory ||
-      !isCallable($.HPColorsV2StateFactory.create)
-    ) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: HPColorsV2StateFactory missing");
-      return;
-    }
-    var rawSessionState = readRootAttribute(MENU_STATE_ATTR);
-    var publishedRaw = decodePublishedState(readRootAttribute(CONFIG_ATTR));
-    var builderPresetRaw = readBuilderPresetRaw();
-    try {
-      stateInstance = $.HPColorsV2StateFactory.create({
-        sessionRaw: rawSessionState || null,
-        publishedRaw: publishedRaw || null,
-        builderPresetRaw: builderPresetRaw,
-      });
-    } catch (error) {
-      $.Msg(
-        "[HP Colors Rewrite] menu boot failed: state factory create error: " +
-          String(error),
-      );
-      return;
-    }
-    if (
-      !stateInstance ||
-      !isCallable(stateInstance.send) ||
-      !isCallable(stateInstance.read)
-    ) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: invalid state instance");
-      stateInstance = null;
-      return;
-    }
-    state.view = stateInstance.read();
-    if (!createSliders()) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: slider host missing");
-      return;
-    }
-    if (!createHeroOptions()) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: hero option host missing");
-      return;
-    }
-    if (!createScopeHeroOptions()) {
-      $.Msg("[HP Colors Rewrite] menu boot failed: scope option host missing");
-      return;
-    }
-
-
+  function bindMenuControls() {
     setPanelEvent(ui.menuButton, "onactivate", openEditor);
     setPanelEvent(ui.doneButton, "onactivate", closeEditor);
     setPanelEvent(ui.undoButton, "onactivate", undo);
@@ -4501,15 +4579,70 @@
     setPanelEvent(ui.precisePipsCopyButton, "onactivate", copyPrecisePipsText);
     setPanelEvent(ui.precisePipsCloseButton, "onactivate", closePrecisePipsDialog);
     setPanelEvent(ui.precisePipsDialog, "oncancel", closePrecisePipsDialog);
+  }
+
+  function boot() {
+    if (state.booted) return;
+    if (!resolvePanels()) {
+      $.Msg("[HP Colors Rewrite] menu boot failed: required panel missing");
+      return;
+    }
+    if (
+      !$.HPColorsV2StateFactory ||
+      !isCallable($.HPColorsV2StateFactory.create)
+    ) {
+      $.Msg("[HP Colors Rewrite] menu boot failed: HPColorsV2StateFactory missing");
+      return;
+    }
+    var rawSessionState = readRootAttribute(MENU_STATE_ATTR);
+    var publishedRaw = decodePublishedState(readRootAttribute(CONFIG_ATTR));
+    var builderPresetRaw = readBuilderPresetRaw();
+    try {
+      stateInstance = $.HPColorsV2StateFactory.create({
+        sessionRaw: rawSessionState || null,
+        publishedRaw: publishedRaw || null,
+        builderPresetRaw: builderPresetRaw,
+      });
+    } catch (error) {
+      $.Msg(
+        "[HP Colors Rewrite] menu boot failed: state factory create error: " +
+          String(error),
+      );
+      return;
+    }
+    if (
+      !stateInstance ||
+      !isCallable(stateInstance.send) ||
+      !isCallable(stateInstance.read)
+    ) {
+      $.Msg("[HP Colors Rewrite] menu boot failed: invalid state instance");
+      stateInstance = null;
+      return;
+    }
+    state.view = stateInstance.read();
+    try {
+      if (!createSliders() || !createHeroOptions() || !createScopeHeroOptions()) {
+        $.Msg("[HP Colors Rewrite] menu boot failed: control creation incomplete");
+        return;
+      }
+    } catch (error) {
+      $.Msg(
+        "[HP Colors Rewrite] menu boot failed: control creation error: " +
+          String(error),
+      );
+      return;
+    }
+    bindMenuControls();
 
     state.booted = true;
     sendState({ type: "session_open", publish: true });
     var effectiveRaw = readRootAttribute(CONFIG_ATTR);
-    if (effectiveRaw) cacheReplayPayload(effectiveRaw, effectiveRaw);
+    if (effectiveRaw) serializedReplayPayload = effectiveRaw;
     refreshSnapshotReplay();
     renderNavigation();
     restartIdentityWatch();
   }
+
 
   $.HPColorsMenuBoot = boot;
   $.HPColorsMenuCancel = cancel;

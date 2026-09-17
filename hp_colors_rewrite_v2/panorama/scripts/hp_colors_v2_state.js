@@ -584,6 +584,7 @@
     var pairs = payload;
     var conditions = null;
     var hasConditions = false;
+    var extension = null;
     if (!Array.isArray(payload)) {
       if (!payload || !isObjectValue(payload))
         return { error: "INVALID HPCR2 PAYLOAD" };
@@ -593,15 +594,19 @@
         if (!Object.prototype.hasOwnProperty.call(payload, payloadField))
           continue;
         payloadFieldCount += 1;
-        if (payloadField !== "v" && payloadField !== "c")
+        if (payloadField !== "v" && payloadField !== "c" && payloadField !== "hpv2")
           return { error: "INVALID HPCR2 PAYLOAD" };
       }
       if (
-        payloadFieldCount !== 2 ||
+        (payloadFieldCount !== 2 && payloadFieldCount !== 3) ||
         !Object.prototype.hasOwnProperty.call(payload, "v") ||
         !Object.prototype.hasOwnProperty.call(payload, "c")
       )
         return { error: "INVALID HPCR2 PAYLOAD" };
+      if (Object.prototype.hasOwnProperty.call(payload, "hpv2")) {
+        extension = deserializePresetExtension(payload.hpv2);
+        if (extension.error) return extension;
+      }
       pairs = payload.v;
       conditions = filterConditions(payload.c, false);
       if (!conditionsAreValid(payload.c, conditions, true))
@@ -636,6 +641,7 @@
       values: normalizeValues(values, CODEC_DEFAULTS),
       conditions: conditions,
       hasConditions: hasConditions,
+      extension: extension,
     };
   }
 
@@ -740,9 +746,17 @@
       var heroes = normalizeHeroSelection(source.heroes);
       if (
         !Array.isArray(source.heroes) ||
-        JSON.stringify(heroes) !== JSON.stringify(source.heroes)
+        heroes.length !== source.heroes.length
       )
         return { error: "INVALID PRESET HEROES" };
+      for (var sourceHeroIndex = 0; sourceHeroIndex < source.heroes.length; sourceHeroIndex++) {
+        var sourceHero = source.heroes[sourceHeroIndex];
+        if (
+          typeof sourceHero !== "string" ||
+          !Object.prototype.hasOwnProperty.call(HERO_BY_KEY, sourceHero)
+        )
+          return { error: "INVALID PRESET HEROES" };
+      }
       var mode = String(source.mode || "");
       var conditions = nullableConditions(source.conditions, false);
       if (!presetConditionsAreValid(source.conditions, conditions))
@@ -983,6 +997,7 @@
       history: [],
       transitionId: 0,
       sessionOpen: true,
+      confirmationSerial: 0,
       confirmation: null,
       gesture: null,
       restoredEffectivePending:
@@ -1272,9 +1287,13 @@
     function makeView() {
       if (viewCache) return viewCache;
       var scopes = [];
+      var currentScope = null;
       var index;
-      for (index = 0; index < state.scopes.length; index++)
-        scopes.push(cloneScope(state.scopes[index]));
+      for (index = 0; index < state.scopes.length; index++) {
+        var projectedScope = cloneScope(state.scopes[index]);
+        scopes.push(projectedScope);
+        if (projectedScope.id === CURRENT_SCOPE_ID) currentScope = projectedScope;
+      }
       var current = currentScopeRow();
       var repository = projectRepository(current);
       var identity = state.identity;
@@ -1311,7 +1330,7 @@
         effectiveValues: copyValues(state.effectiveValues),
         effectiveRevision: state.effectiveRevision,
         scopes: scopes,
-        currentScope: current ? cloneScope(current) : null,
+        currentScope: currentScope,
         identity: viewIdentity,
         ability: viewAbility,
         repository: repository,
@@ -1824,12 +1843,11 @@
       }
       return commit("gesture_begin", function () {
         var before = currentScopeRow() ? historyRaw() : baseRaw();
-        var changed = false;
         var values = editableValues();
         if (hasValue && values[key] !== next) {
           var changedValues = copyValues(values);
           changedValues[key] = next;
-          changed = replaceEditor(
+          replaceEditor(
             changedValues,
             editableConditions(),
             false,
@@ -1838,7 +1856,6 @@
         state.gesture = {
           key: key,
           before: before,
-          changed: changed,
         };
         return true;
       }, { settingId: hasValue ? key : "*" });
@@ -1855,7 +1872,6 @@
         var changedValues = copyValues(editableValues());
         changedValues[key] = next;
         replaceEditor(changedValues, editableConditions(), false);
-        state.gesture.changed = true;
         return true;
       }, { settingId: key });
     }
@@ -1872,7 +1888,6 @@
           var changedValues = copyValues(values);
           changedValues[key] = next;
           replaceEditor(changedValues, editableConditions(), false);
-          gesture.changed = true;
         }
         var after = currentScopeRow() ? historyRaw() : baseRaw();
         if (after !== gesture.before) pushHistory(gesture.before);
@@ -1972,6 +1987,7 @@
           delete conditions[keys[index]];
         }
         state.confirmation = null;
+        state.gesture = null;
         replaceEditor(values, conditions, true);
         return true;
       }, { settingId: "*" });
@@ -2415,6 +2431,11 @@
       var payload = {
         v: canonicalRecordValues(editableValues()),
         c: filterConditions(editableConditions(), false),
+        hpv2: {
+          v: 1,
+          values: canonicalValuePairs(editableValues(), EXTENSION_KEYS),
+          conditions: filterConditions(editableConditions(), true),
+        },
       };
       var text = "HPCR2" + JSON.stringify(payload);
       return commit("settings_copy", function () { return false; }, {
@@ -2430,6 +2451,8 @@
         var importedValues = copyValues(parsed.values);
         var currentConditions = editableConditions();
         var importedConditions = parsed.hasConditions ? parsed.conditions : {};
+        var extensionValues = parsed.extension ? parsed.extension.values : currentValues;
+        var extensionConditions = parsed.extension ? parsed.extension.conditions || {} : currentConditions;
         var extensionIndex;
         for (
           extensionIndex = 0;
@@ -2437,9 +2460,9 @@
           extensionIndex++
         ) {
           var extensionKey = EXTENSION_KEYS[extensionIndex];
-          importedValues[extensionKey] = currentValues[extensionKey];
-          if (Object.prototype.hasOwnProperty.call(currentConditions, extensionKey))
-            importedConditions[extensionKey] = currentConditions[extensionKey];
+          importedValues[extensionKey] = extensionValues[extensionKey];
+          if (Object.prototype.hasOwnProperty.call(extensionConditions, extensionKey))
+            importedConditions[extensionKey] = extensionConditions[extensionKey];
         }
         return replaceEditor(importedValues, importedConditions, true);
       }, { settingId: "*" });
@@ -2581,6 +2604,7 @@
     function read() {
       return makeView();
     }
+
 
     return Object.freeze({ send: dispatch, read: read });
   }
