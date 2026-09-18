@@ -3,11 +3,24 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mergeEscapeMenuXml, assembleCustomPack } from './merge-custom-pack.mjs';
+import { mergeEscapeMenuXml, mergeTopBarXml, assembleCustomPack } from './merge-custom-pack.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const root = path.join(__dirname, '..');
+
+test('mergeTopBarXml: adds HPV2PickupTopBar class, pickups script, and v2 stylesheet', () => {
+  const showrankTopbarXml = fs.readFileSync(path.join(root, 'showrank_recent_purchases/panorama/layout/citadel_hud_top_bar.xml'), 'utf8');
+
+  const merged = mergeTopBarXml(showrankTopbarXml, { enableHpColors: true });
+
+  assert.match(merged, /<CitadelHudTopBar\s+class="HPV2PickupTopBar"/, 'adds HPV2PickupTopBar class to CitadelHudTopBar');
+  assert.match(merged, /s2r:\/\/panorama\/scripts\/hp_colors_v2_contract\.vjs_c/, 'includes hp_colors_v2_contract.vjs_c');
+  assert.match(merged, /s2r:\/\/panorama\/scripts\/test_topbar_pickups\.vjs_c/, 'includes test_topbar_pickups.vjs_c');
+  assert.match(merged, /s2r:\/\/panorama\/styles\/unit_status_v2\.vcss_c/, 'includes unit_status_v2.vcss_c');
+  assert.match(merged, /SpawnNotificationRoot/, 'preserves SpawnNotificationRoot');
+  assert.match(merged, /UrnTracker/, 'preserves UrnTracker');
+});
 
 test('mergeEscapeMenuXml: combines ShowRank, Poker, and HP Colors Rewrite v2', () => {
   const showrankXml = fs.readFileSync(path.join(root, 'showrank_recent_purchases/panorama/layout/hud_escape_menu.xml'), 'utf8');
@@ -68,6 +81,11 @@ test('assembleCustomPack: stages combined assets with HP Colors v2 and Community
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/citadel_ui_context_menu_player.xml')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/showrank_barebones.js')), true);
 
+  // Verify topbar was merged with HP Colors v2 requirements
+  const stagedTopbarXml = fs.readFileSync(path.join(stageDir, 'panorama/layout/citadel_hud_top_bar.xml'), 'utf8');
+  assert.match(stagedTopbarXml, /HPV2PickupTopBar/, 'topbar contains HPV2PickupTopBar class');
+  assert.match(stagedTopbarXml, /test_topbar_pickups\.vjs_c/, 'topbar includes test_topbar_pickups.vjs_c');
+
   // Verify community stats was composed into showrank_barebones.js and styles
   const stagedShowRankJs = fs.readFileSync(path.join(stageDir, 'panorama/scripts/showrank_barebones.js'), 'utf8');
   assert.match(stagedShowRankJs, /ProfileStatsCommunity/, 'composed ProfileStatsCommunity into showrank_barebones.js');
@@ -76,13 +94,16 @@ test('assembleCustomPack: stages combined assets with HP Colors v2 and Community
 
   // HP Colors v2
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/unit_status_overlay_v2.xml')), true);
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/test_event_relay.xml')), true, 'stages test_event_relay.xml');
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/hp_colors_v2_contract.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/hp_colors_v2_state.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/hp_colors_v2_menu.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/unit_status_v2_colors.js')), true);
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/test_event_bridge.js')), true, 'stages test_event_bridge.js');
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/test_topbar_pickups.js')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/styles/hp_colors_v2_menu.css')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/styles/unit_status_v2.css')), true);
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/images/hpv2/ultimate_progress.vtex')), true, 'stages ultimate_progress.vtex');
 
   // Poker & Table games
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/chat.xml')), true);

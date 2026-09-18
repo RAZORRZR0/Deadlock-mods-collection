@@ -195,10 +195,10 @@ if (Test-Path -LiteralPath $stageCompiled) {
 }
 New-Item -ItemType Directory -Force -Path $stageCompiled | Out-Null
 
-$sourceFiles = Get-ChildItem -LiteralPath $stageSource -Recurse -File | Where-Object { $_.Extension -match '\.(xml|css|js|vdata)$' }
+$sourceFiles = Get-ChildItem -LiteralPath $stageSource -Recurse -File | Where-Object { $_.Extension -match '\.(xml|css|js|vdata|vtex)$' }
 $requiredOutputs = @($sourceFiles | ForEach-Object {
     $rel = $_.FullName.Substring($stageSource.Length).TrimStart('\', '/')
-    $compiledRel = $rel -replace '\.xml$', '.vxml_c' -replace '\.css$', '.vcss_c' -replace '\.js$', '.vjs_c' -replace '\.vdata$', '.vdata_c'
+    $compiledRel = $rel -replace '\.xml$', '.vxml_c' -replace '\.css$', '.vcss_c' -replace '\.js$', '.vjs_c' -replace '\.vdata$', '.vdata_c' -replace '\.vtex$', '.vtex_c'
     Join-Path $stageCompiled $compiledRel
 })
 

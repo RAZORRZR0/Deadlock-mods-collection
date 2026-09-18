@@ -224,6 +224,55 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
   return result;
 }
 
+export function mergeTopBarXml(baseXml, options = {}) {
+  const { enableHpColors = false } = options;
+  if (!enableHpColors || !baseXml) return baseXml;
+
+  let result = baseXml;
+
+  // 1. Ensure scripts include hp_colors_v2_contract.vjs_c and test_topbar_pickups.vjs_c
+  const requiredScripts = [
+    's2r://panorama/scripts/hp_colors_v2_contract.vjs_c',
+    's2r://panorama/scripts/test_topbar_pickups.vjs_c'
+  ];
+  for (const script of requiredScripts) {
+    if (!result.includes(script)) {
+      result = result.replace(
+        '</scripts>',
+        `\t\t<include src="${script}" />\n\t</scripts>`
+      );
+    }
+  }
+
+  // 2. Ensure styles include unit_status_v2.vcss_c
+  const requiredStyles = [
+    's2r://panorama/styles/unit_status_v2.vcss_c'
+  ];
+  for (const style of requiredStyles) {
+    if (!result.includes(style)) {
+      result = result.replace(
+        '</styles>',
+        `\t\t<include src="${style}" />\n\t</styles>`
+      );
+    }
+  }
+
+  // 3. Ensure CitadelHudTopBar has class="HPV2PickupTopBar"
+  result = result.replace(/<CitadelHudTopBar\b([^>]*)>/, (match, attrs) => {
+    if (attrs.includes('HPV2PickupTopBar')) {
+      return match;
+    }
+    const classMatch = attrs.match(/class="([^"]*)"/);
+    if (classMatch) {
+      return match.replace(/class="([^"]*)"/, `class="HPV2PickupTopBar $1"`);
+    } else {
+      return `<CitadelHudTopBar class="HPV2PickupTopBar"${attrs}>`;
+    }
+  });
+
+  return result;
+}
+
 export function assembleCustomPack(options) {
   const {
     stageSourceDir,
@@ -274,6 +323,25 @@ export function assembleCustomPack(options) {
     fs.mkdirSync(path.dirname(overlayDest), { recursive: true });
     if (fs.existsSync(overlaySrc)) {
       fs.copyFileSync(overlaySrc, overlayDest);
+    }
+
+    const relaySrc = path.join(hpDir, 'panorama/layout/test_event_relay.xml');
+    const relayDest = path.join(stageSourceDir, 'panorama/layout/test_event_relay.xml');
+    if (fs.existsSync(relaySrc)) {
+      fs.copyFileSync(relaySrc, relayDest);
+    }
+
+    const topbarDest = path.join(stageSourceDir, 'panorama/layout/citadel_hud_top_bar.xml');
+    if (modules.showrank_qol && fs.existsSync(topbarDest)) {
+      const topbarXml = fs.readFileSync(topbarDest, 'utf8');
+      const mergedTopbar = mergeTopBarXml(topbarXml, { enableHpColors: true });
+      fs.writeFileSync(topbarDest, mergedTopbar, 'utf8');
+    } else {
+      const topbarSrc = path.join(hpDir, 'panorama/layout/citadel_hud_top_bar.xml');
+      if (fs.existsSync(topbarSrc)) {
+        fs.mkdirSync(path.dirname(topbarDest), { recursive: true });
+        fs.copyFileSync(topbarSrc, topbarDest);
+      }
     }
 
     // Scripts
