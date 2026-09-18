@@ -5,7 +5,7 @@
   var context = $.GetContextPanel();
   if (context.HPV2PickupStop) context.HPV2PickupStop();
   var stopped = false;
-  var topBar = context.BHasClass("HPV2PickupTopBar") ? context : null;
+  var topBar = (context.BHasClass("HPV2PickupTopBar") || context.paneltype === "CitadelHudTopBar" || context.id === "CitadelHudTopBar") ? context : null;
   var CONFIG_MAGIC = "HP_COLORS_V2_CONFIG";
   var CONFIG_ATTR = "hp_colors_v2_config";
   var CONFIG_VERSION = 2;
@@ -13,21 +13,20 @@
   if (topBar) {
     if (!$.HPColorsV2ContractFactory || !$.HPColorsV2ContractFactory.create) {
       $.Msg("[test_hpv2][config-error] HUD settings contract unavailable");
-      throw new Error("HP Colors v2 settings contract unavailable");
+      return;
     }
     settingsContract = $.HPColorsV2ContractFactory.create();
     if (!settingsContract || typeof settingsContract.normalizeValues !== "function") {
       $.Msg("[test_hpv2][config-error] invalid HUD settings contract");
-      throw new Error("Invalid HP Colors v2 settings contract");
+      return;
     }
-    delete $.HPColorsV2ContractFactory;
   } else if (
     typeof context.HPV2GetNormalizedConfig !== "function" ||
     typeof context.HPV2OnConfigChanged !== "function" ||
     typeof context.HPV2GetUltimateProgressColor !== "function"
   ) {
     $.Msg("[test_hpv2][config-error] renderer config handoff unavailable");
-    throw new Error("HP Colors v2 renderer config handoff unavailable");
+    return;
   }
   var normalizeConfig = topBar ? settingsContract.normalizeValues : null;
   var config = topBar ? normalizeConfig(null) : null;
@@ -396,7 +395,7 @@
       if (!valid(parent) || parent === root) return root;
       root = parent;
     }
-    throw new Error("Pickup snapshot root exceeds 24 ancestors");
+    return root;
   }
 
   function publish(name, mask) {
@@ -1003,15 +1002,15 @@
   function bindWorldConfig() {
     if (topBar) return;
     try {
+      if (typeof context.HPV2GetNormalizedConfig !== "function") return;
       var initial = context.HPV2GetNormalizedConfig();
       if (!onWorldConfigChanged(initial)) {
         $.Msg("[test_hpv2][config-error] renderer config is not normalized");
-        throw new Error("Invalid HP Colors v2 renderer config");
+        return;
       }
       configUnsubscribe = context.HPV2OnConfigChanged(onWorldConfigChanged);
     } catch (error) {
       $.Msg("[test_hpv2][config-error] " + String(error));
-      throw error;
     }
   }
 

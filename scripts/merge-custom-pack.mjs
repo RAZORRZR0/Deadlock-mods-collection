@@ -244,20 +244,7 @@ export function mergeTopBarXml(baseXml, options = {}) {
     }
   }
 
-  // 2. Ensure styles include unit_status_v2.vcss_c
-  const requiredStyles = [
-    's2r://panorama/styles/unit_status_v2.vcss_c'
-  ];
-  for (const style of requiredStyles) {
-    if (!result.includes(style)) {
-      result = result.replace(
-        '</styles>',
-        `\t\t<include src="${style}" />\n\t</styles>`
-      );
-    }
-  }
-
-  // 3. Ensure CitadelHudTopBar has class="HPV2PickupTopBar"
+  // 2. Ensure CitadelHudTopBar has class="HPV2PickupTopBar"
   result = result.replace(/<CitadelHudTopBar\b([^>]*)>/, (match, attrs) => {
     if (attrs.includes('HPV2PickupTopBar')) {
       return match;

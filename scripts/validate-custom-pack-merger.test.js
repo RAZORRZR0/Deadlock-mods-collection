@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const root = path.join(__dirname, '..');
 
-test('mergeTopBarXml: adds HPV2PickupTopBar class, pickups script, and v2 stylesheet', () => {
+test('mergeTopBarXml: adds HPV2PickupTopBar class and pickups scripts', () => {
   const showrankTopbarXml = fs.readFileSync(path.join(root, 'showrank_recent_purchases/panorama/layout/citadel_hud_top_bar.xml'), 'utf8');
 
   const merged = mergeTopBarXml(showrankTopbarXml, { enableHpColors: true });
@@ -17,7 +17,7 @@ test('mergeTopBarXml: adds HPV2PickupTopBar class, pickups script, and v2 styles
   assert.match(merged, /<CitadelHudTopBar\s+class="HPV2PickupTopBar"/, 'adds HPV2PickupTopBar class to CitadelHudTopBar');
   assert.match(merged, /s2r:\/\/panorama\/scripts\/hp_colors_v2_contract\.vjs_c/, 'includes hp_colors_v2_contract.vjs_c');
   assert.match(merged, /s2r:\/\/panorama\/scripts\/test_topbar_pickups\.vjs_c/, 'includes test_topbar_pickups.vjs_c');
-  assert.match(merged, /s2r:\/\/panorama\/styles\/unit_status_v2\.vcss_c/, 'includes unit_status_v2.vcss_c');
+  assert.equal(merged.includes('unit_status_v2.vcss_c'), false, 'does not include unit_status_v2.vcss_c in topbar');
   assert.match(merged, /SpawnNotificationRoot/, 'preserves SpawnNotificationRoot');
   assert.match(merged, /UrnTracker/, 'preserves UrnTracker');
 });

@@ -1,6 +1,6 @@
 function Get-RepoToolPath {
     param(
-        [Parameter(Mandatory=$true)][string[]]$Candidates,
+        [string[]]$Candidates = @(),
         [Parameter(Mandatory=$true)][string]$ToolName
     )
 

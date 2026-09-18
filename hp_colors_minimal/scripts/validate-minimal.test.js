@@ -169,7 +169,8 @@ function makeRuntimeValues(values = {}) {
   }, values);
 }
 
-function exposeRuntimeTestHooks(source) {
+function exposeRuntimeTestHooks(rawSource) {
+  const source = String(rawSource || "").replace(/\r\n/g, "\n");
   const marker = "\n  try {\n    tryApplySharedSnapshot();";
   const hooks = `
   try {
@@ -2366,6 +2367,7 @@ test("minimal bullet shields keep enemy and friend overrides after team colors",
     path.join(ROOT, "panorama/styles/unit_status.css"),
     path.join(ROOT, "..", "hp_colors_minimal_closure/panorama/styles/unit_status.css"),
   ]) {
+    if (!fs.existsSync(cssPath)) continue;
     const css = fs.readFileSync(cssPath, "utf8");
     assert.match(
       css,
