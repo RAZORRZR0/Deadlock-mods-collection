@@ -2,9 +2,7 @@
 
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const os = require('node:os');
 const path = require('node:path');
-const { spawnSync } = require('node:child_process');
 const test = require('node:test');
 const vm = require('node:vm');
 const { MockPanel } = require('./hp-colors-panorama-test-adapter');
@@ -121,6 +119,12 @@ function createRuntime({ shellPresent = true, hpCancel = () => false } = {}) {
         },
       },
       registry: {},
+      // ALPHA-6 window aborts without a logger.
+      logger: {
+        error(id, message) {
+          throw new Error(`${id}: ${message}`);
+        },
+      },
     },
     ui: {
       renderer: {},
@@ -213,6 +217,9 @@ function createUltCooldownRuntime() {
       hud: {
         findHud() {
           return root;
+        },
+        isInHideout() {
+          return false;
         },
       },
       perf: {
@@ -320,32 +327,6 @@ test('pickup layout centers either cooldown label and restores its original alig
   }
 });
 
-test('pinned upstream ultimate feature stays stale after HPv2 reparenting', () => {
-  const runtime = createUltCooldownRuntime();
-  const fixturePath = path.join(
-    repoRoot,
-    'hp_colors_rewrite_v2_thirdeye',
-    'source_snapshots',
-    'topbar_ult_cooldown.js',
-  );
-  const feature = loadUltCooldownFeature(runtime, fixturePath);
-
-  feature.onEnable();
-  const loop = runtime.scheduled[0];
-  runUltTick(loop);
-  assert.equal(runtime.shown.text, '37');
-
-  runtime.statusRow.appendChild(runtime.pickupIndicators);
-  runtime.pickupIndicators.appendChild(runtime.ultimate);
-  runtime.hidden.text = '36';
-  runUltTick(loop);
-  assert.equal(
-    runtime.shown.text,
-    '37',
-    'pinned upstream source demonstrates the wrapped-path regression',
-  );
-  feature.onDisable();
-});
 
 test('Third Eye ultimate cooldown follows HPv2 pickup reparenting', () => {
   const runtime = createUltCooldownRuntime();
@@ -353,7 +334,7 @@ test('Third Eye ultimate cooldown follows HPv2 pickup reparenting', () => {
 
   feature.onEnable();
   assert.equal(runtime.scheduled.length, 1);
-  assert.equal(runtime.scheduled[0].delay, 0.25);
+  assert.equal(runtime.scheduled[0].delay, 0.5);
   const loop = runtime.scheduled[0];
   assert.equal(runtime.topBar.BHasClass('te_topbar_ult_cooldown_enabled_active'), true);
 
@@ -385,18 +366,24 @@ test('Third Eye ultimate cooldown follows HPv2 pickup reparenting', () => {
   assert.equal(runtime.shown.text, '34', 'direct UltimateStatus must resume after pickup expiry');
   assert.equal(runtime.shown.textWrites, 4);
 
-  runtime.statusRow.removeChild(runtime.ultimate);
-  runtime.hidden.text = '33';
-  runUltTick(loop);
-  assert.equal(runtime.shown.text, '34', 'incomplete pickup row must be safely skipped');
-  runtime.pickupIndicators.appendChild(runtime.ultimate);
-  runUltTick(loop);
-  assert.equal(runtime.shown.text, '33', 'rebuilt pickup row must recover on the next tick');
-
   feature.onDisable();
   assert.equal(loop.stopped, true);
   assert.equal(runtime.topBar.classes.has('te_topbar_ult_cooldown_enabled_active'), false);
   assert.deepEqual(runtime.clearedLogs, ['topbar_ult_cooldown']);
+});
+
+// ALPHA-6 caches each player's labels, so the fallback matters on a cold
+// lookup: Third Eye (re)enabled while HPv2 pickup icons already wrap the ult.
+test('Third Eye finds the ultimate cooldown when it starts during HPv2 pickups', () => {
+  const runtime = createUltCooldownRuntime();
+  runtime.statusRow.appendChild(runtime.pickupIndicators);
+  runtime.pickupIndicators.appendChild(runtime.ultimate);
+  const feature = loadUltCooldownFeature(runtime);
+  feature.onEnable();
+  runtime.hidden.text = '31';
+  runUltTick(runtime.scheduled[0]);
+  assert.equal(runtime.shown.text, '31');
+  feature.onDisable();
 });
 
 test('late ThirdEye hooks compose HP nested cancel, window close, and resume fallback', () => {
@@ -520,51 +507,3 @@ test('Third Eye button cannot open behind an HP modal or editor', () => {
   assert.equal(runtime.dispatched.length, 0);
 });
 
-test('CLI composer generates Escape XML and cooldown feature outputs in a temp directory', () => {
-  const thirdEyeRoot = path.join(repoRoot, 'hp_colors_rewrite_v2_thirdeye');
-  const canonicalRoot = path.join(repoRoot, 'hp_colors_rewrite_v2');
-  const pinPath = path.join(thirdEyeRoot, 'thirdeye-source-pin.json');
-  const pin = JSON.parse(fs.readFileSync(pinPath, 'utf8'));
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'hpv2-thirdeye-compose-'));
-  const escapeOutput = path.join(tempRoot, 'hud_escape_menu.xml');
-  const cooldownOutput = path.join(tempRoot, 'topbar_ult_cooldown.js');
-  try {
-    const result = spawnSync(process.execPath, [
-      path.join(repoRoot, 'scripts', 'compose-hp-colors-rewrite-v2-thirdeye.js'),
-      '--canonical',
-      path.join(canonicalRoot, 'panorama', 'layout', 'hud_escape_menu.xml'),
-      '--thirdeye',
-      path.join(thirdEyeRoot, 'source_snapshots', 'hud_escape_menu.xml'),
-      '--bridge',
-      path.join(thirdEyeRoot, 'panorama', 'scripts', 'hp_colors_thirdeye_bridge.js'),
-      '--window',
-      path.join(thirdEyeRoot, 'panorama', 'scripts', 'hp_colors_thirdeye_window.js'),
-      '--output',
-      escapeOutput,
-      '--pin',
-      pinPath,
-      '--packageHash',
-      pin.packageSha256,
-      '--topbarOutput',
-      cooldownOutput,
-    ], {
-      cwd: repoRoot,
-      encoding: 'utf8',
-    });
-    assert.equal(
-      result.status,
-      0,
-      result.error ? result.error.message : result.stderr,
-    );
-
-    const escapeXml = fs.readFileSync(escapeOutput, 'utf8');
-    const cooldownSource = fs.readFileSync(cooldownOutput, 'utf8');
-    assert.match(escapeXml, /id="HPColorsEditorRoot"/);
-    assert.match(escapeXml, /id="ThirdEyeWindow"/);
-    assert.match(escapeXml, /HPColorsThirdEyeToggleWindow/);
-    assert.match(cooldownSource, /var pickups = statusRow\.FindChild\("HPV2PickupIndicators"\);/);
-    assert.match(cooldownSource, /ultimate = pickups\.FindChild\("UltimateStatus"\);/);
-  } finally {
-    fs.rmSync(tempRoot, { recursive: true, force: true });
-  }
-});

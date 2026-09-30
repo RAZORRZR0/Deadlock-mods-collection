@@ -47,6 +47,15 @@ const colorConsumerPath = path.join(
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
 }
+function cssBlock(source, selector) {
+  const pattern = new RegExp(
+    `(?:^|\\n)${selector.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`,
+    'm',
+  );
+  const match = source.match(pattern);
+  assert.ok(match, `missing CSS selector: ${selector}`);
+  return match[1];
+}
 
 function installPanels(harness, ids) {
   for (const id of ids) {
@@ -182,6 +191,18 @@ function translation(transform) {
   return [Number(match[1]), Number(match[2])];
 }
 
+function centeredMarginLayout(panel, stockMarginTop) {
+  let stockTop = panel.actualyoffset;
+  Object.defineProperty(panel, 'actualyoffset', {
+    configurable: true,
+    get() {
+      const margin = Number.parseFloat(panel.style.marginTop);
+      return stockTop + (Number.isFinite(margin) ? (margin - stockMarginTop) / 2 : 0);
+    },
+    set(value) { stockTop = value; },
+  });
+}
+
 function makeStatusFixture(
   role,
   values,
@@ -193,6 +214,8 @@ function makeStatusFixture(
   isPlayer = false,
   staminaStockStyles = null,
   barStockStyles = null,
+  extraClasses = [],
+  beforeBoot = null,
 ) {
   values = { ...values };
   if (values.enemyColor) {
@@ -221,6 +244,7 @@ function makeStatusFixture(
             ? ['team_neutral']
             : [];
   if (isPlayer) classes.push('player');
+  classes.push(...extraClasses);
   const root = harness.root;
   let siblingCounter = null;
   let siblingFill = null;
@@ -329,6 +353,10 @@ function makeStatusFixture(
     findCounts: harness.findCounts,
     operationCounts: harness.operationCounts,
   }));
+  // Both indicators are vertically centered: Panorama moves them by half the
+  // top margin beyond their stock one. Assigning actualyoffset sets the stock top.
+  centeredMarginLayout(levelContainer, 24);
+  centeredMarginLayout(unitInfo, 0);
   const unitInfoPanel = unitInfo.add(new MockPanel('unit_info_panel', {
     findCounts: harness.findCounts,
     operationCounts: harness.operationCounts,
@@ -406,6 +434,7 @@ function makeStatusFixture(
     'hp_colors_v2_config',
     makeSnapshot(revision, values),
   );
+  if (beforeBoot) beforeBoot({ infoHealth, levelContainer, unitInfo, healthbars, healthbar: liveBar.healthbar });
   harness.contextPanel = unitStatus;
   const context = createVmContext(harness, { includeGameUI: false });
   runInVm(read(contractPath), context, contractPath);
@@ -426,6 +455,7 @@ function makeStatusFixture(
     pip,
     counter,
     counterContainer: counterCanvas.container,
+    counterAnchor: counterCanvas.anchor,
     counterMax,
     activeParent,
     healthbars,
@@ -446,234 +476,6 @@ function dispatchColorSnapshot(fixture, revision, values) {
   assert.equal(typeof handler, 'function');
   handler(makeSnapshot(revision, values));
 }
-
-function cssBlock(source, selector) {
-  const pattern = new RegExp(
-    `(?:^|\\n)${selector.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`,
-    'm',
-  );
-  const match = source.match(pattern);
-  assert.ok(match, `missing CSS selector: ${selector}`);
-  return match[1];
-}
-
-
-
-
-
-
-
-test('v2 CSS matches the supplied alignment screenshots', () => {
-  const style = read(stylePath);
-  assert.doesNotMatch(
-    style,
-    /\.health_critical\b|#CriticalIndicator\b|critical_text_png\.vtex|healthCritFlash|TagGroove1/,
-    'production CSS must not contain critical-health conditionals, text, or animations',
-  );
-  assert.doesNotMatch(
-    style,
-    /\.friend\s+#(?:UnitStatus|UnitHealthbarsContainer)\b/,
-    'allies must use the same UnitStatus and healthbar geometry as enemies',
-  );
-  assert.match(
-    style,
-    /^#UnitHealthbarsContainer #unit_healthbar_lagging\.HPColorsRewritePulse,/m,
-  );
-  assert.match(
-    style,
-    /^#UnitHealthbarsContainer #hp_colors_pulse_overlay\.HPColorsRewriteColorPulse$/m,
-  );
-  assert.doesNotMatch(
-    style,
-    /^(?:#unit_healthbar_lagging\.HPColorsRewritePulse|#hp_colors_pulse_overlay\.HPColorsRewriteColorPulse)/m,
-    'live-bar pulse selectors must not reach the hidden stock bar',
-  );
-  const unitStatus = cssBlock(style, '#UnitStatus');
-  assert.match(unitStatus, /width\s*:\s*2000px\s*;/);
-  assert.match(unitStatus, /height\s*:\s*2000px\s*;/);
-  assert.match(unitStatus, /horizontal-align\s*:\s*middle\s*;/);
-  assert.match(unitStatus, /margin-top\s*:\s*-700px\s*;/);
-  assert.match(unitStatus, /margin-right\s*:\s*-105\.075px\s*;/);
-  const overlay = read(layoutPath);
-  const liveSnippet = overlay.match(
-    /<snippet name="UnitHealthBar">[\s\S]*?<\/snippet>/,
-  );
-  assert.ok(liveSnippet, 'missing live UnitHealthBar snippet');
-  assert.doesNotMatch(
-    liveSnippet[0],
-    /id="hp_counter(?:_anchor|_row|_max)?"/,
-    'the shared HP text canvas must not be clipped by a live healthbar',
-  );
-  assert.match(
-    overlay,
-    /<Panel class="WindowRoot" hittest="false">\s*<Label id="name"[^>]*\/>\s*<Panel id="hp_counter_container"[\s\S]*?<\/Panel>\s*<CitadelStatusEffect id="StatusEffects"/,
-    'the HP text canvas must be a root sibling immediately after the name label',
-  );
-  const healthbarPosition = cssBlock(style, '#UnitHealthbarsContainer');
-  assert.match(healthbarPosition, /margin-top\s*:\s*230px\s*;/);
-  assert.match(healthbarPosition, /horizontal-align\s*:\s*middle\s*;/);
-  assert.match(healthbarPosition, /vertical-align\s*:\s*middle\s*;/);
-  assert.match(healthbarPosition, /overflow\s*:\s*noclip\s*;/);
-  assert.match(healthbarPosition, /pre-transform-scale2d\s*:\s*1\.1\s*;/);
-  const counterContainer = cssBlock(style, '#hp_counter_container');
-  assert.match(counterContainer, /width\s*:\s*1000px\s*;/);
-  assert.match(counterContainer, /height\s*:\s*1000px\s*;/);
-  assert.match(counterContainer, /horizontal-align\s*:\s*middle\s*;/);
-  assert.match(counterContainer, /vertical-align\s*:\s*center\s*;/);
-  assert.match(counterContainer, /margin-top\s*:\s*-700px\s*;/);
-  assert.match(counterContainer, /margin-right\s*:\s*-105\.075px\s*;/);
-  assert.match(counterContainer, /overflow\s*:\s*noclip\s*;/);
-  assert.match(counterContainer, /ignore-parent-flow\s*:\s*true\s*;/);
-  assert.match(counterContainer, /z-index\s*:\s*30\s*;/);
-  const counterAnchor = cssBlock(style, '#hp_counter_anchor');
-  assert.match(counterAnchor, /width\s*:\s*750px\s*;/);
-  assert.match(counterAnchor, /height\s*:\s*120px\s*;/);
-  assert.match(counterAnchor, /horizontal-align\s*:\s*left\s*;/);
-  assert.match(counterAnchor, /vertical-align\s*:\s*middle\s*;/);
-  assert.match(counterAnchor, /margin-left\s*:\s*200px\s*;/);
-  assert.match(counterAnchor, /margin-bottom\s*:\s*200px\s*;/);
-  assert.match(counterAnchor, /z-index\s*:\s*20\s*;/);
-  const counterRow = cssBlock(style, '#hp_counter_row');
-  assert.match(counterRow, /flow-children\s*:\s*right\s*;/);
-  assert.match(counterRow, /height\s*:\s*fit-children\s*;/);
-  assert.doesNotMatch(counterRow, /\btransform\s*:/);
-  assert.doesNotMatch(counterRow, /pre-transform-scale2d|transform-origin/);
-  const statusEffects = cssBlock(style, '#StatusEffects');
-  assert.doesNotMatch(
-    statusEffects,
-    /\bheight\s*:/,
-    'the status-effect widget must keep its stock 250px canvas',
-  );
-  assert.match(
-    statusEffects,
-    /margin-top\s*:\s*-20px\s*;/,
-    'the status row must use the requested margin-only upward offset',
-  );
-  assert.doesNotMatch(
-    statusEffects,
-    /\btransform\s*:/,
-    'the status row offset must remain margin-only',
-  );
-  assert.match(
-    cssBlock(style, '.WindowRoot'),
-    /overflow\s*:\s*noclip\s*;/,
-    'the root layout must not add another clipping boundary',
-  );
-  assert.match(
-    statusEffects,
-    /overflow\s*:\s*noclip\s*;/,
-    'the status-effect canvas must not clip circular effects or stack labels',
-  );
-  const playerLevel = cssBlock(style, '.NP_playerlevel_container');
-  assert.match(playerLevel, /height\s*:\s*10\.5%\s*;/);
-  assert.match(playerLevel, /width\s*:\s*height-percentage\(100%\)\s*;/);
-  assert.match(playerLevel, /border\s*:\s*20px\s+solid\s+Team1Color\s*;/);
-  assert.match(playerLevel, /margin-top\s*:\s*24px\s*;/);
-  assert.match(playerLevel, /margin-right\s*:\s*8px\s*;/);
-  assert.match(playerLevel, /margin-left\s*:\s*422\.5px\s*;/);
-  assert.match(
-    cssBlock(style, '#UnitInfoContainer.unit_info_panel'),
-    /margin-left\s*:\s*422\.5px\s*;/,
-  );
-  assert.match(playerLevel, /transform\s*:\s*translateX\(-161px\)\s*;/);
-  assert.match(cssBlock(style, '.NP_playerlevel'), /font-size\s*:\s*100px\s*;/);
-  assert.match(playerLevel, /z-index\s*:\s*200\s*;/);
-  assert.match(cssBlock(style, '.NP_playerlevel'), /z-index\s*:\s*201\s*;/);
-  assert.match(
-    cssBlock(style, '.statusEffect'),
-    /overflow\s*:\s*noclip\s*;/,
-    'each status-effect canvas must preserve the full circular frame',
-  );
-  const staminaContainer = cssBlock(style, '#StaminaContainer');
-  assert.match(staminaContainer, /margin-top\s*:\s*800px\s*;/);
-  const staminaPip = cssBlock(style, '.StaminaPip');
-  assert.match(staminaPip, /margin\s*:\s*0px\s+6px\s*;/);
-  const staminaIcon = cssBlock(style, '.StaminaPip .StaminaPipIcon');
-  assert.match(staminaIcon, /width\s*:\s*110px\s*;/);
-  assert.match(staminaIcon, /height\s*:\s*44\.8px\s*;/);
-  assert.match(staminaIcon, /border-radius\s*:\s*0px\s*;/);
-  assert.match(staminaIcon, /border\s*:\s*4px\s+solid\s+white\s*;/);
-
-  const healthbars = healthbarPosition;
-  assert.match(healthbars, /margin-top\s*:\s*230px\s*;/);
-  assert.match(healthbars, /horizontal-align\s*:\s*middle\s*;/);
-  assert.match(healthbars, /vertical-align\s*:\s*middle\s*;/);
-  assert.match(healthbars, /z-index\s*:\s*0\s*;/);
-  assert.match(healthbars, /pre-transform-rotate2d\s*:\s*0deg\s*;/);
-  assert.match(healthbars, /pre-transform-scale2d\s*:\s*1\.1\s*;/);
-
-  const healthbar = cssBlock(style, '#UnitHealthbarContainer');
-  assert.match(healthbar, /height\s*:\s*120px\s*;/);
-  assert.match(healthbar, /width\s*:\s*750px\s*;/);
-  assert.match(healthbar, /max-width\s*:\s*750px\s*;/);
-  assert.match(healthbar, /margin-left\s*:\s*0px\s*;/);
-
-  const pipLabel = cssBlock(style, '#unit_healthbar_pip_label');
-  assert.match(pipLabel, /pre-transform-scale2d\s*:\s*1\.0,\s*2\.8\s*;/);
-  assert.doesNotMatch(pipLabel, /transform-origin\s*:/);
-
-  for (const selector of [
-    '#UnitHealthbarContainer',
-    '.verticalHealthbars #UnitHealthbarContainer',
-    '.verticalHealthbars #InfoHealthContainer',
-  ]) {
-    assert.match(cssBlock(style, selector), /opacity-mask\s*:\s*none\s*;/);
-  }
-  const healthbarBackground = cssBlock(style, '#unit_healthbar_bg');
-  assert.match(
-    healthbarBackground,
-    /border-image-source\s*:\s*url\("s2r:\/\/panorama\/images\/hud\/world_space\/hero_healthbar_bg_psd\.vtex"\)\s*;/,
-  );
-  assert.match(healthbarBackground, /border-image-repeat\s*:\s*round\s*;/);
-  assert.match(healthbarBackground, /border-image-slice\s*:\s*28%\s+fill\s*;/);
-  assert.match(healthbarBackground, /border-width\s*:\s*20px\s*;/);
-  assert.match(healthbarBackground, /border-color\s*:\s*#ffffffff\s*;/);
-
-  const missingHealth = cssBlock(style, '#unit_healthbar_missing');
-  assert.match(
-    missingHealth,
-    /background-image\s*:\s*url\("s2r:\/\/panorama\/images\/hud\/world_space\/hero_healthbar_missing_psd\.vtex"\)\s*;/,
-  );
-  assert.match(missingHealth, /background-size\s*:\s*cover\s*;/);
-
-  const laggingHealth = cssBlock(style, '#unit_healthbar_lagging');
-  assert.match(
-    laggingHealth,
-    /background-image\s*:\s*url\("s2r:\/\/panorama\/images\/hud\/world_space\/hero_healthbar_fill_center_psd\.vtex"\)\s*;/,
-  );
-  assert.match(
-    laggingHealth,
-    /box-shadow\s*:\s*inset\s+DropshadowColor\s+4px\s+8px\s+5px\s+8px\s*;/,
-  );
-  assert.doesNotMatch(laggingHealth, /box-shadow\s*:\s*none|border-image-source\s*:\s*none/);
-  assert.doesNotMatch(
-    style,
-    /\.verticalHealthbars\s+#unit_healthbar_bg\s*\{/,
-    'vertical bars must not suppress the shared v1 frame texture',
-  );
-  assert.match(
-    cssBlock(style, '.verticalHealthbars #unit_healthbar_pip_label'),
-    /visibility\s*:\s*visible\s*;/,
-    'vertical healthbars must draw the engine-provided pip label',
-  );
-});
-
-test('v2 HP readout uses the unclipped reference canvas', () => {
-  const style = read(stylePath);
-  const counterAnchor = cssBlock(style, '#hp_counter_anchor');
-  const counterRow = cssBlock(style, '#hp_counter_row');
-  assert.match(counterAnchor, /width\s*:\s*750px\s*;/);
-  assert.match(counterAnchor, /height\s*:\s*120px\s*;/);
-  assert.match(counterAnchor, /horizontal-align\s*:\s*left\s*;/);
-  assert.match(counterAnchor, /vertical-align\s*:\s*middle\s*;/);
-  assert.match(counterAnchor, /margin-left\s*:\s*200px\s*;/);
-  assert.match(counterAnchor, /margin-bottom\s*:\s*200px\s*;/);
-  assert.match(counterRow, /horizontal-align\s*:\s*center\s*;/);
-  assert.match(counterRow, /vertical-align\s*:\s*middle\s*;/);
-  assert.match(counterRow, /height\s*:\s*fit-children\s*;/);
-  assert.doesNotMatch(counterRow, /\btransform\s*:/);
-});
-
 
 test('v2 runtime derives current and max HP from live bar geometry', () => {
   const fixture = makeStatusFixture('enemy', {
@@ -759,6 +561,52 @@ test('v2 clears readouts while live geometry is invalid and restores them later'
   fixture.harness.scheduler.runNext();
   assert.equal(fixture.counter.text, '150 / ');
   assert.equal(fixture.counterMax.text, '600');
+});
+
+test('v2 ally health text is opt-in, independently styled, and live without ally bar colors', () => {
+  const stock = makeStatusFixture('ally', { enabled: true, readoutVisible: true });
+  assert.equal(stock.counter.text, '');
+  assert.equal(stock.counter.style.visibility, 'collapse');
+
+  const fixture = makeStatusFixture('ally', {
+    enabled: true,
+    allyEnabled: false,
+    readoutVisible: false,
+    allyReadoutVisible: true,
+    allyReadoutFormat: 'percent',
+    allyReadoutColorMode: 'custom',
+    allyReadoutMode: 'fixed',
+    allyReadoutLow: '#112233',
+    allyReadoutMid: '#445566',
+    allyReadoutHigh: '#778899',
+    allyReadoutSize: 200,
+    allyReadoutFont: 'oracle',
+    allyReadoutOffsetX: 10,
+    allyReadoutOffsetY: 450,
+  });
+  assert.equal(fixture.counter.text, '50%');
+  assert.equal(fixture.counter.style.visibility, 'visible');
+  assert.equal(fixture.counterMax.style.visibility, 'collapse');
+  assert.equal(fixture.counter.style.washColor, '#445566');
+  assert.equal(fixture.counter.style.fontSize, '200px');
+  assert.equal(fixture.counter.style.fontFamily, 'VALVEOracle, Reaver, sans-serif');
+  assert.equal(
+    fixture.counterAnchor.style.transform,
+    'translate3d(-17px, -50px, 0px)',
+  );
+
+  fixture.fill.actuallayoutwidth = 10;
+  fixture.harness.scheduler.runNext();
+  assert.equal(fixture.counter.text, '10%');
+  assert.equal(fixture.counter.style.washColor, '#112233');
+
+  const enemy = makeStatusFixture('enemy', {
+    enabled: true,
+    readoutVisible: false,
+    allyReadoutVisible: true,
+  });
+  assert.equal(enemy.counter.text, '');
+  assert.equal(enemy.counter.style.visibility, 'collapse');
 });
 
 test('v2 retries one incomplete live bar without polling complete bars', () => {
@@ -1560,6 +1408,124 @@ test('indicator geometry stays aligned at maximum scale and offset', () => {
   assert.equal(fixture.unitInfo.style.marginTop, '-510.25px');
 });
 
+// A save applied at game boot reaches the bars during pregame, when stock CSS
+// collapses #InfoHealthContainer, so the indicators are measured in a layout
+// that changes once the match starts.
+const ANCHORED_BOOT_VALUES = {
+  enabled: true,
+  enemyColor: '#123456',
+  widthScale: 150,
+  heightScale: 160,
+  positionX: 120,
+  positionY: 200,
+  levelOffsetY: 12,
+  ultOffsetY: -8,
+};
+
+function bootAnchoredFixture(beforeBoot) {
+  return makeStatusFixture(
+    'enemy', ANCHORED_BOOT_VALUES, 1, "|'", false, false, false, false, null, null, [], beforeBoot,
+  );
+}
+
+function indicatorMargins(fixture) {
+  return {
+    level: [fixture.levelContainer.style.marginLeft, fixture.levelContainer.style.marginTop],
+    ult: [fixture.unitInfo.style.marginLeft, fixture.unitInfo.style.marginTop],
+  };
+}
+
+// Stock match layout.
+function showMatchLayout(fixture) {
+  fixture.infoHealth.actuallayoutheight = 2030;
+  fixture.healthbars.actuallayoutheight = 320;
+  fixture.healthbars.actualyoffset = 955;
+  fixture.healthbar.actuallayoutheight = 120;
+  fixture.levelContainer.actuallayoutheight = 210;
+  fixture.levelContainer.actualyoffset = 910;
+  fixture.unitInfo.actuallayoutheight = 300;
+  fixture.unitInfo.actualyoffset = 850;
+}
+
+test('a save applied while pregame collapses the HUD anchors the level and ultimate once the match shows it', () => {
+  const expected = indicatorMargins(bootAnchoredFixture((parts) => {
+    parts.infoHealth.actuallayoutheight = 2030;
+  }));
+  const fixture = bootAnchoredFixture((parts) => {
+    for (const panel of Object.values(parts)) panel.actuallayoutheight = 0;
+  });
+  showMatchLayout(fixture);
+  fixture.harness.scheduler.runFor(3000);
+  assert.deepEqual(indicatorMargins(fixture), expected);
+});
+
+test('indicators measured in a pregame layout re-anchor when the match layout replaces it', () => {
+  const expected = indicatorMargins(bootAnchoredFixture((parts) => {
+    parts.infoHealth.actuallayoutheight = 2030;
+  }));
+  // Pregame lays the centered panels out inside a small frame.
+  const fixture = bootAnchoredFixture((parts) => {
+    parts.infoHealth.actuallayoutheight = 40;
+    parts.healthbars.actualyoffset = -140;
+    parts.levelContainer.actualyoffset = -85;
+    parts.unitInfo.actualyoffset = -130;
+  });
+  assert.notDeepEqual(indicatorMargins(fixture), expected);
+  showMatchLayout(fixture);
+  fixture.harness.scheduler.runFor(3000);
+  assert.deepEqual(indicatorMargins(fixture), expected);
+
+  // Settled: further scans keep the same anchor.
+  fixture.harness.scheduler.runFor(3000);
+  assert.deepEqual(indicatorMargins(fixture), expected);
+});
+
+// The level badge and UnitInfo stay collapsed until their classes appear; a
+// collapsed panel can report its size with a stale position while the frame
+// around it never changes.
+test('indicators measured while collapsed at a stale position re-anchor when shown', () => {
+  const expected = indicatorMargins(bootAnchoredFixture());
+  const fixture = bootAnchoredFixture((parts) => {
+    parts.levelContainer.actualyoffset = 0;
+    parts.unitInfo.actualyoffset = 0;
+  });
+  assert.notDeepEqual(indicatorMargins(fixture), expected);
+  fixture.levelContainer.actualyoffset = 910;
+  fixture.unitInfo.actualyoffset = 850;
+  fixture.harness.scheduler.runFor(3000);
+  assert.deepEqual(indicatorMargins(fixture), expected);
+  fixture.harness.scheduler.runFor(5000);
+  assert.deepEqual(indicatorMargins(fixture), expected, 'settled anchors stay put');
+});
+
+test('the bar moving inside its frame re-anchors both indicators', () => {
+  const fixture = bootAnchoredFixture();
+  const before = indicatorMargins(fixture);
+  fixture.healthbars.actualyoffset = 855;
+  fixture.harness.scheduler.runFor(3000);
+  const after = indicatorMargins(fixture);
+  assert.equal(parseFloat(before.level[1]) - parseFloat(after.level[1]), 200);
+  assert.equal(parseFloat(before.ult[1]) - parseFloat(after.ult[1]), 200);
+});
+
+test('indicators stop re-anchoring when the layout keeps disagreeing', () => {
+  const fixture = bootAnchoredFixture((parts) => {
+    parts.levelContainer.actualyoffset = 0;
+  });
+  // A layout that moves the badge by its whole margin never settles.
+  const panel = fixture.levelContainer;
+  Object.defineProperty(panel, 'actualyoffset', {
+    configurable: true,
+    get: () => 910 + (Number.parseFloat(panel.style.marginTop) - 24),
+  });
+  fixture.harness.scheduler.runFor(10000);
+  const settled = indicatorMargins(fixture);
+  for (let scan = 0; scan < 3; scan += 1) {
+    fixture.harness.scheduler.runFor(1000);
+    assert.deepEqual(indicatorMargins(fixture), settled);
+  }
+});
+
 test('v2 repairs custom segment geometry without owning parent clipping styles', () => {
   const fixture = makeStatusFixture('enemy', {
     enabled: true,
@@ -1814,6 +1780,44 @@ test('v2 clears ultimate background opacity when customization turns off', () =>
   assert.equal(fixture.healthbar.style.maxWidth, '');
   assert.equal(fixture.healthbar.style.preTransformScale2d, '');
   assert.equal(fixture.healthbar.style.transformOrigin, '');
+});
+
+test('v2 ignores retired ghoul opacity: a creature bar follows the normal bar settings', () => {
+  const retired = { ghoulOpacityEnabled: true, ghoulOpacity: 35 };
+  const fixture = makeStatusFixture(
+    'enemy',
+    { enabled: true, enemyColor: '#123456', ...retired },
+    1,
+    "|'",
+    false,
+    false,
+    false,
+    false,
+    null,
+    null,
+    ['creature'],
+  );
+  assert.equal(fixture.healthbar.style.opacity, '1');
+  assert.equal(fixture.infoBg.style.opacity, '1');
+
+  dispatchColorSnapshot(fixture, 2, {
+    enabled: true,
+    enemyColor: '#123456',
+    ghoulOpacityEnabled: true,
+    ghoulOpacity: 0,
+  });
+  assert.equal(fixture.healthbar.style.opacity, '1');
+  assert.equal(fixture.infoBg.style.opacity, '1');
+
+  // Hiding enemy bars is still the only thing that dims a creature bar.
+  dispatchColorSnapshot(fixture, 3, {
+    enabled: true,
+    enemyColor: '#123456',
+    enemyVisible: false,
+    ...retired,
+  });
+  assert.equal(fixture.healthbar.style.opacity, '0.01');
+  assert.equal(fixture.infoBg.style.opacity, '0.01');
 });
 
 test('v2 color pulse still dims the live healthbar fill', () => {

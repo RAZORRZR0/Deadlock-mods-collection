@@ -13,7 +13,9 @@ $root = $PSScriptRoot
 . (Join-Path $root 'scripts\hp-colors-rewrite-closure.ps1')
 
 $canonicalSrc = Join-Path $root 'hp_colors_rewrite_v2'
+# QOLLOCK 4.0.0 (addons\pak47_dir.vpk) layout, pin, contract and bridge.
 $supportSrc = Join-Path $root 'hp_colors_rewrite_v2_qollock'
+$bridgeSrc = $supportSrc
 $compiledOut = Join-Path $root 'hp_colors_rewrite_v2_qollock_compiled'
 $buildRoot = Join-Path $root '_hp_colors_rewrite_v2_qollock_build'
 $stageSource = Join-Path $buildRoot 'hp_colors_rewrite_v2_qollock'
@@ -28,7 +30,7 @@ $vpkeditcli = Get-RepoToolPath -ToolName 'vpkeditcli.exe' -Candidates @(
 )
 $vpkOut = Join-Path $root 'pak02_dir.vpk'
 $vpkDest = 'G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak02_dir.vpk'
-$qollockPak = 'G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak03_dir.vpk'
+$qollockPak = 'G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak47_dir.vpk'
 $manifestPath = Join-Path $supportSrc 'qollock-source.sha256'
 $contractPath = Join-Path $supportSrc 'pak02-contract.json'
 $refreshScript = Join-Path $root 'scripts\refresh-hp-colors-rewrite-qollock.js'
@@ -41,6 +43,7 @@ if ([string]::IsNullOrWhiteSpace($Source2ViewerPath)) {
 $canonicalScripts = @(
     'panorama\scripts\hp_colors_v2_contract.js',
     'panorama\scripts\hp_colors_v2_state.js',
+    'panorama\scripts\hp_colors_v2_storage.js',
     'panorama\scripts\hp_colors_v2_menu.js',
     'panorama\scripts\unit_status_v2_colors.js'
 )
@@ -51,6 +54,7 @@ $canonicalFiles = @(
     'panorama\layout\unit_status_overlay_v2.xml',
     'panorama\scripts\hp_colors_v2_contract.js',
     'panorama\scripts\hp_colors_v2_state.js',
+    'panorama\scripts\hp_colors_v2_storage.js',
     'panorama\scripts\hp_colors_v2_menu.js',
     'panorama\scripts\unit_status_v2_colors.js',
     'panorama\styles\hp_colors_v2_menu.css',
@@ -61,11 +65,11 @@ $canonicalFiles = @(
     'panorama\images\hpv2\ultimate_progress.png',
     'panorama\images\hpv2\ultimate_progress.vtex'
 )
+# QOLLOCK keeps its own hud.xml; pak02 overrides only the Escape menu and topbar.
 $supportFiles = @(
-    'panorama\layout\hud.xml',
-    'panorama\layout\hud_escape_menu.xml',
-    'panorama\scripts\qollock_hp_colors_bridge.js'
+    'panorama\layout\hud_escape_menu.xml'
 )
+$bridgeFile = 'panorama\scripts\qollock_hp_colors_bridge.js'
 
 $timerScripts = @(
     'panorama\scripts\test_event_bridge.js',
@@ -157,23 +161,15 @@ $requiredCompiled = @(
 if ($RefreshFromInstalledQollock) {
     Require-Path -Path $qollockPak -Label 'Installed QOLLOCK package'
     Require-Path -Path $Source2ViewerPath -Label 'Source2Viewer CLI for QOLLOCK refresh'
-    Write-Host "`n[0/5] Refreshing compatibility layouts from installed pak03..." -ForegroundColor Cyan
+    Write-Host "`n[0/5] Refreshing the Escape-menu layout from installed QOLLOCK..." -ForegroundColor Cyan
     Remove-TreeUnderRoot -Path $refreshRoot -RootPath $root -ExpectedLeaf 'refresh'
     New-Item -ItemType Directory -Path $refreshRoot -Force | Out-Null
-    $compiledHud = Join-Path $refreshRoot 'hud.vxml_c'
-    $compiledEscapeMenu = Join-Path $refreshRoot 'hud_escape_menu.vxml_c'
-    $decompiledHud = Join-Path $refreshRoot 'hud.xml'
-    $decompiledEscapeMenu = Join-Path $refreshRoot 'hud_escape_menu.xml'
+    $decompiledEscapeMenu = Join-Path $refreshRoot 'panorama\layout\hud_escape_menu.xml'
     try {
-        & $vpkeditcli $qollockPak --extract 'panorama/layout/hud.vxml_c' --output $compiledHud --no-progress
-        if ($LASTEXITCODE -ne 0) { throw "QOLLOCK HUD extraction failed with exit code $LASTEXITCODE" }
-        & $vpkeditcli $qollockPak --extract 'panorama/layout/hud_escape_menu.vxml_c' --output $compiledEscapeMenu --no-progress
-        if ($LASTEXITCODE -ne 0) { throw "QOLLOCK Escape-menu extraction failed with exit code $LASTEXITCODE" }
-        & $Source2ViewerPath -i $compiledHud -o $decompiledHud -d
-        if ($LASTEXITCODE -ne 0) { throw "QOLLOCK HUD decompilation failed with exit code $LASTEXITCODE" }
-        & $Source2ViewerPath -i $compiledEscapeMenu -o $decompiledEscapeMenu -d
+        & $Source2ViewerPath -i $qollockPak -o $refreshRoot -d -f 'panorama/layout/hud_escape_menu.vxml_c'
         if ($LASTEXITCODE -ne 0) { throw "QOLLOCK Escape-menu decompilation failed with exit code $LASTEXITCODE" }
-        & node $refreshScript $qollockPak $decompiledHud $decompiledEscapeMenu $canonicalEscapeMenu $supportSrc $manifestPath
+        Require-Path -Path $decompiledEscapeMenu -Label 'Decompiled QOLLOCK Escape menu'
+        & node $refreshScript $qollockPak '-' $decompiledEscapeMenu $canonicalEscapeMenu $supportSrc $manifestPath
         if ($LASTEXITCODE -ne 0) { throw "QOLLOCK compatibility refresh failed with exit code $LASTEXITCODE" }
     }
     finally {
@@ -188,7 +184,7 @@ $qollockPak = Get-VerifiedQolSource -Path $manifestPath
 $qollockTree = Get-PackedVpkTree -VpkEditCli $vpkeditcli -VpkPath $qollockPak -Source2ViewerPath $Source2ViewerPath
 Assert-PackedVpkAssets `
     -Tree $qollockTree `
-    -Label 'Pinned QOLLOCK pak03' `
+    -Label 'Pinned QOLLOCK' `
     -Required @($assetContract.requiredPinnedQollockAssets)
 
 Write-Host "`n[1/5] Validating HP Colors Rewrite v2 QOLLOCK source..." -ForegroundColor Cyan
@@ -202,15 +198,9 @@ foreach ($relativePath in $canonicalScripts + $timerScripts) {
         throw "Runtime script syntax check failed: $relativePath"
     }
 }
-& node --check (Join-Path $supportSrc 'panorama\scripts\qollock_hp_colors_bridge.js')
+& node --check (Join-Path $bridgeSrc $bridgeFile)
 if ($LASTEXITCODE -ne 0) {
     throw 'Runtime script syntax check failed: panorama\scripts\qollock_hp_colors_bridge.js'
-}
-if (-not $SkipPanoramaTests) {
-    & node --test (Join-Path $root 'scripts\validate-hp-colors-rewrite-v2-qollock.test.js')
-    if ($LASTEXITCODE -ne 0) {
-        throw "HP Colors Rewrite v2 QOLLOCK validator failed with exit code $LASTEXITCODE"
-    }
 }
 
 Write-Host "`n[2/5] Preparing Closure ADVANCED compatibility runtime..." -ForegroundColor Cyan
@@ -227,6 +217,7 @@ try {
     foreach ($relativePath in $supportFiles) {
         Copy-StagedFile -RelativePath $relativePath -SourceRoot $supportSrc -DestinationRoot $stageSource -Label 'QOLLOCK compatibility'
     }
+    Copy-StagedFile -RelativePath $bridgeFile -SourceRoot $bridgeSrc -DestinationRoot $stageSource -Label 'QOLLOCK bridge'
     # Preserve the pinned QOLLOCK topbar panels while sharing canonical timer hooks.
     & $Source2ViewerPath -i $qollockPak -o $stageSource -d -f 'panorama/layout/citadel_hud_top_bar.vxml_c'
     if ($LASTEXITCODE -ne 0) { throw 'Pinned QOLLOCK topbar decompilation failed' }

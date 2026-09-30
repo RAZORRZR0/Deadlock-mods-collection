@@ -12,30 +12,31 @@ The layout overrides are based on current stock files in `SteamDatabase/GameTrac
 
 - Enemy and optional ally fixed/gradient colors with shared thresholds.
 - Independent enemy and ally team-high colors.
-- Reversible enemy/ally visibility, dimensions, position, ghoul opacity, healing, damage-delta, shield-indicator, and ultimate-icon coloring.
+- Reversible enemy/ally visibility, dimensions, position, healing, damage-delta, shield-indicator, and ultimate-icon coloring.
 - Neutral-first classification; neutral and unclassified targets never enter enemy coloring.
 - Enemy/ally CSS-driven low-HP pulse and enemy-player-only static kill marker.
 
 ### HP readout and stock indicators
 
-- Current/max, percentage, and current-only HP formats.
+- Current/max, percentage, and current-only HP formats for enemies, plus an opt-in, independently styled ally copy.
 - Size, bounded placement, stock-derived or custom colors, and optional pulse-specific presentation.
-- Health-pip visibility and optional precise 10-HP calculation with manual `gameinfo.gi` copy/reset guidance.
+- Health-pip visibility and optional **More Precise HP Text** (10-HP calculation) with manual `gameinfo.gi` copy/reset guidance.
 - Enemy-player level visibility and tier styling without writing engine-owned text.
 
 ### Editor and settings
 
-- Categorized ESC editor, immediate application, confirmed section reset with guarded feedback, session Undo, Peek, native HSL picker, and HPCR2 live settings import/export.
+- Five ESC rail categories: General (Master, Layout), Enemy (Bar, Heal & Shield, HP Text, Pulse, Kill Marker), Ally (Bar, Heal & Shield, HP Text, Pulse), Indicators (Pips & Level, Ultimate, Stamina, Pickup Timers), and Presets (Library). Every setting belongs to one tab; Reset Section resets that tab's keys.
+- Immediate application, confirmed section reset with guarded feedback, session Undo, Peek, native HSL picker, and HPCR2 live settings import/export.
 - One canonical global base and one resolved effective snapshot.
-- Auto, Manual Override, and Off hero identity with lifecycle settling and stale-callback rejection.
-- All Heroes and Selected Heroes user-preset categories with searchable stable-key selection, a hidden canonical fallback, and changed-effective-only publication.
-- A baked-before-user session preset repository with a focused create form, explicit Apply/Cancel, selected-row **Save & Apply**, row-local rename/reorder/delete/hide, baked restoration, and exact Selected → All Heroes → Rewrite Default routing.
-- `HPCRP1` single-record and bundle copy/import with atomic validation, fresh monotonic user IDs, canonical typed ability conditions, and no live-setting publication.
+- Automatic hero detection with lifecycle settling and stale-callback rejection. The editor has no hero-mode controls; detection always runs in Auto.
+- The Preset Library manages durable All Heroes, Selected Heroes (Only These), and All Except snapshots, the hidden Rewrite Default fallback, and exact Selected → All Except → All Heroes → Rewrite Default routing.
+- Create stores Current without applying; clicking a preset row applies it; **EDIT** loads a preset and opens its form, and **SAVE** replaces that preset with what is on screen. Rename (through the form name field), reorder, copy, import, delete, hide, and restore remain available.
+- The footer **SAVE TO PRESET** button saves what is on screen into a saved preset without leaving the page: pick a preset (never Rewrite Default) or use **+ NEW PRESET (ALL HEROES)**. See Milestone 22.
+- `HPCRP1` single-record and bundle copy/import use atomic validation and preserve fresh monotonic user IDs, canonical typed ability conditions, and repository-only effects.
 - Session-scoped ability signature-tier conditions for serializable settings, with row markers, ability-card tier cycling, typed override editors, base fallback, and changed-effective-only publication.
 
 ### Deliberately deferred
 
-- Durable persistence and restart selection, pending a proven writable storage backend.
 - Detached tooltips and a grouped two-axis position picker are intentionally omitted.
 - Legacy v99 encoding, Anita tokens, aliases, bridge keys, and preset-store VPK compatibility.
 
@@ -109,12 +110,11 @@ The picker uses one modal panel and one active setting key. Closing, Escape, pag
 Implemented controls:
 
 - Independent stock team-color endpoints for enemy and ally high health; unknown teams retain each relation's configured high color.
-- Full-ghoul-healthbar opacity applies independently of bar colors.
 - Horizontal and vertical translation of the complete healthbar stack. The unit stays fixed. One shared toggle makes the level badge and ultimate icon follow the bar's measured left edge or remain at their stock positions.
 - Independent horizontal and vertical offsets for the level badge and ultimate icon. These offsets apply in both anchor modes.
 - One shared ultimate-ready icon rule: Follow Bar uses each customized relation's final bar color; Custom applies one color to enemy and ally icons even when their bar-color toggle is off.
 
-The renderer classifies relation, team, player, building, sentry, boss, and creature-class ghoul facts in the existing ancestry pass. Neutral classification remains authoritative. Building and boss facts restrict player-only level and kill-marker behavior. Sentry and minion facts select stock dimensions. Ghoul opacity applies one value to the cached `UnitHealthbarContainer` and `unit_info_bg`. Zero uses `opacity: 0.01` to preserve engine width updates. The slider and number entry stay disabled until custom ghoul opacity is enabled.
+The renderer classifies relation, team, player, building, sentry, boss, and minion facts in the existing ancestry pass. Neutral classification remains authoritative. Building and boss facts restrict player-only level and kill-marker behavior. Sentry and minion facts select stock dimensions. Custom ghoul opacity was retired: nothing reads, shows, or publishes it (see Milestone 22).
 
 The v1 implementation passed its focused automated and in-game checks before this port. Rewrite v2 still requires its own fresh-restart in-game smoke before parity can be claimed.
 
@@ -131,7 +131,7 @@ The v1 implementation passed its focused automated and in-game checks before thi
 9. Disable indicator anchoring. Bar position changes must leave the indicators in place; width changes must still preserve their scaled bar-edge relationship. Test each indicator's X/Y controls independently.
 10. Test ultimate-icon Follow Bar and Custom modes on enemies and allies. Require shared Custom changes to update both relations even when bar coloring is off, while neutral, unclassified, and bypassed icons return to stock.
 11. Drag each native Hue, Saturation, and Lumen slider; require the slider value, canonical hex, and visible bars to update live, then require one Undo to restore the color from before that slider gesture.
-12. Exercise Reset Section confirmation, Cancel, already-default feedback, and Undo. Reset Layout after a negative X offset and require the bar to return immediately, without damage, another slider change, or a later layout update. Require Reset Section and Undo to stay hidden on Presets, return on settings pages, and Escape to dismiss the reset dialog or palette before closing the editor.
+12. Exercise Reset Section confirmation, Cancel, already-default feedback, and Undo. Reset Layout after a negative X offset and require the bar to return immediately, without damage, another slider change, or a later layout update. Require Reset Section to stay hidden on Presets while Undo stays visible there, both to return on settings pages, and Escape to dismiss the reset dialog or palette before closing the editor.
 13. With indicator anchoring enabled, test `800`, `2100`, and `4100` max HP at default and changed widths. Require the level badge and ultimate icon to keep their left-edge gap, an `18%` kill marker to remain visible, reset to use the current live width, and the console to contain no Rewrite exceptions.
 
 
@@ -143,7 +143,7 @@ Implemented controls:
 - Current/max HP, percentage, and current-only formats.
 - Font chooser with Default (`Retail Demo, Noto Sans, sans-serif`), Oracle (`VALVEOracle, Reaver, sans-serif`), and Pulp (`VALVEPulp, Noto Sans, sans-serif`). Runtime writes the expanded families because stock `sans`, `oracle`, and `block` are compile-time CSS aliases.
 - Text size plus direct horizontal (`-405px...405px`, default `-30px`) and portable vertical (`-35px...840px`, default `434px`) offsets.
-- Bar-derived or custom low/mid/high text colors. Bar Color inherits the enemy bar's Fixed/Gradient mode and shared thresholds. Custom enables its own Fixed/Gradient choice. The always-editable shared threshold pair lives under Enemy → Bar and also drives ally bars and custom HP text. The white label is tinted through `washColor`, matching the bar and legacy rendering path instead of assigning a darker flat `color`.
+- Bar-derived or custom low/mid/high text colors. Bar Color inherits the enemy bar's Fixed/Gradient mode and shared thresholds. Custom enables its own Fixed/Gradient choice. The shared low/high thresholds live under General → Master and drive enemy bars, ally bars, and custom HP text. The white label is tinted through `washColor`, matching the bar and legacy rendering path instead of assigning a darker flat `color`.
 - Optional team coloring for only the maximum-HP value. Current HP and the separator keep the active text color. Unknown teams keep that same text color.
 
 The stock overlay exposes only `unit_healthbar_pip_label`, so the rewrite owns `hp_counter_anchor` plus separate current and maximum labels without changing stock fill geometry. Each live `UnitHealthbarContainer` owns its readout anchor. Maximum HP comes from the stock pip string and current HP from the existing shield-aware fill ratio. Percentage remains available when a maximum cannot be derived. Turning **Enemy Bar Colors** off restores only relation-owned colors. **Show HP Number** controls the readout. Neutral, ally, unclassified, and master-bypassed paths collapse and clear both owned labels. Pip-text changes and replacement counter panels invalidate local caches and reapply through the existing scan and paint loops.
@@ -183,11 +183,13 @@ The editor copies a compact single-line `HPCR2` code containing legacy `v` value
 
 ## Milestone 11: hero identity and match lifecycle
 
-The editor owns transient hero identity separately from the canonical healthbar settings snapshot. **Auto** reads the generated `CitadelHudTopBarPlayer.LocalPlayer` card, resolves its `.HeroName` through an exact English retail-name table, and exposes the resulting stable `hero_*` key only after two matching active-match samples. Blank, placeholder, fuzzy, and unmapped names remain unknown. **Manual Override** uses one explicitly selected stable key, while **Off** produces no effective hero and skips local-card scans.
+The editor owns transient hero identity separately from the canonical healthbar settings snapshot. Detection is automatic: the editor reads the generated `CitadelHudTopBarPlayer.LocalPlayer` card, resolves its `.HeroName` through an exact English retail-name table, and exposes the resulting stable `hero_*` key only after two matching active-match samples. Blank, placeholder, fuzzy, and unmapped names remain unknown. The state module still accepts manual-override and off intents as an API, but the editor exposes no control for them, so a session always runs in Auto.
 
-The lifecycle watcher classifies lobby/pregame, active match, post-match, and transitional states from current HUD classes plus a parseable live topbar clock. It clears detected identity and panel caches on lifecycle changes, rediscovers replaced local-player cards and stale clocks, polls at one second while active or transitioning and five seconds in lobby/post-match, and rejects stale scheduled callbacks by generation. Identity modes and the manual choice are session-only metadata: they do not alter `DEFAULTS`, HPCR2, Undo, the root settings snapshot, or unit-status publications.
+The lifecycle watcher classifies lobby/pregame, Hideout, active match, post-match, and transitional states from current HUD classes plus a parseable live topbar clock. It clears detected identity and panel caches on lifecycle changes, rediscovers replaced local-player cards and stale clocks, polls at one second while active or transitioning and five seconds in lobby/Hideout/post-match, and rejects stale scheduled callbacks by generation. Identity mode and any manual choice are session-only metadata: they do not alter `DEFAULTS`, HPCR2, Undo, the root settings snapshot, or unit-status publications.
 
-Stable Auto observations now avoid state churn without weakening detection. Once a retail name matches the settled hero and no preset is waiting, the state module returns a no-op; repeated unknown samples cap after the required two observations. The watcher still reads the live label every second, so hero changes retain the same two-sample settling and epoch guards.
+Stable Auto observations now avoid state churn without weakening detection. Once a retail name matches the settled hero and no preset is waiting, the state module returns a no-op; repeated unknown samples cap after the required two observations. During active matches the watcher still reads the live label every second, so hero changes retain the same two-sample settling and epoch guards.
+
+The Hideout (`connectedToHideout`) is its own `hideout` phase, polled every five seconds like lobby. Detection deliberately does not identify heroes there; the visible HERO label reads `HERO: UNKNOWN · HIDEOUT`. Entering it releases any held cold-boot snapshot and applies the first All Heroes preset. Without one, a hero-specific Current falls back to Rewrite Default; other Current settings stay unchanged. Pregame lobby keeps the last route. As with a hero swap, unsaved tweaks to a hero-specific Current are replaced; EDIT the preset and SAVE to keep them.
 
 ## Milestone 12: hero scopes and effective settings
 
@@ -199,47 +201,45 @@ Only the resolved effective snapshot enters the existing root config attribute, 
 
 The deployed 2026-08-14 build was user-smoke-tested after restart. Hero scopes, effective-setting transitions, fallback behavior, and the optimized transition-only healthbar telemetry worked without reported regressions.
 
-## Milestone 13: session preset records and application
+## Milestone 13: preset records and application
 
-The menu owns a rewrite-native preset repository beside the canonical global base and ordered scope rows. Each record carries a stable ID, baked/session kind, display name, normalized settings snapshot, scope mode, and validated stable hero keys. The baked `baked_default` / **Rewrite Default** record represents shipped `DEFAULTS`. Baked records render before session records; new session records append in deterministic creation order and Milestone 14 may reorder them.
+The rewrite-native repository keeps stable baked and user records beside the canonical base and ordered Current scopes. `baked_default` / **Rewrite Default** represents shipped `DEFAULTS`; records retain their settings, scope, selected heroes, conditions, and stable IDs.
 
-**New Preset** opens a create-only form. **Create Preset** captures the latest Current working values plus the Current scope mode and selected heroes, allocates a monotonic ID, and closes the form without applying settings. Clicking a session row enters an explicit editing state and warns that **Save & Apply** will replace that stable record with the current values, name, conditions, and scope metadata before applying it through the normal resolver. **Cancel** exits editing without mutation. Baked records are immutable and retain **Apply** only. Runtime-created and imported records, plus every in-game edit, remain session-only and reset when Deadlock restarts. On a cold boot with no session cache, an optional builder-generated `pak96_dir.vpk` seeds validated `HPCRP1` user records from the hidden `hud_escape_menu.xml` preset store, creates Current from the builder-selected record, and publishes it before hero or game-mode lifecycle observation. The packaged records remain build-time inputs rather than durable in-game writes.
+The **Presets → Library** page separates snapshot creation, application, and updating. **Create Preset** stores Current plus its scope without applying it. Clicking a preset row (name, scope, or status) applies it; the ▲ ▼, COPY, EDIT, and DELETE/HIDE buttons are separate targets that never apply. **EDIT** applies the preset first (skipped when it is already ACTIVE) so Current carries its values and APPLIES TO scope, then opens the form with the row marked **EDITING**; that row ignores body clicks and has no EDIT button. **SAVE** replaces the record with what is on screen and applies it; when APPLIES TO differs from the saved scope, the scope summary reads `OLD → NEW` and the button reads **SAVE AS ALL HEROES / ONLY THESE / ALL EXCEPT**. **CLOSE** only closes the form; the screen keeps its changes and **UNDO** stays visible on this page to step them back. Applying or editing another row closes or retargets the form so SAVE never writes into the previous target. Baked records are immutable and can only be applied, copied, or hidden.
 
-Applying All Heroes or Selected Heroes preserves the hidden canonical base and replaces Current with the preset's frozen snapshot plus its stable source ID. Explicit **Apply** publishes that Current snapshot immediately, even if hero identity is unknown or currently different. Controls then edit and publish the Current working copy while the source preset record remains unchanged until **Save & Apply**. Legacy user Global records normalize to All Heroes on load without applying or publishing.
+A row click loads a preset into Current and publishes it immediately, even when hero identity is unknown or differs. Controls edit the Current working copy; the source record stays unchanged until **SAVE**. When no saved preset is ACTIVE (the screen holds values no preset has) or the form holds an unsaved name, a row click or EDIT first swaps that row into a `REPLACE UNSAVED CHANGES?` CONFIRM / CANCEL prompt. ACTIVE marks the first preset equal to what is on screen; without a Current row that includes an All Heroes preset equal to the base, not only Rewrite Default, and selection never hides it. The ACTIVE row carries a green fill and left bar, the EDITING row an amber left bar. Legacy user Global records normalize to All Heroes without applying or publishing.
 
-Later settled hero transitions choose the first matching saved Selected record, then the first saved All Heroes record, then **Rewrite Default** when leaving an active Selected scope. Automatic routing preserves edited Current when the resolved preset has the same stable source ID, including hideout-to-testing and repeated same-hero lifecycle transitions. It replaces Current only when routing resolves to a different preset or fallback. Every application and edit passes through the normalize, resolve, and changed-effective publication path, so byte-identical effective values do not increment revision or dispatch.
+Automatic routing, only when a hero is known, chooses the first Selected Heroes (Only These) preset listing the hero, otherwise the first **All Except** preset that does not skip the hero, otherwise the first All Heroes preset, otherwise **Rewrite Default**; "first" is library order. An All Except preset stores its skipped hero keys (catalogue-validated, deduplicated, catalogue order); an empty skip list becomes All Heroes, and skipping every hero is valid but never auto-picked. Unknown heroes never match Selected or All Except, and in Hideout an All Except Current falls back like a Selected Current. Routing preserves edited Current while the resolved preset's stable source ID remains the same (or while a Selected/All Except Current still covers the hero and no Selected preset matches), and publishes only when effective values change. Saved-state envelopes use schema 3 (same embedded object body as schema 2) only when an All Except preset or Current scope exists, otherwise schema 2, so older builds keep saving for everyone else; schemas 1–3 are read, and older builds treat schema 3 as unsupported and never overwrite it.
 
-## Milestone 14: session preset repository management
+Hero presets (Only These and All Except) layer on a Base: the first All Heroes preset in library order, otherwise Rewrite Default. Each hero record keeps its full `values` snapshot plus `own`, the setting keys it changes (contract order); applying or routing to it sets Current to the Base with those keys overridden, and ACTIVE/no-op checks compare against that resolved result. Update/Create of a hero preset stores `own` as the keys where Current differs from the Base; older saves and codes without `own` derive it on load/import. When the Base changes (All Heroes update/create, delete, reorder, import), an unedited hero Current refreshes once without an Undo entry; an edited one is left alone. While Current is hero-scoped, Reset Section returns the tab to Base values; the scope help line and the preset feedback say that only changed settings are saved. `HPCRP1` codes carry `own`; a non-array `own` rejects the import.
 
-The session repository now owns a retained next-user-ID counter, baked display-name overrides, hidden baked IDs, and one inert repository selection. Loading derives the counter above every surviving `user_####` suffix while retaining any higher stored value, so deleting the highest record cannot reuse its stable identity. Unknown baked IDs and invalid selected references are discarded during normalization.
+## Milestone 14: preset repository management
 
-Selecting a session row enters a distinct **EDITING** state without applying settings. Baked selection remains inert. **Apply** loads and publishes a record immediately, while **Save & Apply** is exposed only for the session record currently being edited. **ACTIVE** and **EDITING** remain separate states.
+The repository retains the next user ID, baked display-name overrides, hidden baked IDs, and an inert selected record. Allocation never reuses a deleted `user_####` ID; invalid baked IDs and selected references are discarded during normalization.
 
-User records can be renamed, moved within deterministic session-only bounds, and deleted after confirmation. Baked records keep fixed identity and order; rename stores a display override, while Hide removes only the visible row. Hidden baked records remain canonical, so `baked_default` still serves automatic fallback, and **Restore Baked** returns hidden rows before session records.
+User presets can be renamed through the form name field, reordered, copied, and deleted after confirmation; inline row renaming is gone. Baked presets keep fixed identity and order; rename stores a display override, while Hide removes only the visible row. Hidden `baked_default` remains the automatic fallback and can be restored.
 
-Rename, reorder, delete, hide, and restore mutate menu-only repository state. They preserve live values and scopes, do not enter Undo, do not increment revision or dispatch configuration, and repair selected references by stable ID. Focus returns to the nearest surviving selected row after destructive or ordering changes.
+Repository-only actions preserve live values and scopes, do not enter Undo or publish configuration, and repair selected references by stable ID. Creating an All Heroes preset automatically hides the redundant Rewrite Default row without removing its fallback.
 
-Creating an **All Heroes** user preset automatically hides the baked **Rewrite Default** row to remove the redundant visible fallback. The baked record remains canonical and available to automatic routing, and **Restore Baked** makes it visible again.
+Focused regressions cover create/edit separation, row-click application, EDIT loading the target scope before the form opens, the unsaved-changes prompt, CLOSE-without-mutation, stable rename identity, baked immutability, delete/hide confirmation, monotonic allocation, routing priority, hidden-default fallback and restore, reference repair, and unchanged configuration during repository-only mutations.
 
-Focused regressions cover cold-boot builder selection publication before lifecycle observation, create/edit separation, selected-row **Save & Apply**, cancel-without-mutation, explicit application, stable rename identity, baked immutability, delete/hide confirmation, monotonic allocation, deterministic boundaries, routing-priority changes, hidden-baked fallback, restoration order, reference repair, and byte-identical root configuration during repository-only mutations.
+## Milestone 15: Preset Library
 
-## Milestone 15: full-width Preset Library
-
-The former split Hero / Presets dashboard is now one full-width Preset Library. It keeps automatic identity resolution active while hiding transient lifecycle diagnostics. The page explains the lower-commitment session behavior first, then web-builder persistence, then the one-VPK packaging rule. Its routing card says that a hero-specific preset wins first, otherwise All Heroes applies, and the highest matching row wins. Scope help states that Selected Heroes overrides All Heroes for chosen heroes. A compact action guide distinguishes Create Preset, Apply, and Save & Apply before the user edits a record.
+The Preset Library lives under its own **PRESETS → LIBRARY** rail entry. A one-line hint (`Click a preset to use it. EDIT loads it so you can change it and SAVE.`) and a collapsed **SHOW HOW PRESETS WORK** guide explain the flow and the routing rule: the first Only These match wins, otherwise a still-fitting Current, then the first All Except, then the top All Heroes preset, otherwise Rewrite Default. The page keeps the create/edit form, scope controls, feedback, hero identity in the library header, preset actions, and a conditional “Rewrite Default is hidden” row. The bottom **SAVED ON THIS PC** strip explains automatic saving and the two-click **FORGET SAVED** action; save status remains only in the header chip. The INFO guide and action guide are gone.
 
 ## Milestone 16: preset repository transfer
 
-The Preset Library can copy the selected record or a deterministic baked-before-user repository bundle as an `HPCRP1` clipboard code. Bundles include hidden baked state and selection but never include the synthetic Current scope row. Web-builder single and bundle exports explicitly hide baked **Rewrite Default** whenever they contain an All Heroes user preset, and XML first-boot hydration preserves that repository state. Import validates the entire code before mutation, preserves names, All Heroes/Selected Heroes scope, stable hero keys, frozen settings, baked display names, and canonical typed ability conditions, then appends user records with fresh monotonic IDs. Copy and import are repository-only: they never apply settings, enter Undo, increment revision, or dispatch configuration.
+**Copy Presets** exports the deterministic baked-before-user repository bundle as an `HPCRP1` clipboard code; row-level **COPY** exports one record. **Import Presets** validates the whole code before mutation, preserves names, scopes, hero keys, frozen settings, baked display names, hidden-baked state, selection, and canonical ability conditions, then allocates fresh user IDs. Transfer never applies settings, enters Undo, changes the live revision, or dispatches configuration. The synthetic Current scope row is never exported.
 
 HPCRP1 hero lists may arrive in any order and are normalized to catalogue order on import. Unknown IDs, duplicate IDs, and non-string entries reject the entire bundle without changing the repository.
 
 ## Milestone 17: confirmed section reset
 
-**Reset Section** now opens a blocking confirmation dialog for the active settings tab. Opening, cancelling, and already-default requests do not mutate menu state, enter Undo, increment revision, or dispatch configuration. Confirming resets the captured tab keys through the canonical replacement path, creates one Undo entry, and relies on effective-value equality to suppress irrelevant publication.
+**Reset Section** confirms and resets only the active tab's keys. **General → Master** owns `enabled` and the shared low/high thresholds; those thresholds no longer reset with **Enemy → Bar**. Opening, cancelling, and already-default requests remain inert. Confirming creates one Undo entry and publishes only an effective change.
 
-The header reports completion or already-default state through a generation-guarded transient message. Reset Section and Undo collapse on the Presets page, where neither action has a meaningful target, and return on settings pages. The reset backdrop intercepts outside clicks so the confirmation cannot coexist with underlying editor actions.
+The header reports completion or already-default state through a generation-guarded message. Reset Section stays hidden on Presets → Library while Undo remains visible there; both show on settings pages. Escape and the blocking backdrop preserve dialog precedence.
 
-Focused regressions cover inert request/cancel behavior, captured-tab reset, unrelated-value preservation, single-entry Undo, effective-equal dispatch suppression, keyless Presets behavior, Escape precedence, stale feedback rejection, and footer-action restoration. Detached tooltips and a grouped two-axis position picker are intentionally omitted; concise inline help and the existing bounded X/Y sliders and numeric entries remain authoritative.
+Focused regressions cover captured-tab reset, unrelated-value preservation, one-entry Undo, effective-equal dispatch suppression, keyless Presets, Escape precedence, stale feedback rejection, and footer restoration. Detached tooltips and a grouped two-axis position picker remain intentionally omitted.
 
 ## Milestone 18: ability signature-tier conditions
 
@@ -263,9 +263,23 @@ The stamina and accessory controls use the versioned `hpv2` extension in HPCRP1 
 
 The enemy pulse now animates both halves of the `current / maximum` HP readout. Ally custom pulse color has the same Fixed and Gradient modes as enemy pulse color, with Fixed replacing the active bar color and Gradient animating an overlay over the normal ally color. This V2-only mode is stored in the `hpv2` extension for both HPCRP1 and HPCR2.
 
-Disabling enemy level display now reproduces v1 flow centering by shifting the ultimate indicator, healthbar, and HP readout left by half of the removed level badge's effective width. The existing enemy stamina page already provides width, height, two-axis position, and custom filled/border color controls while leaving ally and neutral stamina stock.
+Disabling enemy level display reproduces v1 flow centering by shifting the ultimate indicator, healthbar, and HP readout left by half of the removed level badge's effective width. **Indicators → Stamina** provides width, height, two-axis position, and custom filled/border color controls while leaving ally and neutral stamina stock.
 
 Bar and HP-text offset ranges remain wider than the visible viewport by design. Bar width scales the complete live stack around the measured bar center; runtime never writes the engine-owned `width` or `max-width`. Anchored indicators follow X translation without multiplying it by width scale. Layout Reset writes zero translation explicitly instead of waiting for cleared-style recomputation. The existing health pass samples live width and updates alignment when width or configured layout changes. Production emits no geometry records.
+
+## Milestone 21: ally HP text
+
+**Ally → HP TEXT** sits alongside the enemy text page and exposes visibility, format, size, font, Bar Color or Custom Fixed/Gradient low/mid/high colors, team-colored maximum HP, and horizontal/vertical offsets. Ally text is off by default and never changes enemy text. Bar Color follows ally bar colors and mode using the shared thresholds; enemy pulse text modifiers stay enemy-only.
+
+The twelve `allyReadout*` settings append to the versioned `hpv2` extension, so older HPCR2 and HPCRP1 codes keep their defaults. Health sampling stays on the paint cadence whenever relation colors or HP text are visible. Ally's default offsets copy the enemy defaults; ally text alignment still needs an in-game check because ally bars have no level badge.
+
+## Milestone 22: footer SAVE TO PRESET and retired ghoul opacity
+
+**SAVE TO PRESET** sits in the editor footer between the spacer and EXIT and opens a dialog with one row per saved user preset, in library order: its name, its HEROES summary, a small **CHANGED** tag on the preset the settings on screen came from, and its own **SAVE** button. The row body does nothing. The first **SAVE** click arms only that row (**REPLACE?** and `CLICK AGAIN TO REPLACE <NAME>`, plus ` · ALSO CHANGES HERO PRESETS` on the top All Heroes preset while hero presets exist); a second click on the same button writes the settings and ability conditions on screen into that preset with the `preset_save_to {id}` intent, which keeps the preset's id, name, and HEROES and stores hero presets' `own` keys against the current Base. Arming another row, a four-second timeout (never a save), closing, Escape, or reopening disarms. **+ NEW PRESET (ALL HEROES)** deselects, then calls `preset_save` with `allHeroes: true` to create `PRESET N` for all heroes (N is the next free number, skipping a taken name in any case); `allHeroes` always creates and can never rewrite an existing preset's HEROES.
+
+After either save the dialog closes and the saved preset is applied, so it is ACTIVE, the previous source's CHANGED marker clears, EXIT does not prompt, and a three-second header note reads `SAVED TO <NAME>.` or `SAVED AS <NAME>. SET ITS HEROES ON PRESETS.`. Saving is not undoable; the apply is. The footer button is disabled while the preset name form is open, Escape closes the dialog before anything else, and the button pulses amber only while the preset the settings came from is CHANGED (never for Rewrite Default or settings no preset owns). Nothing saves into a preset automatically; the automatic PC save of the live settings is unchanged. To fit six actions, the footer buttons use compact fixed widths with shrinking labels.
+
+**Ghoul opacity** (`ghoulOpacityEnabled`, `ghoulOpacity`) is retired like the earlier exclusions: no editor controls, no renderer branch, and no published keys. Codec slots 68–69 stay reserved so later slots keep their positions. Old saves, presets, HPCR2 codes, and HPCRP1 codes that carry them, in values, ability rules, or hero-preset `own` keys, still load with them dropped; a rule set that held only ghoul rules loads as no rules. Rules on any other unknown key still reject the import.
 
 ## Priority 8 runtime measurement baseline
 
@@ -291,15 +305,15 @@ Ordinary preset Apply updates existing rows instead of rebuilding their controls
 
 The normal wrapper builds standalone pak02 by default. With ShowRank Barebones pak89 installed, use `build_hp_colors_rewrite_v2.ps1 -ShowRankBarebones` to compose its Escape open/out handlers while preserving HP editor cancellation. This changes only the staged layout; the canonical runtime remains independent of ShowRank.
 
-The QOLLOCK wrapper copies the same canonical runtime, derives packed assets from its package contract, and preserves the pinned pak03 dependency. Use `build_hp_colors_rewrite_v2_qollock.ps1 -RefreshFromInstalledQollock` when intentionally updating compatibility against a supplied pak03. Both wrappers accept `-SkipDeploy` for archive-only builds.
+The QOLLOCK wrapper copies the same canonical runtime, derives packed assets from its package contract, and builds against the pinned QOLLOCK 4.0.0 `pak47_dir.vpk`; its layout, pin, contract and bridge live in `hp_colors_rewrite_v2_qollock/`. QOLLOCK 3.2.0 and the 4.0 beta are no longer supported. It overrides only the Escape menu (QOLLOCK's menu plus the HP COLORS V2 button and editor) and the topbar (QOLLOCK's topbar plus pickup-timer includes); QOLLOCK's own `hud.xml` stays authoritative, so pak02 never ships a stale copy of it. Use `build_hp_colors_rewrite_v2_qollock.ps1 -RefreshFromInstalledQollock` when intentionally updating compatibility against a supplied QOLLOCK package. Both wrappers accept `-SkipDeploy` for archive-only builds.
 
-Install only one pak02 variant and fully restart Deadlock. The normal archive contains standalone pak02 only; the QOLLOCK archive requires the matching pak03 and does not bundle it. Barebones remains an opt-in build option, not an archive payload. The prior roughly 35-minute Barebones live capture had no logged style-write failures, and the user confirmed correct rendering. Automated release checks do not substitute for a fresh in-game check of the final packages.
+Install only one pak02 variant and fully restart Deadlock. The normal archive contains standalone pak02 only; the QOLLOCK archive requires the matching QOLLOCK 4.0.0 pak47 and does not bundle it. Barebones remains an opt-in build option, not an archive payload. The prior roughly 35-minute Barebones live capture had no logged style-write failures, and the user confirmed correct rendering. Automated release checks do not substitute for a fresh in-game check of the final packages.
 
 ## Third Eye compatibility
 
 `build_hp_colors_rewrite_v2_thirdeye.ps1` builds the Rewrite v2 + Third Eye compatibility pak02. It runs `scripts/compose-hp-colors-rewrite-v2-thirdeye.js` with the pinned `hp_colors_rewrite_v2_thirdeye/source_snapshots/` inputs, copies the canonical HPv2 runtime at build time, and emits the extra `hp_colors_thirdeye_bridge.vjs_c`, `hp_colors_thirdeye_window.vjs_c`, and `features/topbar_ult_cooldown/feature.vjs_c` assets. The patched window is generated by `scripts/patch-hp-colors-thirdeye-window.js`; the canonical Rewrite runtime remains unmodified.
 
-Install the generated HPv2 preset-builder pak01, this compatibility pak02, and the unchanged Third Eye package at a lower priority (the verified package uses `pak47_dir.vpk`; a lower-priority pak03+ slot also works). The package pin is recorded in `hp_colors_rewrite_v2_thirdeye/thirdeye-source-pin.json`. `-ThirdEyePakPath <path>` validates a supplied package's SHA-256 and required Source 2 assets; `-SkipDeploy` can build from the pinned snapshots without an installed Third Eye package.
+Install this compatibility pak02 and the unchanged Third Eye package at a lower priority (the verified package uses `pak47_dir.vpk`; a lower-priority pak03+ slot also works). Do not install an old HPv2 builder pak01: it overrides the ESC layout and disables saving. The package pin is recorded in `hp_colors_rewrite_v2_thirdeye/thirdeye-source-pin.json`. `-ThirdEyePakPath <path>` validates a supplied package's SHA-256 and required Source 2 assets; `-SkipDeploy` can build from the pinned snapshots without an installed Third Eye package.
 
 Use only one pak02 variant. Do not combine Third Eye with ShowRank Barebones or a QOLLOCK/ShowRank triple stack. The compatibility Escape XML preserves HPColorsMenuBoot/HPColorsMenuCancel nested-cancel behavior, composes Third Eye close handling for Escape, backdrop, and EscapeButton, and closes Third Eye before HP COLORS opens. A fresh Deadlock restart is required after replacing any VPK.
 
@@ -310,7 +324,7 @@ Run `node --test scripts/validate-hp-colors-rewrite-v2-thirdeye.test.js` for the
 
 ## Pickup and ultimate timers
 
-The canonical pak02 now includes the combined timer runtime previously tested in `test_hp_colors_v2_showrank/`. HUD Details exposes pickup colors, background darkness, glyph color, size, spacing, and offsets, plus world ultimate cooldown visibility, scale, darkness, and Follow Icon / Fixed / Gradient progress colors. Timer settings and conditions use appended `hpv2` extension slots in both HPCRP1 and current HPCR2 exports; legacy codes remain accepted.
+The canonical pak02 includes the combined timer runtime previously tested in `test_hp_colors_v2_showrank/`. **Indicators → Pickup Timers** exposes pickup colors, background darkness, glyph color, size, spacing, and offsets; **Indicators → Ultimate** exposes world cooldown visibility, scale, darkness, and Follow Icon / Fixed / Gradient progress colors. Timer settings and conditions use appended `hpv2` extension slots in HPCRP1 and current HPCR2 exports; legacy codes remain accepted.
 
 The event-driven sibling relay, native progress sampling, identity/freshness guards, one-time disabled-pickup clearing, and unchanged ultimate-style suppression are retained. Ultimate scaling includes the backing background. The ultimate texture uses lossless PNG passthrough with one mip and no LOD.
 
@@ -321,6 +335,14 @@ Both normal and QOLLOCK builds include the timers. Do not install the standalone
 Use `-SkipDeploy -SkipPanoramaTests` for compile-only builds without mocked Panorama checks. Timer behavior checks and package checks still run. Latest live rendering and lifecycle behavior remain unverified; no FPS improvement is claimed.
 
 
+## Durable local save
+
+Settings, Current scopes, user presets, conditions, and repository metadata save automatically on this PC and return after a game restart. A hidden `CitadelHTMLPanel` opens `file://`; its localStorage lives in Steam's CEF profile. Only `hantu.hpcolors.v2/state` and `hantu.hpcolors.v2/state.prev` are touched, so Third Eye and QOLLOCK saves on the same origin are unaffected. Saves store non-default values, wait 1.5 seconds after changes, flush when the editor closes, skip unchanged state, and retain the previous valid record as backup.
+
+Cold boot keeps healthbars stock until saved state is restored. An unreadable, corrupt, or newer-format record pauses saving for that run rather than overwriting data; failed writes retry automatically. The header chip reports LOADING, SAVING, SAVED, SAVE RETRYING, SAVE CLEARED, SAVE TOO LARGE, SAVE UNAVAILABLE, or OLD PRESET VPK. The Preset Library's bottom **SAVED ON THIS PC** strip holds **FORGET SAVED**; confirm it twice to delete only the two v2 keys while keeping current settings. Automatic routing does not recreate a forgotten save; the next deliberate edit does.
+
+The web-builder pak01 seed is retired. HPCR2/HPCRP1 codes remain the sharing and off-PC backup path; clearing Steam's browser cache, reinstalling Steam, or moving PCs loses the local save.
+
 ## Remaining limits and live checks
 
-Settings, scopes, user presets, and ability conditions remain session-scoped because the Phase 0 runtime probe found no writable native `$.persistentStorage` interface. Durable persistence, restart selection, Anita compatibility, and Reset All remain out of scope. The external pak96 builder stays build-time and read-only. Rewrite v2 still needs real-game checks for identity discovery, locale behavior, lifecycle transitions, Presets, popup placement, and supported UI scales.
+Anita compatibility and Reset All remain out of scope. The external pak96 builder stays build-time and read-only. Rewrite v2 still needs real-game checks for durable save across restarts, identity discovery, locale behavior, lifecycle transitions, Presets, popup placement, and supported UI scales.
