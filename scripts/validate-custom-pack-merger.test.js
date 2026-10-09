@@ -67,7 +67,7 @@ test('assembleCustomPack: stages combined assets with HP Colors v2 and Community
       showrank_qol: true,
       hp_colors_v2: true,
       poker: true,
-      buff_timer: true,
+
       hud_3d: true
     }
   });
@@ -109,8 +109,10 @@ test('assembleCustomPack: stages combined assets with HP Colors v2 and Community
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/chat.xml')), true);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/poker_escape_menu.js')), true);
 
-  // Buff timer & 3D HUD
-  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/rejuvnbufftimer.js')), true);
+  // Buff/Rift timers ship via hud_minimap.xml; stock hud.xml is left alone and test exports are stripped.
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/hud_minimap.xml')), true, 'stages hud_minimap.xml for minimap timers');
+  assert.equal(fs.existsSync(path.join(stageDir, 'panorama/layout/hud.xml')), false, 'does not override stock hud.xml');
+  assert.doesNotMatch(fs.readFileSync(path.join(stageDir, 'panorama/scripts/rejuvnbufftimer.js'), 'utf8'), /TEST_EXPORTS|module\.exports/);
   assert.equal(fs.existsSync(path.join(stageDir, 'panorama/scripts/3d_hero_dynamic.js')), true);
 
   // Clean up test stage

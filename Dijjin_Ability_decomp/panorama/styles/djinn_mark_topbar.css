@@ -1,0 +1,57 @@
+/* Icons, inner wash colors, and border art come from stock unit_status_icons.vcss_c via the modifier class. */
+
+.TopbarAbilityMarks
+{
+	width: 53px;
+	flow-children: right-wrap;
+	vertical-align: top;
+	overflow: noclip;
+	z-index: 120;
+}
+
+.TopbarAbilityMark
+{
+	flow-children: none;
+	width: 24.5px;
+	height: 24.5px;
+	margin: 0px 1px 1px 1px;
+	background-image: url("s2r://panorama/images/hud/world_space/status_bg_psd.vtex");
+	background-size: contain;
+	visibility: collapse;
+	overflow: noclip;
+}
+
+.TopbarAbilityMark.TopbarAbilityMarkVisible
+{
+	visibility: visible;
+}
+
+.TopbarAbilityMark #StatusEffectsBorder
+{
+	background-texture-size: 48px;
+	z-index: 0;
+	visibility: collapse;
+}
+
+.TopbarAbilityMark .statusEffectImage
+{
+	background-texture-size: 32px;
+}
+
+.TopbarAbilityMarkStacks
+{
+	horizontal-align: right;
+	vertical-align: bottom;
+	ignore-parent-flow: true;
+	color: offWhite;
+	font-family: oracle;
+	font-size: 12px;
+	font-weight: semi-bold;
+	text-shadow: 0px 0px 0px 5.0 offBlack;
+	z-index: 2;
+}
+
+.Dead .TopbarAbilityMarks,.wants_scoreboard .TopbarAbilityMarks
+{
+	visibility: collapse;
+}

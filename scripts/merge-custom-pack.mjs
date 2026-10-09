@@ -102,6 +102,7 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
 \t\t\t\t</Panel>
 \t\t\t</Panel>
 \t\t</Panel>
+\t\t<CitadelPrivilegedFeatures id="PrivilegedFeatures" />
 \t\t<CitadelBindingButton id="EscapeButton" action="MenuBack" onactivate="CitadelResumePlaying()" text="#menu_resume" />
 \t\t<Panel id="RightSideBlur" hittest="false" />
 \t\t<Panel id="RightSide" hittest="false">
@@ -260,17 +261,61 @@ export function mergeTopBarXml(baseXml, options = {}) {
   return result;
 }
 
+// Every hero ability effect on another hero -> topbar icons (Dijjin_Ability_decomp).
+// Injected into already-staged ShowRank/HP layouts so no other pak overrides the same files.
+export function mergeAbilityMarks(stageSourceDir) {
+  const src = path.join(repoRoot, 'Dijjin_Ability_decomp/panorama');
+  const dest = path.join(stageSourceDir, 'panorama');
+  const includes = (kind, names) => names.map((n) => `\t<include src="s2r://panorama/${kind}/${n}" />\n\t`).join('');
+  const insertBefore = (xml, anchor, text, file) => {
+    if (!xml.includes(anchor)) throw new Error(`[ability_marks] ${file}: anchor not found: ${anchor}`);
+    return xml.replace(anchor, text + anchor);
+  };
+
+  copyDirSync(path.join(src, 'scripts'), path.join(dest, 'scripts'));
+  copyDirSync(path.join(src, 'styles'), path.join(dest, 'styles'));
+  fs.mkdirSync(path.join(dest, 'layout'), { recursive: true });
+  fs.copyFileSync(path.join(src, 'layout/djinn_mark_relay.xml'), path.join(dest, 'layout/djinn_mark_relay.xml'));
+
+  // Healthbar publishers: patch staged overlays (HP Colors v2), else ship the decomp's stock-based copies.
+  const publisher = includes('scripts', ['djinn_mark_common.vjs_c', 'djinn_mark_relay.vjs_c', 'djinn_mark_healthbar.vjs_c']);
+  for (const file of ['unit_status_overlay.xml', 'unit_status_overlay_old.xml', 'unit_status_overlay_v2.xml']) {
+    const staged = path.join(dest, 'layout', file);
+    if (fs.existsSync(staged)) {
+      fs.writeFileSync(staged, insertBefore(fs.readFileSync(staged, 'utf8'), '</scripts>', publisher, file), 'utf8');
+    } else if (fs.existsSync(path.join(src, 'layout', file))) {
+      fs.copyFileSync(path.join(src, 'layout', file), staged);
+    }
+  }
+
+  // Topbar consumer: patch ShowRank's staged player card, else ship the decomp's copy.
+  const topbarFile = 'citadel_hud_top_bar_player.xml';
+  const stagedTopbar = path.join(dest, 'layout', topbarFile);
+  const decompTopbar = fs.readFileSync(path.join(src, 'layout', topbarFile), 'utf8');
+  if (!fs.existsSync(stagedTopbar)) {
+    fs.writeFileSync(stagedTopbar, decompTopbar, 'utf8');
+    return;
+  }
+  const marks = decompTopbar.match(/<Panel id="TopbarAbilityMarks"[\s\S]*?\n\t{4}<\/Panel>/);
+  if (!marks) throw new Error(`[ability_marks] ${topbarFile}: TopbarAbilityMarks block not found in decomp`);
+  let xml = fs.readFileSync(stagedTopbar, 'utf8');
+  xml = insertBefore(xml, '</styles>', includes('styles', ['unit_status_icons.vcss_c', 'djinn_mark_topbar.vcss_c']), topbarFile);
+  xml = insertBefore(xml, '</scripts>', includes('scripts', ['djinn_mark_common.vjs_c', 'djinn_mark_topbar.vjs_c']), topbarFile);
+  xml = insertBefore(xml, '<Panel class="Rejuvenator">', `${marks[0]}\n\t\t\t\t`, topbarFile);
+  fs.writeFileSync(stagedTopbar, xml, 'utf8');
+}
+
 export function assembleCustomPack(options) {
   const {
     stageSourceDir,
     modules = {
       showrank_qol: true,
-      hp_colors_v2: true,
+      hp_colors_v2: false,
       poker: false,
       abilities_no_behavior: false,
       abilities_yes_behavior: true,
-      buff_timer: true,
-      hud_3d: false
+      hud_3d: false,
+      ability_marks: false
     }
   } = options;
 
@@ -281,10 +326,19 @@ export function assembleCustomPack(options) {
 
   let escapeBaseXml = '';
 
-  // 1. ShowRank + Topbar QoL (Recent Purchases, Testing Tools, Community Stats)
+  // 1. ShowRank + Topbar QoL (Recent Purchases, Community Stats) + Buff/Rift minimap timers
   if (modules.showrank_qol) {
     const showrankDir = path.join(repoRoot, 'showrank_recent_purchases');
     copyDirSync(path.join(showrankDir, 'panorama'), path.join(stageSourceDir, 'panorama'));
+    // Buff/Rift minimap timers: buff_timer_virgin's hud_minimap.xml override (Hantu-Raya upstream).
+    copyDirSync(path.join(repoRoot, 'buff_timer_virgin/panorama'), path.join(stageSourceDir, 'panorama'));
+    for (const f of ['rejuvnbufftimer.js', 'bt_minimap_settings.js']) {
+      const p = path.join(stageSourceDir, 'panorama/scripts', f);
+      const src = fs.readFileSync(p, 'utf8');
+      const out = src.replace(/\s*\/\/ TEST_EXPORTS_BEGIN[\s\S]*?\/\/ TEST_EXPORTS_END\s*/, '\n');
+      if (out === src) throw new Error(`[showrank_qol] ${f}: TEST_EXPORTS markers not found`);
+      fs.writeFileSync(p, out, 'utf8');
+    }
 
     // Compose Profile Stats Community runtime and styles into staged showrank assets
     try {
@@ -416,19 +470,6 @@ export function assembleCustomPack(options) {
   fs.mkdirSync(path.dirname(escapeMenuDest), { recursive: true });
   fs.writeFileSync(escapeMenuDest, mergedEscape, 'utf8');
 
-  // 5. Buff Timer & Rejuvenator HUD
-  if (modules.buff_timer) {
-    const buffDir = path.join(repoRoot, 'buff_timer_virgin');
-    const hudSrc = path.join(buffDir, 'panorama/layout/hud.xml');
-    const hudDest = path.join(stageSourceDir, 'panorama/layout/hud.xml');
-    fs.mkdirSync(path.dirname(hudDest), { recursive: true });
-    if (fs.existsSync(hudSrc)) {
-      fs.copyFileSync(hudSrc, hudDest);
-    }
-    copyDirSync(path.join(buffDir, 'panorama/scripts'), path.join(stageSourceDir, 'panorama/scripts'));
-    copyDirSync(path.join(buffDir, 'panorama/styles'), path.join(stageSourceDir, 'panorama/styles'));
-  }
-
   // 6. 3D Hero HUD
   if (modules.hud_3d) {
     const hud3dDir = path.join(repoRoot, '3d hud');
@@ -484,28 +525,33 @@ export function assembleCustomPack(options) {
     }
   }
 
+  // 8. Topbar ability marks (after ShowRank/HP layouts are staged)
+  if (modules.ability_marks) {
+    mergeAbilityMarks(stageSourceDir);
+  }
+
   return { success: true, stagedDir: stageSourceDir };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   const args = process.argv.slice(2);
   let stageDir = path.join(repoRoot, '_custom_pack_build/src');
-  let selected = 'showrank_qol,hp_colors_v2,abilities_yes_behavior,buff_timer';
+  let selected = 'showrank_qol,abilities_yes_behavior';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--stage' && args[i + 1]) stageDir = args[i + 1];
     if (args[i] === '--modules' && args[i + 1]) selected = args[i + 1];
   }
 
-  const list = selected.split(',').map((s) => s.trim().toLowerCase());
+  const list = selected.split(/[,; ]+/).map((s) => s.trim().toLowerCase());
   const modules = {
     showrank_qol: list.includes('showrank') || list.includes('showrank_qol') || list.includes('qol') || list.includes('1'),
     hp_colors_v2: list.includes('hp_colors_v2') || list.includes('hp_colors') || list.includes('hp') || list.includes('hpv2') || list.includes('2'),
     poker: list.includes('poker') || list.includes('3'),
     abilities_no_behavior: list.includes('abilities_no_behavior') || list.includes('active_no_filter') || list.includes('pak05') || list.includes('4'),
     abilities_yes_behavior: list.includes('abilities_yes_behavior') || list.includes('active_yes_filter') || list.includes('pak03') || list.includes('5'),
-    buff_timer: list.includes('buff_timer') || list.includes('buff') || list.includes('6'),
-    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('7')
+    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('6'),
+    ability_marks: list.includes('ability_marks') || list.includes('marks') || list.includes('7')
   };
 
   const result = assembleCustomPack({

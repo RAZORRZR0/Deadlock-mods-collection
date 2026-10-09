@@ -13,7 +13,7 @@
 		<include src="s2r://panorama/scripts/spawn_announcements.vjs_c" />
 	</scripts>
 	<CitadelHudTopBar hittest="false">
-		<GlobalClassListener classes="gDetailView gScoreboardOpen" />
+		<GlobalClassListener classes="gDetailView gShopOpen gScoreboardOpen gStreetBrawl gPVE" />
 		<Panel id="ShowRankBarebonesNotificationRoot" hittest="false" />
 		<Panel id="SpawnNotificationRoot" class="SpawnNotificationRoot" hittest="false" />
 		<Panel id="GradientBacker" />
@@ -77,6 +77,7 @@
 					<Image id="StatusEffectImage" />
 					<Panel class="statusEffectImage" />
 				</Panel>
+				<Label id="MidbossTimerLabel" class="midbossTimerLabel" text="{s:midboss_timer}" />
 			</Panel>
 			<Panel id="RejuvenatorEnemy">
 				<Panel class="rejuvIcon" />

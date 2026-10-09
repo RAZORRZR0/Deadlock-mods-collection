@@ -24,6 +24,11 @@
 *.pdb
 *.vpk
 *.bat
+!build_custom_pack.bat
+
+# Unrelated local scratch projects
+/GTA3_UE/
+gt_*.json
 *.7z
 
 # Temp files

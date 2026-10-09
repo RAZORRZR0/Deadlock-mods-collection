@@ -6,7 +6,8 @@
 	height: 60px;
 	width: 600px;
 	margin: 20px;
-	margin-top: -6%;
+	/* ponytail: fixed offset below stock under_reticle debuffs (citadel_status_effect.css margin-top 230px); tune here */
+	margin-top: 84px;
 	visibility: visible;
 	horizontal-align: center;
 	vertical-align: top;

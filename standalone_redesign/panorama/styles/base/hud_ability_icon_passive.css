@@ -1021,12 +1021,12 @@ Label.ability_key
 
 #hud_passive_items #cooldown_mask
 {
-	opacity-mask: url("s2r://panorama/images/hud/world_space/status_border_psd.vtex");
-	height: 37px;
-	background-color: offWhite;
+	opacity-mask: url("s2r://panorama/images/masks/no_mask_png.vtex");
+	height: 30px;
+	height: 35px;
 	background-size: cover;
 	background-repeat: no-repeat;
-	margin-top: 10%;
+	margin-top: 0px;
 }
 
 .Tier0.cooling_down #cooldown_mask,.Tier0.ability_not_ready #cooldown_mask
@@ -1057,7 +1057,6 @@ Label.ability_key
 #hud_passive_items .cooling_down .ability_image
 {
 	opacity: 0.9;
-	wash-color: #0f0f17aa;
 }
 
 .active .ability_image,.channeling .ability_image

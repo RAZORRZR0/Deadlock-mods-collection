@@ -806,6 +806,8 @@ CitadelHudTopBarTeam:last-child #PlayersContainer
 	flow-children: right !important;
 }
 
-
-
-
+/* Objective damage under KDA: stock only shows it with .showNewTopbar */
+.objDamageContainer
+{
+	visibility: visible;
+}
