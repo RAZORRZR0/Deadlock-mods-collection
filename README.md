@@ -1,152 +1,118 @@
-# Deadlock Mods Collection 🔒
+# Deadlock Mods Collection
 
 ![Status](https://img.shields.io/badge/Status-Experimental-orange)
 ![Game](https://img.shields.io/badge/Game-Deadlock-red)
-![Platform](https://img.shields.io/badge/Platform-Windows_&_Linux-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows-blue)
 
-## 📖 Introduction
+Source for a set of Panorama HUD/UI mods for Valve's _Deadlock_, plus a builder that merges the ones you pick into a single **all-in-one (AIO) VPK**. Most modules override stock Panorama layouts, styles and scripts; the abilities module transforms `abilities.vdata`.
 
-Welcome to the **Deadlock Mods Collection**. This repository houses a set of custom HUD modifications and gameplay scripts for Valve's _Deadlock_.
-These mods were created to experiment with the internal Panorama UI system, unlocking new ways to visualize game data like buff timers, health checking, and rank displays.
+This is a fork of [Hantu-Raya/Deadlock-mods-collection](https://github.com/Hantu-Raya/Deadlock-mods-collection) with local additions (see [Credits](#credits-and-upstream)).
 
-Whether you're looking to customize your own HUD or understand how Deadlock's UI works under the hood, this collection serves as a practical resource.
+## What is in the AIO pack
 
-## Repository Structure
+`build_custom_pack.bat` stages the selected modules, compiles them with the Source 2 resource compiler and packs one `pak01_dir.vpk`.
 
-For current layout and cleanup conventions, see
-[WORKSPACE_STRUCTURE.md](WORKSPACE_STRUCTURE.md).
-Archived non-runtime metadata and one-off artifacts are kept in `_archive/`.
+| Module id | Default | What it adds |
+| --- | :---: | --- |
+| `showrank_qol` | yes | ShowRank rank badges (top bar, team averages, profile, context menu, ESC player list, post-game scoreboard), profile **rank history** graph, **party stacks** (duo/trio icons), MISSING lane alerts, VS COMMUNITY stats on profiles, **Recent Purchases** (shop history + floating top bar purchase popups), Hero Testing / Hideout tools, spawn announcements, soul difference, ult cooldown text, always-visible nicknames, Buff/Rift minimap timers |
+| `hp_colors_v3` | yes | HP Colors v3: custom health bar colors, timers HUD, world settings, in-game ESC editor |
+| `abilities_yes_behavior` | yes | Active and passive items shown in the passive area, with the yesBehavior filter |
+| `hp_colors_v2` | no | HP Colors Rewrite v2. Mutually exclusive with `hp_colors_v3` |
+| `poker` | no | ESC-menu table games (Poker and Bluff Deck) |
+| `abilities_no_behavior` | no | Same as above without the behavior filter |
+| `hud_3d` | no | 3D hero dynamic models HUD |
 
-## 🛠️ Tech Stack
+All modules that touch the same layout (ESC menu, top bar) are merged by `scripts/merge-custom-pack.mjs`, so they do not overwrite each other.
 
-- **Valve Panorama UI**: The underlying UI framework used by Deadlock (and Dota 2/CS2).
-- **JavaScript / XML / CSS**: Core technologies for layout and logic.
+### Where each part comes from
 
-## ✨ Features
+| Part | Source directory |
+| --- | --- |
+| ShowRank runtime, layouts, styles | `showrank_barebones/` (kept in sync with upstream) and `showrank_recent_purchases/` (the AIO base: Recent Purchases, hero shop, hero testing, topbar QoL) |
+| Topbar QoL (ult cooldown, nicknames, soul difference) | `showrank_recent_purchases/panorama/scripts/topbar_qol.js` |
+| VS COMMUNITY stats | `profile_stats_community/`, composed into the ShowRank runtime by `scripts/profile-stats-community-composition.js` |
+| Buff/Rift minimap timers | `buff_timer_virgin/` |
+| HP Colors v3 | `hp_colors_v3/` (decompiled release, minified: replace it, do not hand-edit) |
+| HP Colors v2 | `hp_colors_rewrite_v2/` |
+| Passive items | `abilities/scripts/` and `standalone_redesign/` |
 
-This collection includes several discrete modules:
+## Requirements
 
-### TopBar Rank Barebones (V40D TopBarPlus)
+Windows with:
 
-Two mutually exclusive editions replace the former combined design with a clean cutover: the V40D TopBarPlus base plus the ES5 ShowRank Barebones rank surfaces. They preserve native `GameTime`, all TopBarPlus script includes, account-ID authority, duplicate-name/account safety, bounded Escape probing, six/twelve verified-account caching, native Escape behavior, and ranks in profile, context menu, topbar, team average, and player list. They do not use the old canonical ShowRank bridge.
+- Deadlock installed. The builder auto-detects `...\Deadlock\game\citadel\addons` on `D:`, `G:` or the default Steam path, or you can pass `-AddonsPath`.
+- Source 2 Workshop Tools compiler (`sr2compiler/`, driven by the bundled `New folder.exe` wrapper and `pref.json`).
+- Node.js and PowerShell. Python (`py`) for the abilities modules.
+- `vpkeditcli.exe` (bundled lookups); the scripts fall back to a pure Node VPK packer if it is missing.
 
-- **Alert edition (`topbar_rank`)** — ranks plus missing labels, portrait darkening, clock polling, notification root, and hero-icon announcements.
-- **No-missing edition (`topbar_rank_no_missing`)** — rank-only; it contains none of the alert-only features.
-
-Both editions check in 16 TopBarPlus base assets derived from the supplied `G:\v40d_top_bar_plus.zip`. Archive witnesses: ZIP SHA-256 `9610965fc621c7d2f8fa5054c79c1d31f32ef30bb93dfd2ea2475598ba6bd608`; VPK SHA-256 `986d28a49f06919d84a090e9921929075fb2b9c5a445df58de13b1e06921d10d`. Each source tree packages 22 assets: those 16 base assets, four rank layouts (profile, context menu, Escape, player list), one Barebones runtime, and one Barebones style. The topbar root and player layouts are merged replacements, not additions.
-
-Build from the repository root:
+## Build and install
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\build_topbar_rank_barebones.ps1
-powershell -ExecutionPolicy Bypass -File .\build_topbar_rank_barebones_no_missing.ps1
+# Default modules (showrank_qol, hp_colors_v3, abilities_yes_behavior), install into addons
+cmd.exe /c "build_custom_pack.bat -Modules showrank_qol,hp_colors_v3,abilities_yes_behavior -PakName pak01_dir.vpk -Install"
+
+# Interactive module picker
+build_custom_pack.bat
 ```
 
-The artifacts are `topbar_rank_barebones_dir.vpk` and `topbar_rank_barebones_no_missing_dir.vpk`. Either build may use `-KeepStaging`; use `-Install` only to install one edition as `G:\SteamLibrary\steamapps\common\Deadlock\game\citadel\addons\pak89_dir.vpk`. Because both use `pak89_dir.vpk`, install only one at a time.
+Module ids, or numbers `1` showrank_qol, `2` hp_colors_v2, `3` poker, `4` abilities_no_behavior, `5` abilities_yes_behavior, `6` hud_3d, `7` hp_colors_v3, are accepted by `-Modules`. The result is `pak01_dir.vpk` in the repo root.
 
-These TopBar Rank editions are separate from the standalone `showrank_barebones` editions and their release artifacts. Source/build validation verifies inputs and packages; it is not live in-game proof. Smoke-test the installed edition in Deadlock.
+- Close Deadlock before installing; the script refuses to overwrite the pak while the game runs.
+- Never hand-edit `_custom_pack_build/`, `*_compiled/` or any `.vpk`. The builder recreates them.
+- Other paks in `addons/` (`pak02`..`pak04`, etc.) are not touched. Pak slots are shared between standalone builds, so avoid combining standalone builds with the AIO when they override the same files.
 
-### ShowRank + ByteNode Recent Purchases + Hideout Testing Tools
+### Enable mod loading (one time)
 
-A unified Panorama package combining rank badge overlays (topbar player cards, team averages, profile cards, context menus, ESC player list), missing lane alerts (topbar `MISSING` indicators, portrait darkening, hero-icon announcements), ByteNode's in-game shop purchase history and live topbar floating purchase notifications, and Hideout sandbox testing tools (Hero Testing menu and HUD Damage Report in Hideout mode).
+1. Open `...\Deadlock\game\citadel\gameinfo.gi`.
+2. In `SearchPaths`, add `Game citadel/addons` **above** `Game citadel`:
 
-- Resolves the collision on `panorama/layout/citadel_hud_top_bar_player.xml` by cleanly merging `#ShowRankBarebonesTopbarRankImage`, `#ShowRankBarebonesMissingIndicator`, and `.HeroNameHidden`.
-- Includes `#ShowRankBarebonesNotificationRoot` in `citadel_hud_top_bar.xml` for missing announcements.
-- Incorporates `hero_testing_menu.css`, `hud_damage_report.css`, `hud_hero_testing.xml`, and un-collapses `CitadelHudTopBar` in Hideout mode so sandbox bots, stats, and testing panels work across Hideout, Sandbox, and local maps.
-- Packages all 20 assets inside `panorama/` at the root of the VPK.
+   ```text
+   SearchPaths
+   {
+       Game citadel/addons
+       Game citadel
+       Game core
+       ...
+   }
+   ```
 
-Build and package:
+3. Save. Deadlock may rewrite this file on update; re-add the line if mods stop loading.
+
+## Updating for a Deadlock patch
+
+1. Compare `SteamDatabase/GameTracking-Deadlock` against the last baseline for the overridden Panorama files. Rebase any that changed, keeping every stock panel ID.
+2. If `scripts/abilities.vdata` changed, refresh `abilities/scripts/abilities.vdata` and `abilities2.vdata` (strip the `_include` block) and run the abilities test.
+3. Rebuild and reinstall the pack.
+
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1
-# Or install directly to Deadlock:
-powershell -ExecutionPolicy Bypass -File .\build_showrank_recent_purchases.ps1 -Install
+cd abilities\scripts; py test_active.py
+node --test scripts\validate-showrank-recent-purchases.test.js scripts\validate-custom-pack-merger.test.js
 ```
 
-### Developer Testing Tools HUD (`testing_tools`)
+## Testing in game
 
-A standalone Developer & Hero Testing Sandbox HUD featuring an in-game Dev Console (`>_`), Hero Tools (`Change Hero`, `Level Up`, `Max Level`, `Reset`, `Spawn Camp`), Game Rules toggles (`No Death`, `No Reload`, `No Cooldown`, `Fast Stamina`, game speed), Play & Watch quick map launchers, and Hero Control bot spawning & puppet controls.
+Launch Deadlock with `-dev -tools`, open the Panorama debugger (`F7`) or VConsole (`F8`), run `panorama_reload_layout` and confirm there are no script errors or `Unable to find child` messages. Static validators and the build only prove the sources and package contents, not in-game behavior.
 
-Build and package:
-```powershell
-powershell -ExecutionPolicy Bypass -File .\build_testing_tools.ps1
-# Or install directly to Deadlock:
-powershell -ExecutionPolicy Bypass -File .\build_testing_tools.ps1 -Install
-```
+## Standalone modules
 
-### ❤️ Health & Status
+These still build on their own through their own `build_*.ps1` wrappers. Run the focused validator first where one exists.
 
-- **Custom Health Bars**: Modified health bars (`hp`, `self_hp`) including color-blind friendly options.
+- Full HP Colors / ANITA UI: `build_hp_colors.ps1`; minimal: `build_hp_colors_minimal.ps1`; Rewrite v2 / QOLLOCK: `build_hp_colors_rewrite_v2.ps1`, `build_hp_colors_rewrite_v2_qollock.ps1`
+- ShowRank variants: `build_showrank_variants.ps1`; ShowRank + Recent Purchases + Hideout Testing: `build_showrank_recent_purchases.ps1`
+- Developer Testing Tools HUD: `build_testing_tools.ps1`
+- Buff timers, recent purchase, Poker and others: see the `build_*.ps1` files in the repo root.
 
-### 📊 Utility
+`AGENTS.md` and `CONTEXT-MAP.md` describe each lane's contracts in more detail.
 
-- **Recent Purchase Tracker**: Keeps a history of items bought in the current session.
-- **Buff Timer (`buff_timer_virgin`)**: Full timer edition with Bridge Buff minimap glows, claim indicators, and enemy-fog linger markers.
-- **Buff Timer Minimal (`buff_timer_virgin_minimal`)**: Timers-only edition. It keeps Rejuvenator, Bridge Buff, Rift, Urn, neutral-phase, and team-chat timers without custom minimap glows, claim overlays, or enemy `?` markers.
-- **Legacy Target**: Restores targeting indicators to previous styles.
+## Credits and upstream
 
-## 🏗️ Building from Source
-
-**Note**: This repository contains the raw source code. before installing, you must compile the mods.
-
-1.  **Compile Source**: Use the **Dota 2 Workshop Tools** to compile the scripts and layout files.
-2.  **Create VPK Structure**: After compiling, you need to pack the files into a VPK format or folder structure.
-    - _The game requires this format to load the mods correctly._
-
-## 🚀 How to Run
-
-### Prerequisite: Enable Mod Loading
-
-Before mods can work, you must tell the game to look for them.
-
-1.  Navigate to your Deadlock installation directory:
-    - Usually: `C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel`
-2.  Open **`gameinfo.gi`** with a text editor (Notepad, VS Code, etc.).
-3.  Locate the `SearchPaths` section.
-4.  Add the line `Game citadel/addons` **ABOVE** the `Game citadel` line. It should look like this:
-
-    ```text
-    SearchPaths
-    {
-        Game citadel/addons   <-- ADD THIS LINE
-        Game citadel
-        Game core
-        ...
-    }
-    ```
-
-5.  Save and close the file.
-
-## 🧠 Process & Learnings
-
-_Building this collection involved reverse-engineering the existing HUD XML layouts._
-
-- **Challenge**: Finding the correct parent panels to attach custom elements to was trial-and-error.
-- **Learning**: Learned how to hook into game events (like `OnTakeDamage` or `OnBuyItem`) using the Panorama event system.
-- **Technique**: Discovered the "CSS Hijack" pattern to override game styles without modifying XML, by creating CSS files with matching names and using `@import` to load the base styles.
-- **Improvement**: Future versions could use a centralized loader instead of separate folders for easier management.
-
-## 🎥 Preview
-
-<img width="530" height="280" alt="image" src="https://github.com/user-attachments/assets/8dae2040-129b-4af3-9c08-dde441d0ba22" />
-<img width="630" height="991" alt="image" src="https://github.com/user-attachments/assets/1b4d8704-4df8-4bb2-bdcd-c0002bba9266" />
-<img width="782" height="516" alt="image" src="https://github.com/user-attachments/assets/8dc2b32e-958b-4af3-9c08-dde441d0ba22" />
-<img width="431" height="100" alt="image" src="https://github.com/user-attachments/assets/28a68dcc-3885-469b-92da-2798e964bfde" />
-<img width="619" height="348" alt="image" src="https://github.com/user-attachments/assets/5d0c7997-43c7-4211-963c-f5c30ee91149" />
-
-### Shiv Neon Prime Sound Example
-
-[![Shiv Neon Prime Sound](http://img.youtube.com/vi/o2YOa693yLQ/0.jpg)](http://www.youtube.com/watch?v=o2YOa693yLQ)
+- Original collection and ShowRank / HP Colors lines by [Hantu-Raya](https://github.com/Hantu-Raya).
+- ByteNode: Recent Purchases and purchase popups.
+- Top Bar Plus by bonclide, merged with ShowRank in upstream's [Show-rank-merger](https://github.com/Hantu-Raya/Show-rank-merger).
+- Rank data from [deadlock-api](https://deadlock-api.com).
 
 ## License
 
-Unless otherwise noted, original code and original mod source in this repository are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
-
-Attribution notices for this project are included in [NOTICE](NOTICE). If you distribute this software or derivative works, preserve the applicable copyright, license, and notice files as required by Apache-2.0.
-
-### Attribution
-
-When distributing this project or derivative works based on its original code, please preserve the included `LICENSE` and `NOTICE` files. This project was created by Hantu-Raya.
-
-### Third-party and game materials
+Unless otherwise noted, original code and original mod source in this repository are licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE). Attribution notices are in [NOTICE](NOTICE); preserve `LICENSE` and `NOTICE` when distributing this project or derivative works.
 
 Deadlock, Source 2, Valve, Panorama, and related names, paths, formats, trademarks, and game assets belong to their respective owners. This project is an unofficial fan modification and is not affiliated with Valve.

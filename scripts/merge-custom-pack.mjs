@@ -303,50 +303,6 @@ export function mergeTopBarXml(baseXml, options = {}) {
   return result;
 }
 
-// Every hero ability effect on another hero -> topbar icons (Dijjin_Ability_decomp).
-// Injected into already-staged ShowRank/HP layouts so no other pak overrides the same files.
-export function mergeAbilityMarks(stageSourceDir) {
-  const src = path.join(repoRoot, 'Dijjin_Ability_decomp/panorama');
-  const dest = path.join(stageSourceDir, 'panorama');
-  const includes = (kind, names) => names.map((n) => `\t<include src="s2r://panorama/${kind}/${n}" />\n\t`).join('');
-  const insertBefore = (xml, anchor, text, file) => {
-    if (!xml.includes(anchor)) throw new Error(`[ability_marks] ${file}: anchor not found: ${anchor}`);
-    return xml.replace(anchor, text + anchor);
-  };
-
-  copyDirSync(path.join(src, 'scripts'), path.join(dest, 'scripts'));
-  copyDirSync(path.join(src, 'styles'), path.join(dest, 'styles'));
-  fs.mkdirSync(path.join(dest, 'layout'), { recursive: true });
-  fs.copyFileSync(path.join(src, 'layout/djinn_mark_relay.xml'), path.join(dest, 'layout/djinn_mark_relay.xml'));
-
-  // Healthbar publishers: patch staged overlays (HP Colors v2), else ship the decomp's stock-based copies.
-  const publisher = includes('scripts', ['djinn_mark_common.vjs_c', 'djinn_mark_relay.vjs_c', 'djinn_mark_healthbar.vjs_c']);
-  for (const file of ['unit_status_overlay.xml', 'unit_status_overlay_old.xml', 'unit_status_overlay_v2.xml']) {
-    const staged = path.join(dest, 'layout', file);
-    if (fs.existsSync(staged)) {
-      fs.writeFileSync(staged, insertBefore(fs.readFileSync(staged, 'utf8'), '</scripts>', publisher, file), 'utf8');
-    } else if (fs.existsSync(path.join(src, 'layout', file))) {
-      fs.copyFileSync(path.join(src, 'layout', file), staged);
-    }
-  }
-
-  // Topbar consumer: patch ShowRank's staged player card, else ship the decomp's copy.
-  const topbarFile = 'citadel_hud_top_bar_player.xml';
-  const stagedTopbar = path.join(dest, 'layout', topbarFile);
-  const decompTopbar = fs.readFileSync(path.join(src, 'layout', topbarFile), 'utf8');
-  if (!fs.existsSync(stagedTopbar)) {
-    fs.writeFileSync(stagedTopbar, decompTopbar, 'utf8');
-    return;
-  }
-  const marks = decompTopbar.match(/<Panel id="TopbarAbilityMarks"[\s\S]*?\n\t{4}<\/Panel>/);
-  if (!marks) throw new Error(`[ability_marks] ${topbarFile}: TopbarAbilityMarks block not found in decomp`);
-  let xml = fs.readFileSync(stagedTopbar, 'utf8');
-  xml = insertBefore(xml, '</styles>', includes('styles', ['unit_status_icons.vcss_c', 'djinn_mark_topbar.vcss_c']), topbarFile);
-  xml = insertBefore(xml, '</scripts>', includes('scripts', ['djinn_mark_common.vjs_c', 'djinn_mark_topbar.vjs_c']), topbarFile);
-  xml = insertBefore(xml, '<Panel class="Rejuvenator">', `${marks[0]}\n\t\t\t\t`, topbarFile);
-  fs.writeFileSync(stagedTopbar, xml, 'utf8');
-}
-
 export function assembleCustomPack(options) {
   const {
     stageSourceDir,
@@ -356,8 +312,7 @@ export function assembleCustomPack(options) {
       poker: false,
       abilities_no_behavior: false,
       abilities_yes_behavior: true,
-      hud_3d: false,
-      ability_marks: false
+      hud_3d: false
     }
   } = options;
 
@@ -592,11 +547,6 @@ export function assembleCustomPack(options) {
     }
   }
 
-  // 8. Topbar ability marks (after ShowRank/HP layouts are staged)
-  if (modules.ability_marks) {
-    mergeAbilityMarks(stageSourceDir);
-  }
-
   return { success: true, stagedDir: stageSourceDir };
 }
 
@@ -614,12 +564,11 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename
   const modules = {
     showrank_qol: list.includes('showrank') || list.includes('showrank_qol') || list.includes('qol') || list.includes('1'),
     hp_colors_v2: list.includes('hp_colors_v2') || list.includes('hp_colors') || list.includes('hp') || list.includes('hpv2') || list.includes('2'),
-    hp_colors_v3: list.includes('hp_colors_v3') || list.includes('hpv3') || list.includes('8'),
+    hp_colors_v3: list.includes('hp_colors_v3') || list.includes('hpv3') || list.includes('7'),
     poker: list.includes('poker') || list.includes('3'),
     abilities_no_behavior: list.includes('abilities_no_behavior') || list.includes('active_no_filter') || list.includes('pak05') || list.includes('4'),
     abilities_yes_behavior: list.includes('abilities_yes_behavior') || list.includes('active_yes_filter') || list.includes('pak03') || list.includes('5'),
-    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('6'),
-    ability_marks: list.includes('ability_marks') || list.includes('marks') || list.includes('7')
+    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('6')
   };
 
   const result = assembleCustomPack({
