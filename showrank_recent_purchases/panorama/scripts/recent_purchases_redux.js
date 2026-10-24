@@ -687,10 +687,8 @@
                 quickInitialized = true;
             }
             if (heroMapState !== HERO_MAP_BUILT) BuildHeroNameMap();
-            if (!wasInHideout) {
-                UpdateQuickPurchases(container, purchases);
-                PruneSeenKeys(container, purchases);
-            }
+            UpdateQuickPurchases(container, purchases);
+            PruneSeenKeys(container, purchases);
         } catch (e) {
             _errorCounter++;
             var msg = "[MainPoll] ERROR: " + e;
