@@ -44,6 +44,7 @@ Important lanes:
 - `poker/` — chat-authoritative Poker and Bluff Deck ESC-menu minigames; see `poker/AGENTS.md`, `poker/CONTEXT.md`, and `poker/codemap.md` first.
 - `hp_colors/` — full ANITA UI and HP Colors runtime.
 - `hp_colors_minimal/` — minimal pak97 runtime paired with a separate pak96 builder preset.
+- `hp_colors_v3/` — decompiled HP Colors v3 release (minified; do not hand-edit scripts). `scripts/merge-custom-pack.mjs` stages it as module `hp_colors_v3` (default in `build_custom_pack.bat`, mutually exclusive with `hp_colors_v2`): it merges the v3 ESC editor/button, top bar timers hooks, overlay layout, scripts, styles, and `hpv3` image into the AIO pak.
 - `hp_colors_rewrite/`, `hp_colors_rewrite_qollock/` — canonical Rewrite source and its pak02 compatibility layer for an installed QOLLOCK pak03.
 - `hp_color_debug/`, `hp_colors_minimal*_debug/` — diagnostic variants; follow their local contracts instead of copying them into production lanes.
 - `topbar_rank/`, `showrank/`, `showrank_recent_purchases/` — rank surfaces, topbar HUD, profile/player-list hooks, combined ByteNode purchase notifications, and build variants.

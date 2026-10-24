@@ -65,7 +65,8 @@ $availableModules = @(
     @{ Id = "abilities_no_behavior";  Name = "Active & Passive Items in Passive Area (No Filter / Original Active Behavior)";                         Default = $false },
     @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                                         Default = $true },
     @{ Id = "hud_3d";                 Name = "3D Hero Dynamic Models HUD";                                                                             Default = $false },
-    @{ Id = "ability_marks";          Name = "Topbar Ability Marks (hero abilities on other heroes, from Djinn's Mark decomp)";                          Default = $false }
+    @{ Id = "ability_marks";          Name = "Topbar Ability Marks (hero abilities on other heroes, from Djinn's Mark decomp)";                          Default = $false },
+    @{ Id = "hp_colors_v3";           Name = "HP Colors v3 (Healthbar Colors, Timers HUD, World Settings & In-Game ESC Editor; replaces v2)";            Default = $true }
 )
 
 $selected = @{}
@@ -81,7 +82,8 @@ if ($Modules) {
         $clean = $p.Trim().ToLower()
         if ($selected.ContainsKey($clean)) { $selected[$clean] = $true }
         if ($clean -match '^(1|showrank|qol)')            { $selected["showrank_qol"] = $true }
-        if ($clean -match '^(2|hp_colors|hpv2|hp)')        { $selected["hp_colors_v2"] = $true }
+        if ($clean -match '^(2|hp_colors_v2|hpv2|hp_colors|hp)$') { $selected["hp_colors_v2"] = $true }
+        if ($clean -match '^(8|hp_colors_v3|hpv3)$')       { $selected["hp_colors_v3"] = $true }
         if ($clean -match '^(3|poker)')                    { $selected["poker"] = $true }
         if ($clean -match '^(4|active_no_filter|pak05)')  { $selected["abilities_no_behavior"] = $true }
         if ($clean -match '^(5|active_yes_filter|pak03)') { $selected["abilities_yes_behavior"] = $true }

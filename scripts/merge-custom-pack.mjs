@@ -30,10 +30,13 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
   const {
     pokerXml = '',
     hpColorsXml = '',
+    hpColorsV3Xml = '',
     enableShowrank = true,
     enablePoker = false,
-    enableHpColors = false
+    enableHpColors = false,
+    enableHpColorsV3 = false
   } = options;
+  const enableAnyHp = enableHpColors || enableHpColorsV3;
 
   let result = baseXml;
 
@@ -203,12 +206,45 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
     result = result.replace(/<CitadelBindingButton\s+id="EscapeButton"[^>]*\/>/, `<CitadelBindingButton id="EscapeButton" action="MenuBack" onactivate="${cancelHandler}" text="#menu_resume" />`);
   }
 
+  // 4b. HP Colors v3 integration (same $.HPColorsMenu* hooks as v2; editor panels come from the v3 release layout)
+  if (enableHpColorsV3) {
+    const addInclude = (section, src) => {
+      if (!result.includes(src)) {
+        result = result.replace(`</${section}>`, `\t\t<include src="${src}" />\n\t</${section}>`);
+      }
+    };
+    for (const s of ['citadel_ui_color_picker', 'hp_colors_v3_world', 'hp_colors_v3_menu']) {
+      addInclude('styles', `s2r://panorama/styles/${s}.vcss_c`);
+    }
+    for (const s of ['settings', 'from_v2', 'codec', 'storage', 'renderer', 'preview', 'menu']) {
+      addInclude('scripts', `s2r://panorama/scripts/hp_colors_v3_${s}.vjs_c`);
+    }
+
+    const hpButton = hpColorsV3Xml.match(/<Button id="HPColorsMenuButton"[\s\S]*?<\/Button>/);
+    if (!hpButton) throw new Error('[hp_colors_v3] HPColorsMenuButton not found in v3 escape menu layout');
+    if (!result.includes('id="HPColorsMenuButton"')) {
+      if (!result.includes('<Panel class="SettingsRow">')) throw new Error('[hp_colors_v3] SettingsRow anchor not found in staged escape menu');
+      result = result.replace('<Panel class="SettingsRow">', `${hpButton[0]}\n\t\t\t\t\t<Panel class="SettingsRow">`);
+    }
+
+    const hostStart = hpColorsV3Xml.indexOf('<Panel id="HPColorsMenuHost"');
+    const hostEnd = hpColorsV3Xml.lastIndexOf('</CitadelHudEscapeMenu>');
+    if (hostStart === -1 || hostEnd === -1) throw new Error('[hp_colors_v3] HPColorsMenuHost not found in v3 escape menu layout');
+    if (!result.includes('id="HPColorsMenuHost"')) {
+      result = result.replace('</CitadelHudEscapeMenu>', '\t\t' + hpColorsV3Xml.slice(hostStart, hostEnd).trim() + '\n\t</CitadelHudEscapeMenu>');
+    }
+
+    const cancelHandler = 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { $.DispatchEvent(&apos;CitadelResumePlaying&apos;, $.GetContextPanel()); }';
+    result = result.replace(/<Panel\s+id="EscapeBackground"[^>]*\/>/, `<Panel id="EscapeBackground" onactivate="${cancelHandler}" />`);
+    result = result.replace(/<CitadelBindingButton\s+id="EscapeButton"[^>]*\/>/, `<CitadelBindingButton id="EscapeButton" action="MenuBack" onactivate="${cancelHandler}" text="#menu_resume" />`);
+  }
+
   // 5. Harmonize root CitadelHudEscapeMenu attributes
   const onloadCalls = [];
   if (enableShowrank) onloadCalls.push('if ($.ShowRankBarebonesEscapeOpen) $.ShowRankBarebonesEscapeOpen();');
-  if (enableHpColors) onloadCalls.push('if ($.HPColorsMenuBoot) $.HPColorsMenuBoot();');
+  if (enableAnyHp) onloadCalls.push('if ($.HPColorsMenuBoot) $.HPColorsMenuBoot();');
 
-  const oncancelHandler = enableHpColors
+  const oncancelHandler = enableAnyHp
     ? 'if ($.HPColorsMenuCancel &amp;&amp; $.HPColorsMenuCancel()) {} else { $.DispatchEvent(&apos;CitadelResumePlaying&apos;, $.GetContextPanel()); }'
     : 'CitadelResumePlaying()';
 
@@ -226,16 +262,21 @@ export function mergeEscapeMenuXml(baseXml, options = {}) {
 }
 
 export function mergeTopBarXml(baseXml, options = {}) {
-  const { enableHpColors = false } = options;
-  if (!enableHpColors || !baseXml) return baseXml;
+  const { enableHpColors = false, enableHpColorsV3 = false } = options;
+  if (!(enableHpColors || enableHpColorsV3) || !baseXml) return baseXml;
 
   let result = baseXml;
 
-  // 1. Ensure scripts include hp_colors_v2_contract.vjs_c and test_topbar_pickups.vjs_c
-  const requiredScripts = [
-    's2r://panorama/scripts/hp_colors_v2_contract.vjs_c',
-    's2r://panorama/scripts/test_topbar_pickups.vjs_c'
-  ];
+  // 1. Ensure the HP Colors scripts are included
+  const requiredScripts = enableHpColorsV3
+    ? [
+      's2r://panorama/scripts/hp_colors_v3_world_settings.vjs_c',
+      's2r://panorama/scripts/hp_colors_v3_timers_hud.vjs_c'
+    ]
+    : [
+      's2r://panorama/scripts/hp_colors_v2_contract.vjs_c',
+      's2r://panorama/scripts/test_topbar_pickups.vjs_c'
+    ];
   for (const script of requiredScripts) {
     if (!result.includes(script)) {
       result = result.replace(
@@ -245,16 +286,17 @@ export function mergeTopBarXml(baseXml, options = {}) {
     }
   }
 
-  // 2. Ensure CitadelHudTopBar has class="HPV2PickupTopBar"
+  // 2. Ensure CitadelHudTopBar carries the HP Colors class
+  const topBarClass = enableHpColorsV3 ? 'HPColorsV3TimersTopBar' : 'HPV2PickupTopBar';
   result = result.replace(/<CitadelHudTopBar\b([^>]*)>/, (match, attrs) => {
-    if (attrs.includes('HPV2PickupTopBar')) {
+    if (attrs.includes(topBarClass)) {
       return match;
     }
     const classMatch = attrs.match(/class="([^"]*)"/);
     if (classMatch) {
-      return match.replace(/class="([^"]*)"/, `class="HPV2PickupTopBar $1"`);
+      return match.replace(/class="([^"]*)"/, `class="${topBarClass} $1"`);
     } else {
-      return `<CitadelHudTopBar class="HPV2PickupTopBar"${attrs}>`;
+      return `<CitadelHudTopBar class="${topBarClass}"${attrs}>`;
     }
   });
 
@@ -417,6 +459,29 @@ export function assembleCustomPack(options) {
     }
   }
 
+  // 2b. HP Colors v3 (drop-in replacement for v2; layouts/scripts/styles come from the v3 release decomp)
+  let hpColorsV3Xml = '';
+  if (modules.hp_colors_v3) {
+    if (modules.hp_colors_v2) throw new Error('hp_colors_v2 and hp_colors_v3 are mutually exclusive');
+    const hp3Dir = path.join(repoRoot, 'hp_colors_v3/panorama');
+    const layoutDest = path.join(stageSourceDir, 'panorama/layout');
+    fs.mkdirSync(layoutDest, { recursive: true });
+    for (const f of ['unit_status_overlay_v2.xml', 'hp_colors_v3_relay.xml']) {
+      fs.copyFileSync(path.join(hp3Dir, 'layout', f), path.join(layoutDest, f));
+    }
+    copyDirSync(path.join(hp3Dir, 'scripts'), path.join(stageSourceDir, 'panorama/scripts'));
+    copyDirSync(path.join(hp3Dir, 'styles'), path.join(stageSourceDir, 'panorama/styles'));
+    copyDirSync(path.join(hp3Dir, 'images'), path.join(stageSourceDir, 'panorama/images'));
+
+    const topbarDest = path.join(layoutDest, 'citadel_hud_top_bar.xml');
+    if (modules.showrank_qol && fs.existsSync(topbarDest)) {
+      fs.writeFileSync(topbarDest, mergeTopBarXml(fs.readFileSync(topbarDest, 'utf8'), { enableHpColorsV3: true }), 'utf8');
+    } else {
+      fs.copyFileSync(path.join(hp3Dir, 'layout/citadel_hud_top_bar.xml'), topbarDest);
+    }
+    hpColorsV3Xml = fs.readFileSync(path.join(hp3Dir, 'layout/hud_escape_menu.xml'), 'utf8');
+  }
+
   // 3. Poker & Bluff Deck Table Games
   let pokerXml = '';
   if (modules.poker) {
@@ -461,9 +526,11 @@ export function assembleCustomPack(options) {
   const mergedEscape = mergeEscapeMenuXml(escapeBaseXml, {
     pokerXml,
     hpColorsXml,
+    hpColorsV3Xml,
     enableShowrank: !!modules.showrank_qol,
     enablePoker: !!modules.poker,
-    enableHpColors: !!modules.hp_colors_v2
+    enableHpColors: !!modules.hp_colors_v2,
+    enableHpColorsV3: !!modules.hp_colors_v3
   });
 
   const escapeMenuDest = path.join(stageSourceDir, 'panorama/layout/hud_escape_menu.xml');
@@ -536,7 +603,7 @@ export function assembleCustomPack(options) {
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   const args = process.argv.slice(2);
   let stageDir = path.join(repoRoot, '_custom_pack_build/src');
-  let selected = 'showrank_qol,abilities_yes_behavior';
+  let selected = 'showrank_qol,hp_colors_v3,abilities_yes_behavior';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--stage' && args[i + 1]) stageDir = args[i + 1];
@@ -547,6 +614,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename
   const modules = {
     showrank_qol: list.includes('showrank') || list.includes('showrank_qol') || list.includes('qol') || list.includes('1'),
     hp_colors_v2: list.includes('hp_colors_v2') || list.includes('hp_colors') || list.includes('hp') || list.includes('hpv2') || list.includes('2'),
+    hp_colors_v3: list.includes('hp_colors_v3') || list.includes('hpv3') || list.includes('8'),
     poker: list.includes('poker') || list.includes('3'),
     abilities_no_behavior: list.includes('abilities_no_behavior') || list.includes('active_no_filter') || list.includes('pak05') || list.includes('4'),
     abilities_yes_behavior: list.includes('abilities_yes_behavior') || list.includes('active_yes_filter') || list.includes('pak03') || list.includes('5'),

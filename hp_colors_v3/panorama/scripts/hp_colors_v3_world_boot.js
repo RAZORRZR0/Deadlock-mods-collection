@@ -1,0 +1,1 @@
+$.HPColorsV3Renderer.start();
