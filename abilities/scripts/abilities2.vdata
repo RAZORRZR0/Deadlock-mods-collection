@@ -108336,6 +108336,7 @@
 			_my_subclass_name = "modifier_warden_riot_protocol_cast_delay"
 			m_sLocalizationName = "modifier_warden_riot_protocol_cast_delay"
 			m_bIsHidden = true
+			m_nEnabledStateMask = "MODIFIER_STATE_FEAR_IMMUNE"
 			m_vecAutoRegisterModifierValueFromAbilityPropertyName = 
 			[
 				"TechResist",
@@ -108374,7 +108375,7 @@
 			m_sAmbientLoopingSound = soundevent:"Warden.RiotProtocol.Lp"
 			m_bIsHidden = true
 			m_strParticleEffect = resource_name:"particles/abilities/warden/warden_riot_protocol_buff.vpcf"
-			m_nEnabledStateMask = "MODIFIER_STATE_SINCLAIR_TAX_ULT_ACTIVE | MODIFIER_STATE_SINCLAIR_TAX_KEEP_MODEL_SWAP"
+			m_nEnabledStateMask = "MODIFIER_STATE_SINCLAIR_TAX_ULT_ACTIVE | MODIFIER_STATE_SINCLAIR_TAX_KEEP_MODEL_SWAP | MODIFIER_STATE_FEAR_IMMUNE"
 			m_vecAutoRegisterModifierValueFromAbilityPropertyName = 
 			[
 				"BonusMoveSpeed",
@@ -291933,6 +291934,7 @@
 		m_flAdditionalTraceDistance = 80.0
 		m_RangeParticle = resource_name:""
 		m_StrokeParticle = resource_name:"particles/abilities/artist/artist_pullbrush_stroke.vpcf"
+		m_flMinStrokeDistance = 15.0
 		m_flTraceSurfaceOffset = 80.0
 		m_flSpacingBetweenBlockers = 45.0
 		m_flDrawingLingerTime = 0.2
