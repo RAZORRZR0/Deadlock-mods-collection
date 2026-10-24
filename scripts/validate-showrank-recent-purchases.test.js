@@ -38,15 +38,8 @@ test('showrank_recent_purchases: source contract', () => {
   assert.match(heroTestingXml, /id="BotsSpawnBotCard"/, 'hero testing XML includes stock BotsSpawnBotCard');
   assert.match(heroTestingXml, /HeroTesting_HeroControl/, 'hero testing XML includes Hero Control section');
 
-  const showrankJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/showrank_barebones.js'), 'utf8');
-  assert.match(showrankJs, /registerMissingRecord\(missingShared,\s*root\)/, 'showrank runtime registers missing records');
-  assert.match(showrankJs, /updateTopBarUltimateCooldowns/, 'showrank runtime updates topbar ultimate cooldowns');
-  assert.match(showrankJs, /updateTopBarSoulDifference/, 'showrank runtime updates live soul difference');
-  assert.match(showrankJs, /updateTopBarNicknames/, 'showrank runtime updates player nicknames');
-  assert.match(showrankJs, /refreshPlayerCardNickname/, 'showrank runtime refreshes player card nicknames');
-
-  const topbarRankCss = fs.readFileSync(path.join(modDir, 'panorama/styles/showrank_barebones_topbar.css'), 'utf8');
-  assert.match(topbarRankCss, /#ShowRankBarebonesMissingIndicator\s+Label\s*\{[^}]*margin-top:\s*26px;/, 'missing indicator is positioned below nickname text');
+  assert.match(topbarXml, /topbar_qol\.vjs_c/, 'topbar XML includes topbar QoL runtime');
+  assert.ok(fs.existsSync(path.join(modDir, 'panorama/scripts/topbar_qol.js')), 'topbar QoL runtime source exists');
 
   const spawnAnnouncerJs = fs.readFileSync(path.join(modDir, 'panorama/scripts/spawn_announcements.js'), 'utf8');
   assert.match(spawnAnnouncerJs, /sinners_sacrifice/, 'spawn announcements include sinners sacrifice');

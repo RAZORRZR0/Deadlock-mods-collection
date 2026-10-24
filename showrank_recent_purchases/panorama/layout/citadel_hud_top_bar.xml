@@ -11,6 +11,7 @@
 	</styles>
 	<scripts>
 		<include src="s2r://panorama/scripts/spawn_announcements.vjs_c" />
+		<include src="s2r://panorama/scripts/topbar_qol.vjs_c" />
 	</scripts>
 	<CitadelHudTopBar hittest="false">
 		<GlobalClassListener classes="gDetailView gShopOpen gScoreboardOpen gStreetBrawl gPVE" />
