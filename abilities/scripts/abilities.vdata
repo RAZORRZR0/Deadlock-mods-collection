@@ -4227,7 +4227,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_bStartTrained = true
@@ -5396,7 +5396,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -5970,6 +5970,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -6264,7 +6276,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -6838,6 +6850,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -9854,7 +9878,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -10428,6 +10452,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -10722,7 +10758,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -11296,6 +11332,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -11590,7 +11638,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -12164,6 +12212,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -12458,7 +12518,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -13032,6 +13092,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -13326,7 +13398,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -13900,6 +13972,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -14194,7 +14278,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -14768,6 +14852,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -15062,7 +15158,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -15636,6 +15732,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -27627,7 +27735,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -28201,6 +28309,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -30276,7 +30396,7 @@
 				m_flPelletScatterFactor = 2.1
 				m_strBulletImpactSound = soundevent:"Abrams.Wpn.Impact"
 				m_bReloadSingleBulletsAllowCancel = true
-				m_flBulletDamage = 3.6
+				m_flBulletDamage = 3.78
 				m_iBulletsToFullyClaimOrb = 1
 				m_strFirstShotSound = soundevent:"Abrams.Wpn.Fire.First"
 				m_flRecycleTime = 2.0
@@ -30528,7 +30648,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -31102,6 +31222,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -32903,7 +33035,7 @@
 				[
 					{
 						m_strPropertyName = "DPS"
-						m_strBonus = 18
+						m_strBonus = 22
 					},
 					{
 						m_strPropertyName = "DPS"
@@ -33531,7 +33663,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -34105,6 +34237,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -37238,7 +37382,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -37812,6 +37956,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -39581,7 +39737,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -40155,6 +40311,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -42185,7 +42353,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -42759,6 +42927,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -44076,7 +44256,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 110.0
+				m_strValue = 95.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -44973,7 +45153,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -45547,6 +45727,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -48099,7 +48291,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -48673,6 +48865,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -49332,7 +49536,7 @@
 					_class = "scale_function_single_stat"
 					_my_subclass_name = "TurretBaseHealth_scale_function"
 					m_eSpecificStatScaleType = "ELevelUpBoons"
-					m_flStatScale = 9
+					m_flStatScale = 10
 				}
 			}
 			TurretAttackRange = 
@@ -49414,7 +49618,7 @@
 			}
 			NonHeroDamagePercentOutgoing = 
 			{
-				m_strValue = "50"
+				m_strValue = "65"
 			}
 			BossDamagePercentOutgoing = 
 			{
@@ -52618,7 +52822,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -53192,6 +53396,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -54617,7 +54833,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -55192,6 +55408,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -55455,7 +55683,7 @@
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 1.22
+					m_flStatScale = 1.35
 				}
 				m_bIsAbilityDamageProperty = true
 			}
@@ -57540,7 +57768,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -58114,6 +58342,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -58828,7 +59068,7 @@
 				[
 					{
 						m_strPropertyName = "StunDuration"
-						m_strBonus = "0.9"
+						m_strBonus = "1.1"
 					},
 					{
 						m_strPropertyName = "Damage"
@@ -60770,7 +61010,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -61344,6 +61584,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -63580,7 +63832,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -64154,6 +64406,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -65672,19 +65936,20 @@
 			},
 		]
 		m_strSelectedSound = soundevent:""
-		m_strUnselectedSound = soundevent:"Hornet.Assassinate.Zoom.Out"
+		m_strUnselectedSound = soundevent:""
 		m_AssassinateShotParticle = resource_name:"particles/abilities/hornet/hornet_assassinate.vpcf"
 		m_AssassinateShotParticleOwnerOnly = resource_name:"particles/abilities/hornet/hornet_assassinate_owner.vpcf"
-		m_strSnipeImpactSound = soundevent:"Hornet.Assassinate.Impact"
 		m_LaserSightParticle = resource_name:"particles/abilities/hornet/hornet_assassinate_laser_sight.vpcf"
 		m_LaserSightParticleOwnerOnly = resource_name:"particles/abilities/hornet/hornet_assassinate_laser_sight_player.vpcf"
-		m_strFullyChargedSound = soundevent:"Mods.Weapon.Spellslinger.Proc"
+		m_strFullyChargedSound = soundevent:"Hornet.Assassinate.Charge.Complete"
 		m_SnipeModifier = subclass:
 		{
 			_class = "modifier_citadel_hornet_snipe"
 			_my_subclass_name = "modifier_citadel_hornet_snipe"
 			m_bIsHidden = true
 			m_sAmbientLoopingSound = soundevent:""
+			m_sStartSound = soundevent:"Hornet.Assassinate.Zoom.In"
+			m_sExpiredSound = soundevent:"Hornet.Assassinate.Zoom.Out"
 		}
 		m_GlowEnemyModifier = subclass:
 		{
@@ -65754,12 +66019,11 @@
 		m_flScopeTimeToFullPower = 1.0
 		m_strSelectedLoopSound = soundevent:""
 		m_flFoVChangeTime = 0.15
-		m_strZoomIn = soundevent:"Hornet.Assassinate.Zoom.In"
-		m_strZoomOut = soundevent:"Hornet.Assassinate.Zoom.Out"
 		m_ScopeFoV = [ 30 ]
 		m_strCastButtonLocToken = "#AbilityButtonHint_AssassinateAttack"
 		m_strAG2SourceName = "vindicta_ability_assassinate"
 		m_strBeamPointClosestLoopSound = soundevent:"Hornet.Assassinate.Zoom.Lp"
+		m_strHitConfirmationSound = soundevent:"Hornet.Assassinate.Impact"
 	}
 	citadel_weapon_inferno_set = 
 	{
@@ -66274,7 +66538,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -66849,6 +67113,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -67260,6 +67536,12 @@
 					{
 						m_strPropertyName = "Radius"
 						m_strBonus = "10m"
+					},
+					{
+						m_strPropertyName = "Damage"
+						m_strBonus = "0.4"
+						m_eUpgradeType = "EAddToScale"
+						m_eScaleStatFilter = "ETechPower"
 					},
 				]
 			},
@@ -68190,7 +68472,7 @@
 				[
 					{
 						m_strPropertyName = "LifestealPercentHero"
-						m_strBonus = "15"
+						m_strBonus = "20"
 					},
 				]
 			},
@@ -68611,6 +68893,7 @@
 					m_eHudDisplayLocation = "DISPLAY_HUD_NONE"
 					m_nEnabledStateMask = "MODIFIER_STATE_AFTERBURNING"
 					m_nAttributes = "MODIFIER_ATTRIBUTE_MULTIPLE"
+					m_strAfterburnHitSound = soundevent:"Inferno.Afterburn.Modifier.Start"
 				}
 				m_BuildUpModifier = subclass:
 				{
@@ -68632,7 +68915,6 @@
 					"CITADEL_DAMAGETYPE_ABILITY",
 					"CITADEL_DAMAGETYPE_MELEE",
 				]
-				m_strAfterburnHitSound = soundevent:"Inferno.Afterburn.Modifier.Start"
 			},
 		]
 		m_AbilityTooltipDetails = 
@@ -69185,7 +69467,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -69759,6 +70041,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -71195,7 +71489,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 185
+				m_strValue = 190
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -71435,7 +71729,7 @@
 				[
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-20"
+						m_strBonus = "-30"
 					},
 				]
 			},
@@ -71446,6 +71740,10 @@
 						m_strPropertyName = "AbilityDuration"
 						m_strBonus = 1.5
 					},
+					{
+						m_strPropertyName = "FireRateSlow"
+						m_strBonus = "20"
+					},
 				]
 			},
 			{
@@ -71453,7 +71751,7 @@
 				[
 					{
 						m_strPropertyName = "BonusHealthRegen"
-						m_strBonus = "65"
+						m_strBonus = "75"
 					},
 					{
 						m_strPropertyName = "BonusHealthRegen"
@@ -71501,7 +71799,7 @@
 			{
 				_class = "modifier_base_aura"
 				_my_subclass_name = "ice_dome_enemy_aura"
-				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY"
+				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP"
 				m_modifierProvidedByAura = subclass:
 				{
 					_class = "modifier_icedome_auramodifier_base"
@@ -72276,7 +72574,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -72851,6 +73149,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -73243,6 +73553,10 @@
 					{
 						m_strPropertyName = "AirControlPercent"
 						m_strBonus = "60"
+					},
+					{
+						m_strPropertyName = "JumpVelocity"
+						m_strBonus = "4m"
 					},
 				]
 			},
@@ -75105,7 +75419,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -75679,6 +75993,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -77208,12 +77534,12 @@
 			}
 			TeleportCompletedTime = 
 			{
-				m_strValue = "2"
+				m_strValue = "3"
 				m_strCSSClass = "duration"
 			}
 			InterruptCooldown = 
 			{
-				m_strValue = "4"
+				m_strValue = "5"
 				m_strCSSClass = "duration"
 			}
 			SearchRadius = 
@@ -77244,7 +77570,8 @@
 			}
 			MovementSpeedBonusDuration = 
 			{
-				m_strValue = "0"
+				m_strValue = "12"
+				m_strLocTokenOverride = "BuffDuration"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -77255,7 +77582,7 @@
 			}
 			CombatBarrier = 
 			{
-				m_strValue = "0"
+				m_strValue = "400"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_BARRIER_HEALTH"
 				m_strCSSClass = "bullet_armor_up"
 				m_subclassScaleFunction = subclass:
@@ -77280,6 +77607,11 @@
 			BuffTarget = 
 			{
 				m_strValue = "0"
+			}
+			UninterruptibleByDamage = 
+			{
+				m_strValue = "0"
+				m_bIsHidden = true
 			}
 		}
 		m_bitsPostCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
@@ -77306,7 +77638,7 @@
 		m_nAbillityUnlocksCost = 1
 		m_eAbilityType = "EAbilityType_Ultimate"
 		m_iMaxLevel = 1
-		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED"
+		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP | MODIFIER_STATE_IMMOBILIZED | MODIFIER_STATE_SILENCE_MOVEMENT_ABILITES | MODIFIER_STATE_GLITCHED"
 		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
@@ -77333,25 +77665,6 @@
 						m_strPropertyName = "BonusFireRate"
 						m_strBonus = "20"
 					},
-					{
-						m_strPropertyName = "MovementSpeedBonusDuration"
-						m_strBonus = "12"
-					},
-				]
-			},
-			{
-				m_vecPropertyUpgrades = 
-				[
-					{
-						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "400"
-					},
-					{
-						m_strPropertyName = "CombatBarrier"
-						m_strBonus = "0.6"
-						m_eUpgradeType = "EAddToScale"
-						m_eScaleStatFilter = "ETechPower"
-					},
 				]
 			},
 			{
@@ -77359,7 +77672,22 @@
 				[
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-90"
+						m_strBonus = "-65"
+					},
+				]
+			},
+			{
+				m_vecPropertyUpgrades = 
+				[
+					{
+						m_strPropertyName = "UninterruptibleByDamage"
+						m_strBonus = "1"
+					},
+					{
+						m_strPropertyName = "CombatBarrier"
+						m_strBonus = 0.8
+						m_eUpgradeType = "EAddToScale"
+						m_eScaleStatFilter = "ETechPower"
 					},
 				]
 			},
@@ -78168,7 +78496,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -78743,6 +79071,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -79005,13 +79345,13 @@
 			}
 			Damage = 
 			{
-				m_strValue = 50
+				m_strValue = 45
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
-					m_flStatScale = 0.75
+					m_flStatScale = 0.675
 					m_eSpecificStatScaleType = "ETechPower"
 				}
 				m_bIsAbilityDamageProperty = true
@@ -79106,7 +79446,7 @@
 				[
 					{
 						m_strPropertyName = "Damage"
-						m_strBonus = 35
+						m_strBonus = 30
 					},
 				]
 			},
@@ -79319,13 +79659,13 @@
 			}
 			DPS = 
 			{
-				m_strValue = 75
+				m_strValue = 65
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "DPS_scale_function"
-					m_flStatScale = 1.488
+					m_flStatScale = 1.339
 					m_eSpecificStatScaleType = "ETechPower"
 				}
 				m_bIsAbilityDamageProperty = true
@@ -79456,7 +79796,7 @@
 				[
 					{
 						m_strPropertyName = "DPS"
-						m_strBonus = 50
+						m_strBonus = 45
 					},
 				]
 			},
@@ -79847,7 +80187,7 @@
 			}
 			Damage = 
 			{
-				m_strValue = "40"
+				m_strValue = "35"
 				m_strCSSClass = "tech_damage"
 			}
 			SilenceStamina = 
@@ -79918,7 +80258,7 @@
 				[
 					{
 						m_strPropertyName = "Damage"
-						m_strBonus = "50"
+						m_strBonus = "45"
 					},
 					{
 						m_strPropertyName = "AbilityCastRange"
@@ -80136,13 +80476,13 @@
 			}
 			DPS = 
 			{
-				m_strValue = 40
+				m_strValue = 35
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "DPS_scale_function"
-					m_flStatScale = 0.6
+					m_flStatScale = 0.54
 					m_eSpecificStatScaleType = "ETechPower"
 				}
 				m_bIsAbilityDamageProperty = true
@@ -80256,11 +80596,11 @@
 					},
 					{
 						m_strPropertyName = "DPS"
-						m_strBonus = 40
+						m_strBonus = 35
 					},
 					{
 						m_strPropertyName = "DPS"
-						m_strBonus = 0.4
+						m_strBonus = 0.36
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -81643,7 +81983,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -82217,6 +82557,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -85060,7 +85412,7 @@
 					},
 					{
 						m_strPropertyName = "DamageAmpDuration"
-						m_strBonus = "6"
+						m_strBonus = "8"
 					},
 					{
 						m_strPropertyName = "DamageAmpBuildDuration"
@@ -86655,7 +87007,7 @@
 					},
 					{
 						m_strPropertyName = "ImpactDamage"
-						m_strBonus = "60"
+						m_strBonus = "90"
 					},
 				]
 			},
@@ -87379,7 +87731,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -87954,6 +88306,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -88240,6 +88604,11 @@
 			{
 				m_strValue = "15"
 			}
+			WallRicochet = 
+			{
+				m_strValue = "0"
+				m_bIsHidden = true
+			}
 		}
 		m_bitsPostCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
 		_editor = 
@@ -88423,14 +88792,18 @@
 						m_eUpgradeType = "EAddToBase"
 						m_eScaleStatFilter = "ETechPower"
 					},
+					{
+						m_strPropertyName = "AbilityCooldownBetweenCharge"
+						m_strBonus = "-2"
+					},
 				]
 			},
 			{
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "AbilityCooldownBetweenCharge"
-						m_strBonus = "-3"
+						m_strPropertyName = "WallRicochet"
+						m_strBonus = "1"
 					},
 					{
 						m_strPropertyName = "Damage"
@@ -88462,6 +88835,8 @@
 			]
 		}
 		m_ShootParticle = resource_name:"particles/abilities/archer/archer_charged_shot_channel_shock.vpcf"
+		m_flWallRicochetMaxNormalZ = 1.0
+		m_flWallRicochetSpeedScale = 0.5
 		m_AutoChannelModifier = subclass:
 		{
 			_my_subclass_name = "modifier_intrinsic_base"
@@ -88788,7 +89163,7 @@
 		m_nAbillityUnlocksCost = 1
 		m_eAbilityType = "EAbilityType_Signature"
 		m_iMaxLevel = 1
-		m_bitsInterruptingStates = "MODIFIER_STATE_IMMOBILIZED | MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
+		m_bitsInterruptingStates = "MODIFIER_STATE_IMMOBILIZED | MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP | MODIFIER_STATE_PULLDOWN_TO_GROUND"
 		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
@@ -89660,7 +90035,7 @@
 		m_ArrowCameraHeightOffset = 55.0
 		m_ArrowCameraDistance = 150.0
 		m_ArrowOffsetX = -150
-		m_ArrowInitialPitch = -45
+		m_ArrowInitialPitch = 89
 		m_flTrackAmount = 110.0
 		m_flSpeedAccel = 800.0
 		m_flSpeedDeccel = 300.0
@@ -90715,7 +91090,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -91290,6 +91665,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -91587,14 +91974,14 @@
 			}
 			FullRageCurrentHealthDamagePct = 
 			{
-				m_strValue = "3.5"
+				m_strValue = "4"
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "FullRageCurrentHealthDamagePct_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 0.01
+					m_flStatScale = 0.015
 				}
 			}
 		}
@@ -91707,6 +92094,11 @@
 					{
 						m_strPropertyName = "BleedDPSPerStack"
 						m_strBonus = 0.07
+						m_eUpgradeType = "EAddToScale"
+					},
+					{
+						m_strPropertyName = "FullRageCurrentHealthDamagePct"
+						m_strBonus = 0.01
 						m_eUpgradeType = "EAddToScale"
 					},
 				]
@@ -92049,7 +92441,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_TRIGGER_POST_CAST_ON_CAST_COMPLETE | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_TRIGGER_CANCEL_MASH_PROTECTION_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_TROPHY_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_PICKUP_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_LINE"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/shiv/shiv_flash.psd"
 		m_vecAbilityUpgrades = 
@@ -92750,7 +93142,7 @@
 			}
 			RecastWindow = 
 			{
-				m_strValue = "16"
+				m_strValue = "12"
 				m_strCSSClass = "cooldown"
 				m_subclassScaleFunction = subclass:
 				{
@@ -93591,7 +93983,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -94165,6 +94557,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -99756,7 +100160,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -100330,6 +100734,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -103256,7 +103672,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -103831,6 +104247,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -104225,7 +104653,7 @@
 				[
 					{
 						m_strPropertyName = "Damage"
-						m_strBonus = 36
+						m_strBonus = 45
 					},
 					{
 						m_strPropertyName = "Radius"
@@ -106287,7 +106715,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -106861,6 +107289,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -107469,7 +107909,7 @@
 			}
 			MoveSpeedBonusPct = 
 			{
-				m_strValue = "15"
+				m_strValue = "20"
 				m_strCSSClass = "move_speed"
 			}
 			CombatBarrier = 
@@ -107779,7 +108219,7 @@
 			}
 			WeaponPowerDebuff = 
 			{
-				m_strValue = "-25"
+				m_strValue = "-30"
 				m_strCSSClass = "bullet_damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_WEAPON_DAMAGE_INCREASE"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -108009,9 +108449,10 @@
 				_class = "citadel_projectile"
 				_my_subclass_name = "projectile_primary"
 				m_particle = resource_name:"particles/abilities/warden/warden_flask_grenade_projectile.vpcf"
-				m_flSpeed = 700.0
+				m_flSpeed = 980.0
 				m_nBehaviors = "PBF_DetonateOnLifetimeExpire"
-				m_flUpSpeed = 275.0
+				m_flUpSpeed = 385.0
+				m_flGravityScale = 1.96
 				m_flVerticalAimBias = 0.0
 				m_bHideWarningParticle = true
 				m_LoopingSound = soundevent:"Warden.Flask.Proj.Lp"
@@ -108298,11 +108739,11 @@
 				[
 					{
 						m_strPropertyName = "PulseDPS"
-						m_strBonus = 40.5
+						m_strBonus = 50.0
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = -30.0
+						m_strBonus = -40.0
 					},
 				]
 			},
@@ -108965,7 +109406,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -109540,6 +109981,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -110084,7 +110537,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 46.0
+				m_strValue = 50.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -110128,7 +110581,7 @@
 			}
 			AbilityCastDelay = 
 			{
-				m_strValue = "0.75"
+				m_strValue = "1.0"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cast"
 				m_bCanSetTokenOverride = true
@@ -110990,7 +111443,8 @@
 			}
 			HeartHeal = 
 			{
-				m_strValue = "60"
+				m_strValue = "45"
+				m_nMaxScaleDecimalsDisplayed = 2
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_healing_spirit_scale"
@@ -111772,7 +112226,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -112346,6 +112800,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -115820,7 +116286,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -116395,6 +116861,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -116674,7 +117152,7 @@
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "FullChargeDamage_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 1.85
+					m_flStatScale = 1.96
 				}
 				m_bIsAbilityDamageProperty = true
 			}
@@ -116800,7 +117278,7 @@
 					},
 					{
 						m_strPropertyName = "FullChargeDamage"
-						m_strBonus = 0.5
+						m_strBonus = 0.53
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -116966,7 +117444,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "26m"
+				m_strValue = "23m"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -117214,7 +117692,7 @@
 				[
 					{
 						m_strPropertyName = "AbilityCastRange"
-						m_strBonus = "15m"
+						m_strBonus = "8m"
 					},
 					{
 						m_strPropertyName = "CanGrappleAllyHeroes"
@@ -117312,6 +117790,14 @@
 			{
 				m_strParamName = ""
 			}
+		}
+		m_HomingTargetModifier = subclass:
+		{
+			_class = "modifier_base"
+			_my_subclass_name = "homing"
+			m_bIsHidden = true
+			m_eDebuffType = "MODIFIER_DEBUFF_NO"
+			m_strParticleEffect = resource_name:"particles/abilities/yamato/yamato_decimate_target.vpcf"
 		}
 		m_BulletGrappleTracerParticle = resource_name:"particles/abilities/yamato/yamato_flying_strike_rope_tracer.vpcf"
 		m_strGrappleLoop = soundevent:"Yamato.A2.FlyingStrike.Projectile.Lp"
@@ -117835,7 +118321,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 150.0
+				m_strValue = 160.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -118090,8 +118576,8 @@
 						m_strBonus = "4m"
 					},
 					{
-						m_StrPropertyNAme = "AbilityCooldown"
-						m_strBonus = "-20"
+						m_strPropertyName = "AbilityCooldown"
+						m_strBonus = "-30"
 					},
 				]
 			},
@@ -118810,7 +119296,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -119384,6 +119870,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -122912,7 +123410,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -123486,6 +123984,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -125345,7 +125855,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -125919,6 +126429,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -128367,7 +128889,7 @@
 			{
 				_class = "modifier_base_aura"
 				_my_subclass_name = "ice_dome_enemy_aura"
-				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY"
+				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP"
 				m_modifierProvidedByAura = subclass:
 				{
 					_class = "modifier_icedome_auramodifier_base"
@@ -130646,7 +131168,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -131220,6 +131742,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -138212,7 +138746,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -138786,6 +139320,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -142503,7 +143049,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -143077,6 +143623,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -146755,7 +147313,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -147329,6 +147887,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -148966,7 +149536,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -149540,6 +150110,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -151715,7 +152297,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -152289,6 +152871,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -154975,7 +155569,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -155549,6 +156143,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -157103,7 +157709,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -157677,6 +158283,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -159239,7 +159857,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -159813,6 +160431,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -160640,7 +161270,7 @@
 				[
 					{
 						m_strPropertyName = "IncomingDamagePercent"
-						m_strBonus = "15"
+						m_strBonus = "16"
 					},
 					{
 						m_strPropertyName = "Radius"
@@ -162290,7 +162920,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -162867,6 +163497,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -163305,6 +163947,7 @@
 					{
 						m_strPropertyName = "GroundFlameDuration"
 						m_strBonus = "2"
+						m_strStreetBrawlBonus = "1"
 					},
 					{
 						m_strPropertyName = "Radius"
@@ -165157,7 +165800,7 @@
 				m_nRecoilSeed = 32152
 				m_AimingShootSpreadPenalty = [ 0.0, 0.2 ]
 				m_strBulletImpactSound = soundevent:"Wraith.Wpn.Impact"
-				m_flBulletDamage = 35.0
+				m_flBulletDamage = 32.0
 				m_bCanCrit = false
 				m_flExplosionRadius = 25.0
 				m_flPenetrationPercent = 100.0
@@ -166159,7 +166802,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -166733,6 +167376,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -167685,7 +168340,7 @@
 					},
 					{
 						m_strPropertyName = "WallImpactDamage"
-						m_strBonus = "75"
+						m_strBonus = "90"
 					},
 					{
 						m_strPropertyName = "WallImpactDamage"
@@ -167704,7 +168359,7 @@
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-15"
+						m_strBonus = "-18"
 						m_eUpgradeType = "EAddToBase"
 					},
 				]
@@ -169994,7 +170649,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -170571,6 +171226,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -170698,7 +171365,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "27"
+				m_strValue = "25"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -172299,11 +172966,11 @@
 				[
 					{
 						m_strPropertyName = "MaxHealthBuffPct"
-						m_strBonus = 10
+						m_strBonus = 15
 					},
 					{
 						m_strPropertyName = "MaxHealthBuffDuration"
-						m_strBonus = 16
+						m_strBonus = 20
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
@@ -173355,7 +174022,7 @@
 				m_flDamageForce = 50.0
 				m_bBulletShouldUseVerlet = true
 				m_flRecoilRecoveryDelayFactor = 0.9
-				m_flBulletDamage = 19.5
+				m_flBulletDamage = 20.1
 				m_bHitOnceAcrossAllBullets = true
 				m_strShootSound = soundevent:"Drifter.Wpn.Fire.Main"
 				m_AimingShootSpreadPenalty = [ 0.0, 2.0 ]
@@ -173967,7 +174634,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -174541,6 +175208,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -176064,7 +176743,7 @@
 				[
 					{
 						m_strPropertyName = "AmpDamagePercent"
-						m_strBonus = 11.0
+						m_strBonus = 12.0
 					},
 				]
 			},
@@ -176468,7 +177147,7 @@
 				[
 					{
 						m_strPropertyName = "AbilityDuration"
-						m_strBonus = "2.5"
+						m_strBonus = "2.75"
 					},
 					{
 						m_strPropertyName = "MaxTargets"
@@ -177116,7 +177795,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -177690,6 +178369,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -186939,7 +187630,7 @@
 			}
 			BonusBulletSpeedPercent = 
 			{
-				m_strValue = "60"
+				m_strValue = "45"
 				m_eDisplayType = "EBulletSpeedIncrease"
 				m_strCSSClass = "bullet_damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_BONUS_BULLET_SPEED_PERCENT"
@@ -187457,7 +188148,7 @@
 			}
 			ParryCooldownReduction = 
 			{
-				m_strValue = "1.75"
+				m_strValue = "1.25"
 				m_eDisplayType = "ETechCooldown"
 				m_strCSSClass = "cooldown"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_PARRY_COOLDOWN_REDUCTION_FIXED"
@@ -191667,7 +192358,7 @@
 			}
 			BonusHealth = 
 			{
-				m_strValue = "50"
+				m_strValue = "90"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEALTH_MAX"
 				m_eDisplayType = "EMaxHealth"
 				m_strCSSClass = "health"
@@ -196057,14 +196748,14 @@
 			}
 			HealAmpReceivePenaltyPercent = 
 			{
-				m_strValue = "-35"
+				m_strValue = "-40"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_RECEIVE_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
 			HealAmpRegenPenaltyPercent = 
 			{
-				m_strValue = "-35"
+				m_strValue = "-40"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_REGEN_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -197255,7 +197946,7 @@
 			}
 			SlowDuration = 
 			{
-				m_strValue = "2"
+				m_strValue = "2.5"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -198000,14 +198691,14 @@
 			}
 			HealAmpReceivePenaltyPercent = 
 			{
-				m_strValue = "-35"
+				m_strValue = "-40"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_RECEIVE_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
 			HealAmpRegenPenaltyPercent = 
 			{
-				m_strValue = "-35"
+				m_strValue = "-40"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_REGEN_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -200562,7 +201253,7 @@
 			}
 			BulletLifestealPercent = 
 			{
-				m_strValue = "13"
+				m_strValue = "15"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBulletLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -200584,7 +201275,7 @@
 			}
 			BaseAttackDamagePercent = 
 			{
-				m_strValue = "6"
+				m_strValue = "10"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eDisplayType = "EBaseWeaponDamageIncrease"
@@ -202921,7 +203612,7 @@
 			}
 			BulletResist = 
 			{
-				m_strValue = "30"
+				m_strValue = "35"
 				m_eDisplayType = "EBulletArmorDamageReduction"
 				m_strCSSClass = "bullet_armor_up"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_BULLET_ARMOR_DAMAGE_RESIST"
@@ -202942,7 +203633,7 @@
 			}
 			OutOfCombatHealthRegen = 
 			{
-				m_strValue = "3"
+				m_strValue = "5"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_OUT_OF_COMBAT_HEALTH_REGEN"
 				m_eDisplayType = "EOOCHealthRegen"
 				m_strCSSClass = "healing"
@@ -203241,6 +203932,15 @@
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_GROUND_DASH_REDUCTION_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
+			GravityScale = 
+			{
+				m_strValue = "20"
+				m_strCSSClass = "slow"
+				m_bIsNegativeAttribute = true
+				m_strLocTokenOverride = "GravityScaleIncrease"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_GRAVITY_SCALE"
+				m_eStatsUsageFlags = "ConditionallyApplied"
+			}
 		}
 		m_bitsPostCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
 		_editor = 
@@ -203301,6 +204001,7 @@
 						m_vecAbilityProperties = 
 						[
 							"ActiveMoveSpeedPenalty",
+							"GravityScale",
 							"GroundDashReductionPercent",
 							"AbilityDuration",
 							"AbilityCooldown",
@@ -203538,17 +204239,9 @@
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_REGEN_PERCENT"
 				m_eStatsUsageFlags = ""
 			}
-			BonusHealthRegen = 
-			{
-				m_strValue = "3"
-				m_strCSSClass = "healing"
-				m_eDisplayType = "EBaseHealthRegen"
-				m_eProvidedPropertyType = "MODIFIER_VALUE_HEALTH_REGEN_PER_SECOND"
-				m_eStatsUsageFlags = ""
-			}
 			OutOfCombatHealthRegen = 
 			{
-				m_strValue = "1"
+				m_strValue = "2"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_OUT_OF_COMBAT_HEALTH_REGEN"
 				m_eDisplayType = "EOOCHealthRegen"
 				m_strCSSClass = "healing"
@@ -203584,10 +204277,6 @@
 		m_strAG2SourceName = "item"
 		m_eItemSlotType = "EItemSlotType_Armor"
 		m_iItemTier = "EModTier_2"
-		m_vecComponentItems = 
-		[
-			"upgrade_endurance",
-		]
 		m_strCSSClass = "healingBooster"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_armor/healing_booster.psd"
 		m_vecTooltipSectionInfo = 
@@ -203600,7 +204289,6 @@
 						m_vecElevatedAbilityProperties = [  ]
 						m_vecAbilityProperties = 
 						[
-							"BonusHealthRegen",
 							"OutOfCombatHealthRegen",
 						]
 					},
@@ -203633,7 +204321,6 @@
 				[
 					"HealAmpCastPercent",
 					"HealAmpRegenPercent",
-					"BonusHealthRegen",
 					"OutOfCombatHealthRegen",
 				]
 			},
@@ -203652,10 +204339,6 @@
 					{
 						m_strPropertyName = "HealAmpCastPercent"
 						m_strBonus = "15"
-					},
-					{
-						m_strPropertyName = "BonusHealthRegen"
-						m_strBonus = "9"
 					},
 				]
 			},
@@ -204129,7 +204812,7 @@
 			}
 			AbilityLifestealPercentHero = 
 			{
-				m_strValue = "28"
+				m_strValue = "30"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "ETechLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -204143,7 +204826,7 @@
 			}
 			BulletLifestealPercent = 
 			{
-				m_strValue = "28"
+				m_strValue = "30"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBulletLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -206609,6 +207292,7 @@
 				_class = "modifier_base_aura"
 				_my_subclass_name = "modifier_bullet_armor_reduction_aura"
 				m_bIsHidden = true
+				m_eLosCheck = "Bounds"
 				m_modifierProvidedByAura = subclass:
 				{
 					_class = "modifier_hunter_aura_target"
@@ -207824,7 +208508,7 @@
 			}
 			TechResist = 
 			{
-				m_strValue = "18"
+				m_strValue = "15"
 				m_eDisplayType = "ETechArmorDamageReduction"
 				m_strCSSClass = "tech_armor_up"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_RESIST"
@@ -208111,7 +208795,7 @@
 			}
 			BaseAttackDamagePercent = 
 			{
-				m_strValue = "18"
+				m_strValue = "22"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -209370,7 +210054,7 @@
 			}
 			TechPower = 
 			{
-				m_strValue = "6"
+				m_strValue = "8"
 				m_strDisableValue = "0"
 				m_bCanSetTokenOverride = true
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_POWER"
@@ -209387,7 +210071,7 @@
 			}
 			AbilityLifestealPercentHero = 
 			{
-				m_strValue = "13"
+				m_strValue = "15"
 				m_eDisplayType = "ETechLifesteal"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
@@ -210009,6 +210693,18 @@
 		}
 		m_vecTooltipSectionInfo = 
 		[
+			{
+				m_eAbilitySectionType = "EArea_Innate"
+				m_vecSectionAttributes = 
+				[
+					{
+						m_vecAbilityProperties = 
+						[
+							"BulletResist",
+						]
+					},
+				]
+			},
 			{
 				m_eAbilitySectionType = "EArea_Active"
 				m_vecSectionAttributes = 
@@ -210941,7 +211637,7 @@
 			}
 			TechPower = 
 			{
-				m_strValue = "6"
+				m_strValue = "8"
 				m_strDisableValue = "0"
 				m_bCanSetTokenOverride = true
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_POWER"
@@ -210958,7 +211654,7 @@
 			}
 			AbilityLifestealPercentHero = 
 			{
-				m_strValue = "13"
+				m_strValue = "15"
 				m_eDisplayType = "ETechLifesteal"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
@@ -213218,13 +213914,13 @@
 			}
 			HealOnKill = 
 			{
-				m_strValue = "275"
+				m_strValue = "170"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
-					_class = "scale_function_single_stat"
+					_class = "scale_function_healing_boon_scale"
 					_my_subclass_name = "HealOnKill_scale_function"
-					m_eSpecificStatScaleType = "EHealingOutput"
+					m_flStatScale = 3
 				}
 			}
 		}
@@ -213313,7 +214009,7 @@
 			},
 			subclass:
 			{
-				_class = "modifier_apply_debuff_proc"
+				_class = "modifier_healbane_proc"
 				_my_subclass_name = "modifier_healbane_debuff_proc"
 				m_bIsHidden = true
 				m_vecProcDamageTypes = 
@@ -213324,6 +214020,7 @@
 				{
 					_class = "modifier_healbane_debuff"
 					_my_subclass_name = "modifier_healbane_debuff"
+					m_nAttributes = "MODIFIER_ATTRIBUTE_MULTIPLE"
 					m_strSmallIconCssClass = "escalating_exposure"
 					m_strParticleEffect = resource_name:"particles/upgrades/tech_resist_debuff.vpcf"
 					m_bDurationAffectedByEffectiveness = true
@@ -213503,7 +214200,7 @@
 			}
 			GroundDashReductionPercent = 
 			{
-				m_strValue = "-10"
+				m_strValue = "-12"
 				m_strCSSClass = "slow"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_GROUND_DASH_REDUCTION_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -216628,7 +217325,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "18"
+				m_strValue = "22"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -216654,7 +217351,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "40m"
+				m_strValue = "35m"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -216942,7 +217639,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "45"
+				m_strValue = "40"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -220249,14 +220946,14 @@
 			}
 			HealAmpReceivePenaltyPercent = 
 			{
-				m_strValue = "-50"
+				m_strValue = "-55"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_RECEIVE_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
 			HealAmpRegenPenaltyPercent = 
 			{
-				m_strValue = "-50"
+				m_strValue = "-55"
 				m_strCSSClass = "damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEAL_AMP_REGEN_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -221998,7 +222695,7 @@
 		m_strDisableItemTarget = ""
 		m_bStartTrained = true
 		m_eAbilityType = "EAbilityType_Item"
-		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
+		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_DEPLOYED_OBJECT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
 		m_flBossDamageScale = 1.0
@@ -222011,6 +222708,11 @@
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CANCEL_ROPE_CLIMB_ON_CAST"
 		m_strCSSClass = "warpStone"
 		m_strAbilityImage = panorama:"file://{images}/upgrades/mods_weapon/warp_stone.psd"
+		m_deploymentInfo = 
+		{
+			m_bPointTrace = true
+			m_bCheckPlayerFit = true
+		}
 		m_CastDelayParticle = resource_name:"particles/upgrades/warp_stone_cast_delay.vpcf"
 		m_TeleportTrailParticle = resource_name:"particles/upgrades/warp_stone_travel_beam.vpcf"
 		m_strCastSound = soundevent:"Mods.Weapon.Warp.Stone.Cast"
@@ -222894,7 +223596,7 @@
 			}
 			AbilityPostCastDuration = 
 			{
-				m_strValue = "0.5"
+				m_strValue = "0.2"
 				m_strDisableValue = "0"
 			}
 			AbilityCharges = 
@@ -223288,7 +223990,7 @@
 			}
 			MeleeResistPercent = 
 			{
-				m_strValue = "18"
+				m_strValue = "22"
 				m_eDisplayType = "EMeleeResist"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MELEE_RESIST"
 				m_eStatsUsageFlags = ""
@@ -224385,11 +225087,17 @@
 					_my_subclass_name = "duration_scale_function"
 				}
 			}
-			AmbushBonusFireRate = 
+			AmbushBuildUpDuration = 
 			{
-				m_strValue = "25"
+				m_strValue = "6"
+				m_strCSSClass = "duration"
+			}
+			AmbushBonusWeaponDamage = 
+			{
+				m_strValue = "50"
 				m_strCSSClass = "bullet_damage"
-				m_eProvidedPropertyType = "MODIFIER_VALUE_FIRE_RATE"
+				m_eDisplayType = "EBaseWeaponDamageIncrease"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_WEAPON_DAMAGE_INCREASE"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 				m_strConditionalLocTokenOverride = "#DuringAmbush_conditional"
 			}
@@ -224398,15 +225106,6 @@
 				m_strValue = "25"
 				m_strCSSClass = "tech_damage"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_POWER"
-				m_eStatsUsageFlags = "ConditionallyApplied"
-				m_strConditionalLocTokenOverride = "#DuringAmbush_conditional"
-			}
-			AmbushBonusMeleeDamage = 
-			{
-				m_strValue = "25"
-				m_eDisplayType = "EBaseMeleeDamageIncrease"
-				m_strCSSClass = "melee_damage"
-				m_eProvidedPropertyType = "MODIFIER_VALUE_MELEE_DAMAGE_INCREASE"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 				m_strConditionalLocTokenOverride = "#DuringAmbush_conditional"
 			}
@@ -224476,18 +225175,12 @@
 			m_strActivateAmbushSound = soundevent:"Mods.Armor.Cloak.Ambush"
 			m_InvisRevealedParticle = resource_name:"particles/generic/invis_revealed.vpcf"
 			m_AmbushParticle = resource_name:"particles/upgrades/upgrades_fervor_buff.vpcf"
-			m_vecAutoRegisterModifierValueFromAbilityPropertyName = 
-			[
-				"AmbushBonusTechPower",
-				"AmbushBonusFireRate",
-				"AmbushBonusMeleeDamage",
-			]
 			m_eDrawOverheadStatus = "OVERHEAD_DRAW_FOR_EVERYONE"
 			m_strSmallIconCssClass = "cloaking_device_active_ambush"
 		}
 		m_InvisModifier = subclass:
 		{
-			_class = "modifier_invis"
+			_class = "modifier_cloaking_device_active_invis"
 			_my_subclass_name = "modifier_invis"
 			m_bDurationExtendible = true
 			m_sLocalizationName = "upgrade_cloaking_device_active"
@@ -224544,18 +225237,16 @@
 						m_vecImportantAbilityProperties = 
 						[
 							{
-								m_strImportantProperty = "AmbushBonusFireRate"
+								m_strImportantProperty = "AmbushBonusWeaponDamage"
 							},
 							{
 								m_strImportantProperty = "AmbushBonusTechPower"
-							},
-							{
-								m_strImportantProperty = "AmbushBonusMeleeDamage"
 							},
 						]
 						m_vecAbilityProperties = 
 						[
 							"AmbushDuration",
+							"AmbushBuildUpDuration",
 						]
 					},
 				]
@@ -224588,12 +225279,8 @@
 						m_strBonus = "20"
 					},
 					{
-						m_strPropertyName = "AmbushBonusFireRate"
+						m_strPropertyName = "AmbushBonusWeaponDamage"
 						m_strBonus = "35"
-					},
-					{
-						m_strPropertyName = "AmbushBonusMeleeDamage"
-						m_strBonus = "30"
 					},
 					{
 						m_strPropertyName = "AmbushBonusTechPower"
@@ -224625,15 +225312,11 @@
 						m_strBonus = "3m"
 					},
 					{
-						m_strPropertyName = "AmbushBonusFireRate"
+						m_strPropertyName = "AmbushBonusWeaponDamage"
 						m_strBonus = "35"
 					},
 					{
 						m_strPropertyName = "AmbushBonusTechPower"
-						m_strBonus = "35"
-					},
-					{
-						m_strPropertyName = "AmbushBonusMeleeDamage"
 						m_strBonus = "35"
 					},
 					{
@@ -226305,9 +226988,9 @@
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
-					_class = "scale_function_healing_boon_scale"
+					_class = "scale_function_healing_spirit_scale"
 					_my_subclass_name = "TotalHealthRegen_scale_function"
-					m_flStatScale = 6
+					m_flStatScale = 1.1
 				}
 			}
 			HeroTargetBonus = 
@@ -227531,7 +228214,7 @@
 			}
 			TechPower = 
 			{
-				m_strValue = "6"
+				m_strValue = "8"
 				m_strDisableValue = "0"
 				m_bCanSetTokenOverride = true
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_POWER"
@@ -227563,7 +228246,7 @@
 			}
 			AbilityLifestealPercentHero = 
 			{
-				m_strValue = "70"
+				m_strValue = "75"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "ETechLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -227585,7 +228268,7 @@
 			}
 			AbilityLifestealPercentHeroPassive = 
 			{
-				m_strValue = "13"
+				m_strValue = "15"
 				m_eDisplayType = "ETechLifesteal"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
@@ -228138,7 +228821,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "45"
+				m_strValue = "55"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -235056,7 +235739,7 @@
 			}
 			BaseAttackDamagePercent = 
 			{
-				m_strValue = "80"
+				m_strValue = "85"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eDisplayType = "EBaseWeaponDamageIncrease"
@@ -235408,7 +236091,7 @@
 			}
 			BulletLifestealPercent = 
 			{
-				m_strValue = "14"
+				m_strValue = "15"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBulletLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -235442,7 +236125,7 @@
 			}
 			BaseAttackDamagePercent = 
 			{
-				m_strValue = "6"
+				m_strValue = "10"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eDisplayType = "EBaseWeaponDamageIncrease"
@@ -235451,7 +236134,7 @@
 			}
 			ActiveBonusMoveSpeed = 
 			{
-				m_strValue = "1m"
+				m_strValue = "1.5m"
 				m_strCSSClass = "move_speed"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_SPEED_MAX"
 				m_strConditionalLocTokenOverride = "#ActiveItemUse_conditional"
@@ -235823,7 +236506,7 @@
 			}
 			ActiveBonusLifesteal = 
 			{
-				m_strValue = "70"
+				m_strValue = "75"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBulletLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -235855,7 +236538,7 @@
 			}
 			BulletLifestealPercent = 
 			{
-				m_strValue = "13"
+				m_strValue = "15"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBulletLifesteal"
 				m_subclassScaleFunction = subclass:
@@ -235869,7 +236552,7 @@
 			}
 			BaseAttackDamagePercent = 
 			{
-				m_strValue = "6"
+				m_strValue = "10"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eDisplayType = "EBaseWeaponDamageIncrease"
@@ -239593,13 +240276,13 @@
 			}
 			HealingPerCast = 
 			{
-				m_strValue = "65"
+				m_strValue = "40"
 				m_eDisplayType = "EMaxHealth"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_healing_boon_scale"
 					_my_subclass_name = "HealPercentAmount_scale_function"
-					m_flStatScale = 1.7
+					m_flStatScale = 1.4
 				}
 				m_strCSSClass = "healing"
 			}
@@ -239619,7 +240302,7 @@
 				{
 					_class = "scale_function_healing_spirit_scale"
 					_my_subclass_name = "TotalHealthRegen_scale_function"
-					m_flStatScale = 0.035
+					m_flStatScale = 0.025
 				}
 			}
 			RegenerationDuration = 
@@ -248079,6 +248762,10 @@
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
+					_class = "scale_function_tech_damage"
+					_my_subclass_name = "Damage_scale_function"
+					m_eSpecificStatScaleType = "ETechPower"
+					m_flStatScale = 0.35
 				}
 			}
 			SlowPercent = 
@@ -248127,7 +248814,7 @@
 			}
 			GroundDashReductionPercent = 
 			{
-				m_strValue = "-10"
+				m_strValue = "-12"
 				m_strCSSClass = "slow"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_GROUND_DASH_REDUCTION_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
@@ -250085,7 +250772,7 @@
 			}
 			ProcChance = 
 			{
-				m_strValue = "55"
+				m_strValue = "60"
 			}
 			BaseAttackDamagePercent = 
 			{
@@ -251235,7 +251922,7 @@
 			}
 			BonusHealthRegen = 
 			{
-				m_strValue = "8"
+				m_strValue = "15"
 				m_strCSSClass = "healing"
 				m_eDisplayType = "EBaseHealthRegen"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_HEALTH_REGEN_PER_SECOND"
@@ -252278,7 +252965,7 @@
 			ProcBaseAttackDamagePercentAltFire = 
 			{
 				m_strLocTokenOverride = "BaseAttackDamagePercentAltFire"
-				m_strValue = "40"
+				m_strValue = "38"
 				m_strCSSClass = "bullet_damage"
 				m_eDisplayUnits = "EDisplayUnit_Normal"
 				m_eDisplayType = "EBaseWeaponDamageIncrease"
@@ -252289,7 +252976,7 @@
 					_class = "scale_function_single_stat"
 					_my_subclass_name = "SecondaryDamage_scale_function"
 					m_eSpecificStatScaleType = "ELevelUpBoons"
-					m_flStatScale = 1.3
+					m_flStatScale = 1.24
 				}
 			}
 		}
@@ -257571,7 +258258,7 @@
 			}
 			OutgoingDamagePenaltyPercent = 
 			{
-				m_strValue = "-15"
+				m_strValue = "-12"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_ALL_DAMAGE_MULTIPLIER"
 				m_bIsNegativeAttribute = true
 			}
@@ -258228,6 +258915,286 @@
 			m_eDebuffType = "MODIFIER_DEBUFF_NO"
 			m_strScreenParticleEffect = resource_name:"particles/event/christmas/snowball_tgt_screen.vpcf"
 		}
+	}
+	seasonal_ability_eat_halloween_candy = 
+	{
+		_class = "seasonal_eat_halloween_candy"
+		m_mapAbilityProperties = 
+		{
+			AbilityCooldown = 
+			{
+				m_strValue = "3"
+				m_strDisableValue = "0"
+				m_strCSSClass = "cooldown"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_single_stat"
+					_my_subclass_name = "AbilityCooldown_scale_function"
+					m_eSpecificStatScaleType = "ETechCooldown"
+				}
+			}
+			AbilityDuration = 
+			{
+				m_strValue = "8"
+				m_strDisableValue = "0"
+				m_strCSSClass = "duration"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_single_stat"
+					_my_subclass_name = "AbilityDuration_scale_function"
+					m_eSpecificStatScaleType = "ETechDuration"
+				}
+			}
+			AbilityCastRange = 
+			{
+				m_strValue = "0"
+				m_eDisplayUnits = "EDisplayUnit_Meters"
+				m_strCSSClass = "range"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_single_stat"
+					_my_subclass_name = "AbilityCastRange_scale_function"
+					m_eSpecificStatScaleType = "ETechRange"
+				}
+			}
+			AbilityUnitTargetLimit = 
+			{
+				m_strValue = "1"
+				m_bCanSetTokenOverride = true
+			}
+			AbilityCastDelay = 
+			{
+				m_strValue = "0.1"
+				m_strDisableValue = "0"
+				m_strCSSClass = "cast"
+				m_bCanSetTokenOverride = true
+			}
+			AbilityChannelTime = 
+			{
+				m_strValue = "0"
+				m_strDisableValue = "0"
+				m_strCSSClass = "cast"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_multi_stats"
+					_my_subclass_name = "scale_duration"
+					m_vecScalingStats = 
+					[
+						"EChannelDuration",
+						"ETechDuration",
+					]
+				}
+			}
+			AbilityPostCastDuration = 
+			{
+				m_strValue = "0"
+				m_strDisableValue = "0"
+			}
+			AbilityCharges = 
+			{
+				m_strValue = "0"
+				m_strDisableValue = "-1"
+				m_strCSSClass = "cast"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_ability_charges"
+					_my_subclass_name = "AbilityCharges_scale_function"
+				}
+			}
+			AbilityCooldownBetweenCharge = 
+			{
+				m_strValue = "-1.0"
+				m_strDisableValue = "-2"
+				m_strCSSClass = "charge_cooldown"
+				m_bCanSetTokenOverride = true
+				m_subclassScaleFunction = subclass:
+				{
+					_class = "scale_function_ability_recharge_time"
+					_my_subclass_name = "scale_function_ability_recharge_time"
+				}
+			}
+			ChannelMoveSpeed = 
+			{
+				m_strValue = "-1"
+				m_eDisplayUnits = "EDisplayUnit_MetersPerSecond"
+				m_strCSSClass = "move_speed"
+				m_bCanSetTokenOverride = true
+			}
+			AbilityResourceCost = 
+			{
+				m_strValue = "0"
+				m_strDisableValue = "0"
+				m_bCanSetTokenOverride = true
+				m_strCSSClass = "cast"
+			}
+			TechPower = 
+			{
+				m_strValue = "15"
+				m_strDisableValue = "0"
+				m_bCanSetTokenOverride = true
+				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_POWER"
+				m_eDisplayType = "ETechPower"
+				m_strCSSClass = "tech_damage"
+				m_eStatsUsageFlags = "ConditionallyApplied"
+			}
+			WeaponPower = 
+			{
+				m_strValue = "0"
+				m_strDisableValue = "0"
+				m_bCanSetTokenOverride = true
+				m_eProvidedPropertyType = "MODIFIER_VALUE_WEAPON_POWER"
+			}
+			HealOnActivate = 
+			{
+				m_strValue = "75"
+				m_strCSSClass = "healing"
+			}
+			HealPerMinute = 
+			{
+				m_strValue = "3"
+				m_strCSSClass = "healing"
+			}
+			StaminaRestore = 
+			{
+				m_strValue = "1"
+				m_strCSSClass = "move_speed"
+			}
+			BonusFireRate = 
+			{
+				m_strValue = "15"
+				m_eDisplayType = "EFireRate"
+				m_strCSSClass = "fire_rate"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_FIRE_RATE"
+				m_eStatsUsageFlags = "ConditionallyApplied"
+			}
+			BonusFireRatePerMinute = 
+			{
+				m_strValue = "0.35"
+				m_strCSSClass = "fire_rate"
+			}
+			TechPowerPerMinute = 
+			{
+				m_strValue = "0.75"
+				m_strCSSClass = "tech_damage"
+			}
+			BonusMoveSpeed = 
+			{
+				m_strValue = "1m"
+				m_eDisplayUnits = "EDisplayUnit_MetersPerSecond"
+				m_strCSSClass = "move_speed"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_SPEED_MAX"
+				m_eStatsUsageFlags = "ConditionallyApplied"
+			}
+			BonusMoveSpeedPerMinute = 
+			{
+				m_strValue = "0.02m"
+				m_strCSSClass = "move_speed"
+			}
+		}
+		m_bitsPostCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
+		_editor = 
+		{
+			folder_name = "Actives"
+		}
+		m_mapWeaponInfos = 
+		{
+			primary = 
+			{
+				m_flBulletSpeed = 10000.0
+			}
+		}
+		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
+		m_bitsPreCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
+		m_sCustomStackLabel = "#HalloweenCandy_label"
+		_multibase = 
+		[
+			"cosmetic_base",
+		]
+		m_bStartTrained = true
+		m_eAbilityType = "EAbilityType_Cosmetic"
+		m_strAG2SourceName = "item"
+		m_strCSSClass = "item_seasonal"
+		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_NONE"
+		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
+		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DONT_BREAK_INVISIBILITY | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_strCastAnimGraphParam = "e_GenericCast"
+		m_strCastAnimSequenceName = "ability_generic_cast"
+		m_vecTooltipSectionInfo = 
+		[
+			{
+				m_eAbilitySectionType = "EArea_Active"
+				m_vecSectionAttributes = 
+				[
+					{
+						m_strLocString = "#seasonal_ability_eat_halloween_candy_desc"
+						m_vecImportantAbilityProperties = 
+						[
+							{
+								m_strImportantProperty = "HealOnActivate"
+							},
+							{
+								m_strImportantProperty = "StaminaRestore"
+							},
+						]
+					},
+					{
+						m_strLocString = "#modifier_halloween_candy_sugar_rush"
+						m_vecImportantAbilityProperties = 
+						[
+							{
+								m_strImportantProperty = "BonusFireRate"
+							},
+							{
+								m_strImportantProperty = "TechPower"
+							},
+							{
+								m_strImportantProperty = "BonusMoveSpeed"
+							},
+							{
+								m_strImportantProperty = "AbilityDuration"
+							},
+						]
+					},
+				]
+			},
+		]
+		m_eShopFilters = ""
+		m_strAbilityImage = panorama:"file://{images}/items/seasonal/2026_candy.psd"
+		m_nMaxCandy = 0
+		m_flCandyDropDistance = 100.0
+		m_mapBreakableCandyDrops = 
+		{
+			citadel_breakable_prop_candy_cauldron = 1
+			citadel_breakable_prop_candy_cauldron_hideout = 1
+		}
+		m_vecCandyModifiers = 
+		[
+			subclass:
+			{
+				_class = "modifier_halloween_candy_buff"
+				_my_subclass_name = "halloween_candy_sugar_rush"
+				m_sLocalizationName = "modifier_halloween_candy_sugar_rush"
+				m_strParticleEffect = resource_name:"particles/event/halloween/halloween_2026_candy_consume.vpcf"
+				m_eHudDisplayLocation = "DISPLAY_HUD_NONE"
+				m_eModifierDisplayLocaiton = "MODIFIER_DISPLAY_HEALTHBAR"
+			},
+		]
+		m_AutoIntrinsicModifiers = 
+		[
+			subclass:
+			{
+				_class = "modifier_eat_halloween_candy_intrinsic"
+				_my_subclass_name = "modifier_eat_halloween_candy_intrinsic"
+				m_bIsHidden = true
+			},
+		]
+		m_strCastDelaySound = soundevent:"Powerup.Eat.Candy"
 	}
 	cosmetic_ability_voting_poster = 
 	{
@@ -259175,7 +260142,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -259749,6 +260716,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -260512,7 +261491,7 @@
 			IncomingDamagePercent = 
 			{
 				m_strValue = "-35"
-				m_eProvidedPropertyType = "MODIFIER_VALUE_INCOMING_DAMAGE_PERCENTAGE"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_INCOMING_DAMAGE_PERCENTAGE_CHANGE"
 				m_strCSSClass = "health"
 			}
 			SlowResistance = 
@@ -261708,11 +262687,11 @@
 			}
 			BonusDamage = 
 			{
-				m_strValue = "115"
+				m_strValue = "95"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_multi_stats"
-					m_flStatScale = 3.0
+					m_flStatScale = 3.6
 					_my_subclass_name = "bonusdamagesf"
 					m_vecScalingStats = 
 					[
@@ -262296,7 +263275,7 @@
 				_class = "modifier_base_aura"
 				_my_subclass_name = "enemyaura"
 				m_vecAutoRegisterModifierValueFromAbilityPropertyName = [  ]
-				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY"
+				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP"
 				m_modifierProvidedByAura = subclass:
 				{
 					_class = "modifier_base"
@@ -263090,7 +264069,7 @@
 				_class = "modifier_base_aura"
 				_my_subclass_name = "enemyaura"
 				m_vecAutoRegisterModifierValueFromAbilityPropertyName = [  ]
-				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY"
+				m_iAuraSearchType = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP"
 				m_modifierProvidedByAura = subclass:
 				{
 					_class = "modifier_base"
@@ -264878,7 +265857,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -265452,6 +266431,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -266809,7 +267800,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
 		m_flTargetingConeAngle = 35.0
 		m_flTargetingConeHalfWidth = 40.0
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_TROOPER_FRIENDLY | CITADEL_UNIT_TARGET_HERO_FRIENDLY | CITADEL_UNIT_TARGET_MINION_FRIENDLY | CITADEL_UNIT_TARGET_NEUTRAL | CITADEL_UNIT_TARGET_BREAKABLE_PROP | CITADEL_UNIT_TARGET_PROP | CITADEL_UNIT_TARGET_TROPHY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_TROOPER_FRIENDLY | CITADEL_UNIT_TARGET_HERO_FRIENDLY | CITADEL_UNIT_TARGET_MINION_FRIENDLY | CITADEL_UNIT_TARGET_NEUTRAL | CITADEL_UNIT_TARGET_BREAKABLE_PROP | CITADEL_UNIT_TARGET_PROP | CITADEL_UNIT_TARGET_PICKUP"
 		m_strAltCastButtonLocToken = "#AbilityButtonHint_CastOnHost"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/familiar/familiar_helpers.psd"
 		m_strSubCastUICSSClass = "subcast_familiar"
@@ -269018,7 +270009,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -269592,6 +270583,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -270577,8 +271580,9 @@
 			}
 			StunDuration = 
 			{
-				m_strValue = "0.8"
+				m_strValue = "1.5"
 				m_strCSSClass = "duration"
+				m_strLocTokenOverride = "ImmobilizeDuration"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_single_stat"
@@ -270729,7 +271733,7 @@
 					},
 					{
 						m_strPropertyName = "StunDuration"
-						m_strBonus = "0.4"
+						m_strBonus = "0.6"
 					},
 				]
 			},
@@ -270815,6 +271819,16 @@
 			_my_subclass_name = "modifier_fencer_riposte_target_lifesteal"
 			m_sLocalizationName = "modifier_fencer_riposte_target_lifesteal"
 			m_strSmallIconCssClass = "lifesteal"
+		}
+		m_ImmobilizeModifier = subclass:
+		{
+			_class = "modifier_citadel_root"
+			_my_subclass_name = "modifier_fencer_riposte_immobilize"
+			m_nEnabledStateMask = "MODIFIER_STATE_PARRY_DISABLED"
+			m_sLocalizationName = "modifier_citadel_root"
+			m_eHudDisplayLocation = "DISPLAY_HUD_CENTER"
+			m_strSmallIconCssClass = "immobilize"
+			m_strParticleEffect = resource_name:"particles/abilities/fencer/fencer_riposte_root.vpcf"
 		}
 		m_strChannelSound = soundevent:"Fencer.Riposte.Cast"
 		m_DashLineEffect = resource_name:""
@@ -271170,7 +272184,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_TRIGGER_POST_CAST_ON_CAST_COMPLETE | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_TRIGGER_CANCEL_MASH_PROTECTION_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_TROPHY_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_PICKUP_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_LINE"
 		m_SlashSwingEffect = resource_name:"particles/abilities/fencer/fencer_lunge_strike.vpcf"
 		m_strSlashStart = soundevent:"Fencer.Lunge.Cast"
@@ -271785,7 +272799,7 @@
 		m_nAbillityUnlocksCost = 1
 		m_eAbilityType = "EAbilityType_Ultimate"
 		m_iMaxLevel = 1
-		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
+		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED"
 		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
@@ -271795,7 +272809,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_DONT_TRIGGER_POST_CAST_ON_CAST_COMPLETE | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_TRIGGER_CANCEL_MASH_PROTECTION_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_COOLDOWN_ON_CHANNEL_END | CITADEL_ABILITY_BEHAVIOR_SHOW_CAST_RANGE_AS_SAT_SPHERE_WHILE_CASTING | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_TROPHY_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_PICKUP_FRIENDLY | CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_LINE"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/fencer/fencer_ult.psd"
 		m_TargetingPreviewParticle = resource_name:"particles/abilities/shiv/shiv_dash_tgt.vpcf"
@@ -272838,7 +273852,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -273413,6 +274427,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -273708,6 +274734,11 @@
 				{
 				}
 			}
+			GrabHeight = 
+			{
+				m_strValue = "1.75m"
+				m_bIsHidden = true
+			}
 			Damage = 
 			{
 				m_strValue = "90"
@@ -273772,7 +274803,7 @@
 			}
 			ZombieWallDeployTime = 
 			{
-				m_strValue = "0.6"
+				m_strValue = "0.8"
 			}
 			DamagePctPerWallHit = 
 			{
@@ -275284,10 +276315,6 @@
 						m_strBonus = "10"
 						m_strStreetBrawlBonus = "7"
 					},
-					{
-						m_strPropertyName = "SummonFrequency"
-						m_strBonus = "-0.3"
-					},
 				]
 			},
 			{
@@ -275297,6 +276324,10 @@
 						m_strPropertyName = "CurrentHealthDamagePercentage"
 						m_strBonus = "5"
 						m_strStreetBrawlBonus = "3.4"
+					},
+					{
+						m_strPropertyName = "SummonFrequency"
+						m_strBonus = "-0.3"
 					},
 				]
 			},
@@ -278181,7 +279212,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -278755,6 +279786,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -285891,7 +286934,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -286465,6 +287508,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -287586,7 +288641,7 @@
 			}
 			Damage = 
 			{
-				m_strValue = "140"
+				m_strValue = "125"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
@@ -290307,7 +291362,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -290882,6 +291937,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -292901,7 +293968,7 @@
 			}
 			StunDuration = 
 			{
-				m_strValue = "1"
+				m_strValue = "0.9"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -292956,7 +294023,7 @@
 				m_subclassScaleFunction = subclass:
 				{
 				}
-				m_eProvidedPropertyType = "MODIFIER_VALUE_OUTGOING_DAMAGE_PERCENTAGE"
+				m_eProvidedPropertyType = "MODIFIER_VALUE_OUTGOING_DAMAGE_PERCENTAGE_CHANGE"
 			}
 			PullDistance = 
 			{
@@ -293309,7 +294376,7 @@
 					},
 					{
 						m_strPropertyName = "HealthRegen"
-						m_strBonus = "0.25"
+						m_strBonus = "0.15"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -293335,7 +294402,7 @@
 					},
 					{
 						m_strPropertyName = "StunDuration"
-						m_strBonus = "0.35"
+						m_strBonus = "0.45"
 					},
 					{
 						m_strPropertyName = "BonusMoveSpeedPercent"
@@ -293418,16 +294485,18 @@
 			}
 			m_bPullOnFull = false
 			m_bStunOnFull = true
-			m_strSmallIconCssClass = ""
+			m_strSmallIconCssClass = "buildup"
 			m_bReverseHudProgressBar = true
 			m_bCreatePickup = true
 			m_bIsBuildup = false
 			m_nAttributes = ""
-			m_bIsHidden = true
-			m_eHudDisplayLocation = "DISPLAY_HUD_LEFT"
+			m_bIsHidden = false
+			m_eHudDisplayLocation = "DISPLAY_HUD_CENTER"
 			m_eDebuffType = "MODIFIER_DEBUFF_ENEMY_TEAM_ONLY"
 			m_bDurationReducible = false
 			m_bDurationReducibleByCrowdControlDiminish = false
+			m_sLocalizationName = "modifier_artist_still_life"
+			m_strHudMessageText = ""
 		}
 		aimColorDesat = [ 98, 98, 98 ]
 		aimColorOutline = [ 150, 207, 184 ]
@@ -293527,7 +294596,7 @@
 		m_bShouldVOOnProc = false
 		m_bUseDesatVolumes = true
 		m_bBuildupRequiresLOS = true
-		m_flBuildupGracePeriod = 0.3
+		m_flBuildupGracePeriod = 0.45
 		m_bBuildupRequiresLook = true
 		m_BuffModifier = subclass:
 		{
@@ -293547,6 +294616,7 @@
 		m_AOEPreviewParticleOverride = resource_name:"particles/abilities/artist/artist_item_drop.vpcf"
 		m_bShouldDropPickupOnproc = true
 		m_strFailSound = soundevent:"Artist.Still.Life.Fail"
+		m_HudSharedStyle = resource_name:"panorama/styles/ability_hud_elements/abilities_artist.vcss"
 	}
 	ability_artist_bamboogrove = 
 	{
@@ -293555,7 +294625,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "165"
+				m_strValue = "180"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -293577,13 +294647,14 @@
 					_class = "scale_function_multi_stats"
 					_my_subclass_name = "AbilityDuration_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 0.04
+					m_flStatScale = 0.01
 					m_vecScalingStats = 
 					[
 						"ETechPower",
 						"ETechDuration",
 					]
 				}
+				m_strStreetBrawlValue = "5"
 			}
 			AbilityCastRange = 
 			{
@@ -293921,7 +294992,7 @@
 				m_bDurationReducible = false
 				m_nEnabledStateMask = "MODIFIER_STATE_ARTIST_BAMBOO_IMMUNE"
 			}
-			m_flImmuneDuration = 0.5
+			m_flImmuneDuration = 0.75
 			m_strHitConfirmSound = soundevent:"Artist.Landscape.Hit"
 			m_EnemyGroundParticle = resource_name:"particles/abilities/artist/artist_ultimate_enemy_geyser_individual.vpcf"
 			m_AllyGroundParticle = resource_name:"particles/abilities/artist/artist_ultimate_geyser_individual.vpcf"
@@ -294075,10 +295146,7 @@
 					{
 						m_strPropertyName = "AbilityDuration"
 						m_strBonus = "4"
-					},
-					{
-						m_strPropertyName = "DestroyOnDamage"
-						m_strBonus = "-1"
+						m_strStreetBrawlBonus = "3"
 					},
 				]
 			},
@@ -294856,7 +295924,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -295431,6 +296499,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -295716,7 +296796,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_flHeavyHoldTime = 0.25
@@ -295866,8 +296946,8 @@
 				m_bCanBeParried = true
 				m_bParryOnlyBlocksParrier = true
 				m_bParryStunsAttacker = false
-				m_flCooldownOnHit = 1.4
-				m_flCooldownOnMiss = 1.7
+				m_flCooldownOnHit = 1.2
+				m_flCooldownOnMiss = 1.5
 				m_strHitSound = soundevent:"Ability.Melee.Impact.Heavy.NPC"
 				m_strHitHeroSound = soundevent:"Ability.Melee.Impact.Heavy.Player"
 				m_strMeleeDashSound = soundevent:"Player.Melee.Dash.Ground"
@@ -296092,7 +297172,7 @@
 			}
 			DebuffDuration = 
 			{
-				m_strValue = "22"
+				m_strValue = "16"
 				m_strStreetBrawlValue = "14"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
@@ -296636,7 +297716,7 @@
 			}
 			HeavyMeleeSlowDuration = 
 			{
-				m_strValue = "4"
+				m_strValue = "2"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -296685,7 +297765,7 @@
 			}
 			LightKickKnockbackDistance = 
 			{
-				m_strValue = "10m"
+				m_strValue = "8m"
 				m_strCSSClass = "distance"
 				m_subclassScaleFunction = subclass:
 				{
@@ -297204,25 +298284,25 @@
 			}
 			BrewTime = 
 			{
+				m_strValue = "0"
+				m_strCSSClass = "duration"
+			}
+			BarrierWindow = 
+			{
 				m_strValue = "1.5"
 				m_strCSSClass = "duration"
 			}
-			BarrierLockTime = 
+			SilenceWindow = 
 			{
-				m_strValue = "2.5"
+				m_strValue = "1.5"
 				m_strCSSClass = "duration"
 			}
-			SilenceLockTime = 
+			FireWindow = 
 			{
-				m_strValue = "3.5"
+				m_strValue = "1.5"
 				m_strCSSClass = "duration"
 			}
-			FireLockTime = 
-			{
-				m_strValue = "4.5"
-				m_strCSSClass = "duration"
-			}
-			FailLockTime = 
+			FailWindow = 
 			{
 				m_strValue = "0"
 				m_strCSSClass = "duration"
@@ -297302,7 +298382,7 @@
 			}
 			SilenceDuration = 
 			{
-				m_strValue = "3"
+				m_strValue = "2.75"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -297599,6 +298679,9 @@
 		m_strAG2ChannelingAction = "hexing_brew_channeling"
 		m_strAG2CastCompletedAction = "hexing_brew_cast_completed"
 		m_FuseBarrierColor = [ 69, 150, 108 ]
+		m_TargetingFireColor = [ 225, 63, 63 ]
+		m_TargetingBarrierColor = [ 94, 173, 156 ]
+		m_TargetingSilenceColor = [ 206, 144, 255 ]
 		m_strBurnAppliedSound = soundevent:"Baba.Hex.Hit.Fire"
 		m_strSilenceAppliedSound = soundevent:"Baba.Hex.Hit.Silence"
 		m_strBrewChangeDefaultSound = soundevent:"Baba.Hex.Brew.Switch"
@@ -298576,7 +299659,7 @@
 				m_flPelletScatterFactor = 1.0
 				m_flPelletScatterSpreadFactor = 0.2
 				m_strBulletImpactSound = soundevent:"Chessmaster.Wpn.Impact"
-				m_flBulletDamage = 30.0
+				m_flBulletDamage = 25.0
 				m_bFirstShotPerfectAccuracy = false
 				m_bUsesSpreadPattern = true
 				m_bAllowExplosionToCollectGold = true
@@ -299291,7 +300374,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -299866,6 +300949,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -300019,7 +301114,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "50m"
+				m_strValue = "65m"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -301187,7 +302282,7 @@
 				{
 					_class = "scale_function_tech_damage"
 					m_bFunctionDisabled = false
-					m_flStatScale = 0.64
+					m_flStatScale = 0.85
 					_my_subclass_name = "tiledamagesf"
 				}
 			}
@@ -301228,7 +302323,7 @@
 			}
 			GroundAuraHeight = 
 			{
-				m_strValue = "4m"
+				m_strValue = "1m"
 			}
 			DashSlowPercent = 
 			{
@@ -301388,7 +302483,7 @@
 					},
 					{
 						m_strPropertyName = "FadingSlowPercent"
-						m_strBonus = "15"
+						m_strBonus = "25"
 					},
 				]
 			},
@@ -301410,11 +302505,11 @@
 				[
 					{
 						m_strPropertyName = "TechArmorDamageReductionPerStack"
-						m_strBonus = "-2.5"
+						m_strBonus = "-5"
 					},
 					{
 						m_strPropertyName = "MaxStacks"
-						m_strBonus = "10"
+						m_strBonus = "5"
 					},
 					{
 						m_strPropertyName = "StackDuration"
@@ -303016,7 +304111,7 @@
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
-					m_flStatScale = 1.3
+					m_flStatScale = 0.9
 					_my_subclass_name = "damagesf"
 				}
 			}
@@ -303259,7 +304354,7 @@
 				[
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-12"
+						m_strBonus = "-10"
 						m_eUpgradeType = "EAddToBase"
 					},
 					{
@@ -303739,7 +304834,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "210"
+				m_strValue = "240"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -303897,7 +304992,7 @@
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
-					m_flStatScale = 1.4
+					m_flStatScale = 1.6
 					_my_subclass_name = "damagesf"
 				}
 			}
@@ -303963,12 +305058,12 @@
 			}
 			CheckmateThreshold = 
 			{
-				m_strValue = "0"
+				m_strValue = "100"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_single_stat"
 					m_bFunctionDisabled = false
-					m_flStatScale = 0.0
+					m_flStatScale = 5.0
 					_my_subclass_name = "checkmate"
 					m_eSpecificStatScaleType = "ELevelUpBoons"
 				}
@@ -304075,13 +305170,7 @@
 				[
 					{
 						m_strPropertyName = "CheckmateThreshold"
-						m_strBonus = "200"
-					},
-					{
-						m_strPropertyName = "CheckmateThreshold"
-						m_strBonus = "5"
-						m_eUpgradeType = "EAddToScale"
-						m_eScaleStatFilter = "ELevelUpBoons"
+						m_strBonus = "150"
 					},
 					{
 						m_strPropertyName = "SlowPercent"
@@ -304327,7 +305416,7 @@
 		m_TileExplodeParticle = resource_name:"particles/abilities/chessmaster/chessmaster_queen_aura_explosion.vpcf"
 		m_flTimeBetweenTiles = 0.15
 		m_strTileReleasedSound = soundevent:"Chessmaster.Queen.Tile.Impact"
-		m_flInitialTileDelay = 1.0
+		m_flInitialTileDelay = 1.2
 		m_strAG2CastingAction = "chessmaster_queen_casting"
 		m_strAG2ChannelingAction = "chessmaster_queen_channeling"
 		m_strAG2CastCompletedAction = "chessmaster_queen_completed"
@@ -304336,6 +305425,7 @@
 		m_QueenRecallSound = soundevent:"Chessmaster.Queen.Recall"
 		m_PostExplodeParticle = resource_name:"particles/abilities/chessmaster/chessmaster_queen_stomp_post.vpcf"
 		m_QueenExpireSound = soundevent:"Chessmaster.Queen.Piece.Expire"
+		m_TilePreviewParticle = resource_name:"particles/abilities/chessmaster/chessmaster_queen_stomp_post_warning.vpcf"
 	}
 	ability_chessmaster_queen_trigger = 
 	{
@@ -305571,7 +306661,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -306146,6 +307236,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -306288,6 +307390,7 @@
 						"ETechCooldown",
 					]
 					m_flStatScale = -0.45
+					m_flStreetBrawlStatScale = -0.25
 				}
 			}
 			AbilityDuration = 
@@ -306618,6 +307721,7 @@
 					{
 						m_strPropertyName = "OverheatLockoutDurationReductionOnPlayerHitPercent"
 						m_strBonus = "50"
+						m_strStreetBrawlBonus = "30"
 					},
 				]
 			},
@@ -307141,8 +308245,9 @@
 		m_flVerticalIntentDiminishRangeEnd = 1700.0
 		m_flVerticalIntentDiminishFracAtRangeEnd = 0.2
 		m_flInSlideThrustMultiplier = 0.87
-		m_flSlowEffectivenessVertical = 0.35
-		m_flSlowEffectivenessLateral = 0.7
+		m_flSlowEffectivenessVertical = 0.8
+		m_flSlowEffectivenessLateral = 0.8
+		m_flSlowEffectivenessMovementAbilitySilenceFrac = 4.0
 		m_HUDPanel = 
 		{
 			m_vecHUDElements = 
@@ -309022,7 +310127,7 @@
 				m_strZoomOutSound = soundevent:"default.ZoomOut"
 				m_flDamageForce = 50.0
 				m_bBulletShouldUseVerlet = true
-				m_flBulletDamage = 14.858
+				m_flBulletDamage = 13.372
 				m_AimingShootSpreadPenalty = [ 0.0, 0.5 ]
 				m_vecScatterOffsets = [  ]
 				m_flPelletScatterSpreadFactor = 1.0
@@ -309687,7 +310792,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -310262,6 +311367,18 @@
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
 				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
+				},
 			]
 		}
 		m_flBackDashDodgeDist = 50.0
@@ -310570,7 +311687,11 @@
 			}
 			LeechGroundLifetime = 
 			{
-				m_strValue = "180"
+				m_strValue = "120"
+			}
+			LeechGroundLifetimePerMinute = 
+			{
+				m_strValue = "3"
 			}
 			LeechCrawlRadius = 
 			{
@@ -310896,6 +312017,9 @@
 								{
 									m_strImportantProperty = "FireRatePerLeechPickup"
 								},
+								{
+									m_strImportantProperty = "SpiritPowerPerLeechStack"
+								},
 							]
 						},
 					]
@@ -310904,7 +312028,6 @@
 						"MaxLeechBonusStacks",
 						"LeechCrawlRadius",
 						"LeechStaminaDrain",
-						"SpiritPowerPerLeechStack",
 					]
 					m_strLocString = "#ability_nurse_leech_therapy_leech_desc"
 				},
@@ -310988,6 +312111,7 @@
 						"ETechDuration",
 					]
 				}
+				m_strStreetBrawlValue = "5.0"
 			}
 			AbilityPostCastDuration = 
 			{
@@ -311107,7 +312231,7 @@
 			}
 			BuildupTime = 
 			{
-				m_strValue = "1.3"
+				m_strValue = "2"
 				m_strCSSClass = "duration"
 				m_strLocTokenOverride = "FearBuildupTime"
 			}
@@ -311125,6 +312249,11 @@
 			BuildupLookAngleFull = 
 			{
 				m_strValue = "55"
+				m_bIsHidden = true
+			}
+			BuildupLookAngleVertical = 
+			{
+				m_strValue = "50"
 				m_bIsHidden = true
 			}
 			LookBuildupScalePercent = 
@@ -311187,10 +312316,9 @@
 				m_strCSSClass = "slow"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_SPEED_SLOW_PERCENT"
 			}
-			ChannelDamageImmune = 
+			DamageResistPctWhileChanneling = 
 			{
 				m_strValue = "0"
-				m_bIsHidden = true
 			}
 			FireRateSlow = 
 			{
@@ -311350,12 +312478,13 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "ChannelDamageImmune"
-						m_strBonus = "1"
+						m_strPropertyName = "DamageResistPctWhileChanneling"
+						m_strBonus = "50"
 					},
 					{
 						m_strPropertyName = "AbilityChannelTime"
 						m_strBonus = "3.0"
+						m_strStreetBrawlBonus = "2.0"
 					},
 					{
 						m_strPropertyName = "DPS"
@@ -311411,6 +312540,7 @@
 			m_flSteerTurnRate = 50
 			m_flReturnTurnRate = 50
 			m_strScreenParticleEffect = resource_name:"particles/abilities/nurse/nurse_screen_effect_fear.vpcf"
+			m_strFearAppliedNPCSound = soundevent:"Nurse.Fear.Debuff.Start.NPC"
 		}
 		m_BuildupModifier = subclass:
 		{
@@ -311825,14 +312955,14 @@
 			}
 			HealRegen = 
 			{
-				m_strValue = "25"
+				m_strValue = "22"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_healing_spirit_scale"
 					_my_subclass_name = "HealRegen_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 0.2
+					m_flStatScale = 0.24
 				}
 			}
 			HeadshotHealBonusPercent = 
@@ -311922,7 +313052,7 @@
 					},
 					{
 						m_strPropertyName = "HealRegen"
-						m_strBonus = "20"
+						m_strBonus = "16"
 					},
 				]
 			},
@@ -312316,7 +313446,7 @@
 				[
 					{
 						m_strPropertyName = "RushTimeScaleBonusPercent"
-						m_strBonus = "15"
+						m_strBonus = "20"
 					},
 					{
 						m_strPropertyName = "DispelDebuffs"
@@ -312685,7 +313815,7 @@
 				m_AimingShootSpreadPenalty = [ 0.0, 2.0 ]
 				m_flPelletScatterFactor = 1.2
 				m_strBulletImpactSound = soundevent:"Abrams.Wpn.Impact"
-				m_flBulletDamage = 6.0
+				m_flBulletDamage = 5.7
 				m_iBulletsToFullyClaimOrb = 1
 				m_strFirstShotSound = soundevent:"Ratking.Wpn.Fire.First"
 				m_bHitOnceAcrossAllBullets = false
@@ -312993,7 +314123,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_HIDDEN | CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK  | CITADEL_ABILITY_BEHAVIOR_NOT_SILENCABLE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_HIDDEN"
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_TROPHY_ENEMY"
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY | CITADEL_UNIT_TARGET_PICKUP_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_PENETRATE_INVULNERABLE | CITADEL_UNIT_TARGET_FLAG_ALLOW_SMALL_DEPLOYABLES"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/melee_damage.psd"
@@ -313567,6 +314697,18 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_idol_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenTroll"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_troll"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_HalloweenCauldron"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_halloween_cauldron"
 				},
 			]
 		}
@@ -314288,7 +315430,7 @@
 			}
 			DamagePerShrapnel = 
 			{
-				m_strValue = "70"
+				m_strValue = "60"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_ability_weapon_damage"
@@ -314358,6 +315500,7 @@
 			ShrapnelSphereRadius = 
 			{
 				m_strValue = "8m"
+				m_strStreetBrawlValue = "6m"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_range"
@@ -314517,7 +315660,7 @@
 				[
 					{
 						m_strPropertyName = "DamagePerShrapnel"
-						m_strBonus = "70"
+						m_strBonus = "60"
 					},
 				]
 			},
@@ -314530,7 +315673,7 @@
 					},
 					{
 						m_strPropertyName = "BigExplosionDamage"
-						m_strBonus = "300"
+						m_strBonus = "275"
 					},
 					{
 						m_strPropertyName = "BigExplosionDamage"
@@ -314540,6 +315683,7 @@
 					{
 						m_strPropertyName = "BigExplosionRadius"
 						m_strBonus = "14m"
+						m_strStreetBrawlBonus = "10m"
 					},
 					{
 						m_strPropertyName = "BigExplosionRadius"
@@ -314678,6 +315822,10 @@
 		m_flBounceTargetingPlayerWeight = 1.5
 		m_flBounceMaxHorizontalSpeed = 600.0
 		m_flBounceTargetDistanceCheck = 1200.0
+		m_flFirstBounceDetonateTimer = 0.9
+		m_flAdditionalBounceDetonateTimer = 0.8
+		m_flFinalBounceDetonateTimer = 1.6
+		m_flMeleeMinFuseRemaining = 0.4
 	}
 	ability_ratking_ratarmor = 
 	{
@@ -315407,7 +316555,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "160"
+				m_strValue = "180"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -315545,6 +316693,7 @@
 			Radius = 
 			{
 				m_strValue = "20m"
+				m_strStreetBrawlValue = "16m"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_range"
@@ -315554,6 +316703,7 @@
 			FlagDuration = 
 			{
 				m_strValue = "12"
+				m_strStreetBrawlValue = "9"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_duration"
@@ -315616,7 +316766,7 @@
 		m_nAbillityUnlocksCost = 1
 		m_eAbilityType = "EAbilityType_Ultimate"
 		m_iMaxLevel = 1
-		m_bitsInterruptingStates = "MODIFIER_STATE_IMMOBILIZED | MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
+		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
@@ -315653,6 +316803,7 @@
 					{
 						m_strPropertyName = "Radius"
 						m_strBonus = "8m"
+						m_strStreetBrawlBonus = "6m"
 					},
 				]
 			},
@@ -315739,6 +316890,7 @@
 			m_SewerModel = resource_name:"models/heroes_wip/ratking/ratking_ult_diorama.vmdl"
 			m_flExplosionHalfHeightMeters = 10.0
 			m_flTossSpeed = 500.0
+			m_flTossGravityScale = 2.0
 			m_strParticleEffect = resource_name:""
 		}
 		m_FlagModel = resource_name:"models/heroes_wip/ratking/ratking_ult_diorama.vmdl"
