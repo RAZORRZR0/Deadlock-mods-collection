@@ -6,11 +6,17 @@
 	height: 60px;
 	width: 600px;
 	margin: 20px;
-	/* ponytail: fixed offset below stock under_reticle debuffs (citadel_status_effect.css margin-top 230px); tune here */
-	margin-top: 84px;
+	margin-top: -6%;
 	visibility: visible;
 	horizontal-align: center;
 	vertical-align: top;
 	ui-scale: 105%;
+}
+
+/* The stock under-reticle status strip (margin-top 230px) overlaps the raised
+   passive bar; sit it just below the bar instead. */
+#StatusEffects.under_reticle
+{
+	margin-top: 370px;
 }
 

@@ -1,1 +1,1 @@
-$.HPColorsV3Renderer.start();
+var a=$.HPColorsV3WorldSettings?$.HPColorsV3Bridge?$.HPColorsV3Renderer?"":"HPColorsV3Renderer":"HPColorsV3Bridge":"HPColorsV3WorldSettings";if(a)throw Error("world_boot: $."+a+" is missing; include order is world_settings, bridge, renderer, timers_world, world_boot");$.HPColorsV3Renderer.start();

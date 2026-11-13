@@ -1910,7 +1910,7 @@ CitadelHudModifierIcons
 {
 	width: 440px;
 	height: 520px;
-	padding-bottom: 15px;
+	margin-bottom: 15px;
 	vertical-align: bottom;
 	horizontal-align: right;
 	perspective: 900;
@@ -1981,8 +1981,6 @@ CitadelHudModifierIcons
 	text-transform: lowercase;
 	opacity: 0.5;
 	font-size: 13px;
-	text-overflow: shrink;
-	max-height: 20px;
 }
 
 .in_map_district #minimap_location
@@ -2035,7 +2033,7 @@ CitadelHudModifierIcons
 	transition-property: width,height;
 	transition-duration: 0.15s;
 	transform: rotateX(0deg);
-	overflow: render;
+	overflow: clip;
 	ui-scale: 105%;
 }
 
@@ -3857,6 +3855,25 @@ CitadelHudSoulAPContainer.ShowGoldAndAPOnHud
 	opacity: 1;
 	pre-transform-scale2d: 1.0;
 	wash-color: white;
+}
+
+.InHideout #AbilitiesContainer:not(.gShopOpen)
+{
+	opacity: 1;
+	pre-transform-scale2d: 1.0;
+	wash-color: white;
+}
+
+.InHideout #AbilitiesContainer:not(.gShopOpen) #hud_passive_items,.InHideout #AbilitiesContainer:not(.gShopOpen) #hud_signature,.InHideout #AbilitiesContainer:not(.gShopOpen) #ActiveAbilitiesMenu,.InHideout #AbilitiesContainer:not(.gShopOpen) #HeldAbilitiesMenu,.InHideout #AbilitiesContainer:not(.gShopOpen) #APContainer,.InHideout #AbilitiesContainer:not(.gShopOpen) .scoreboardBindMessages
+{
+	opacity: 0;
+	pre-transform-scale2d: .9;
+	wash-color: dodgerblue;
+}
+
+.inHideoutIntro #AbilitiesContainer
+{
+	visibility: collapse;
 }
 
 #CitadelHudHideout

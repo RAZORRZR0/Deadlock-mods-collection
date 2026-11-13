@@ -421,7 +421,7 @@ export function assembleCustomPack(options) {
     const hp3Dir = path.join(repoRoot, 'hp_colors_v3/panorama');
     const layoutDest = path.join(stageSourceDir, 'panorama/layout');
     fs.mkdirSync(layoutDest, { recursive: true });
-    for (const f of ['unit_status_overlay_v2.xml', 'hp_colors_v3_relay.xml']) {
+    for (const f of ['unit_status_overlay_v2.xml', 'hp_colors_v3_relay.xml', 'citadel_status_effect.xml']) {
       fs.copyFileSync(path.join(hp3Dir, 'layout', f), path.join(layoutDest, f));
     }
     copyDirSync(path.join(hp3Dir, 'scripts'), path.join(stageSourceDir, 'panorama/scripts'));
