@@ -558,7 +558,7 @@ export function assembleCustomPack(options) {
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
   const args = process.argv.slice(2);
   let stageDir = path.join(repoRoot, '_custom_pack_build/src');
-  let selected = 'showrank_qol,hp_colors_v3,abilities_yes_behavior';
+  let selected = 'showrank_qol,hp_colors_v3,abilities_yes_behavior,detailed_postgame';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--stage' && args[i + 1]) stageDir = args[i + 1];

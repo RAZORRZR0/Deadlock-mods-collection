@@ -50,7 +50,7 @@ Windows with:
 ## Build and install
 
 ```powershell
-# Default modules (showrank_qol, hp_colors_v3, abilities_yes_behavior), install into addons
+# Default modules (showrank_qol, hp_colors_v3, abilities_yes_behavior, detailed_postgame), install into addons
 cmd.exe /c "build_custom_pack.bat -Modules showrank_qol,hp_colors_v3,abilities_yes_behavior,detailed_postgame -PakName pak01_dir.vpk -Install"
 
 # Interactive module picker
