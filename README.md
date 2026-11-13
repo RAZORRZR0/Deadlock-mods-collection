@@ -17,6 +17,7 @@ This is a fork of [Hantu-Raya/Deadlock-mods-collection](https://github.com/Hantu
 | `showrank_qol` | yes | ShowRank rank badges (top bar, team averages, profile, context menu, ESC player list, post-game scoreboard), profile **rank history** graph, **party stacks** (duo/trio icons), MISSING lane alerts, VS COMMUNITY stats on profiles, **Recent Purchases** (shop history + floating top bar purchase popups), Hero Testing / Hideout tools, spawn announcements, soul difference, ult cooldown text, always-visible nicknames, Buff/Rift minimap timers |
 | `hp_colors_v3` | yes | HP Colors v3: custom health bar colors, timers HUD, world settings, in-game ESC editor |
 | `abilities_yes_behavior` | yes | Active and passive items shown in the passive area, with the yesBehavior filter |
+| `detailed_postgame` | yes | Detailed post-game scoreboard: exact stats, souls by source, final items, soul lead graph |
 | `hp_colors_v2` | no | HP Colors Rewrite v2. Mutually exclusive with `hp_colors_v3` |
 | `poker` | no | ESC-menu table games (Poker and Bluff Deck) |
 | `abilities_no_behavior` | no | Same as above without the behavior filter |
@@ -32,6 +33,7 @@ All modules that touch the same layout (ESC menu, top bar) are merged by `script
 | Topbar QoL (ult cooldown, nicknames, soul difference) | `showrank_recent_purchases/panorama/scripts/topbar_qol.js` |
 | VS COMMUNITY stats | `profile_stats_community/`, composed into the ShowRank runtime by `scripts/profile-stats-community-composition.js` |
 | Buff/Rift minimap timers | `buff_timer_virgin/` |
+| Detailed Post Scoreboard | `detailed_postgame/` (upstream fork of Observer HUD's board) |
 | HP Colors v3 | `hp_colors_v3/` (decompiled release, minified: replace it, do not hand-edit) |
 | HP Colors v2 | `hp_colors_rewrite_v2/` |
 | Passive items | `abilities/scripts/` and `standalone_redesign/` |
@@ -49,13 +51,13 @@ Windows with:
 
 ```powershell
 # Default modules (showrank_qol, hp_colors_v3, abilities_yes_behavior), install into addons
-cmd.exe /c "build_custom_pack.bat -Modules showrank_qol,hp_colors_v3,abilities_yes_behavior -PakName pak01_dir.vpk -Install"
+cmd.exe /c "build_custom_pack.bat -Modules showrank_qol,hp_colors_v3,abilities_yes_behavior,detailed_postgame -PakName pak01_dir.vpk -Install"
 
 # Interactive module picker
 build_custom_pack.bat
 ```
 
-Module ids, or numbers `1` showrank_qol, `2` hp_colors_v2, `3` poker, `4` abilities_no_behavior, `5` abilities_yes_behavior, `6` hud_3d, `7` hp_colors_v3, are accepted by `-Modules`. The result is `pak01_dir.vpk` in the repo root.
+Module ids, or numbers `1` showrank_qol, `2` hp_colors_v2, `3` poker, `4` abilities_no_behavior, `5` abilities_yes_behavior, `6` hud_3d, `7` hp_colors_v3, `8` detailed_postgame, are accepted by `-Modules`. The result is `pak01_dir.vpk` in the repo root.
 
 - Close Deadlock before installing; the script refuses to overwrite the pak while the game runs.
 - Never hand-edit `_custom_pack_build/`, `*_compiled/` or any `.vpk`. The builder recreates them.

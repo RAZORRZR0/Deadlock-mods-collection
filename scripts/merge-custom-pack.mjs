@@ -511,6 +511,11 @@ export function assembleCustomPack(options) {
     }
   }
 
+  // 6b. Detailed Post Scoreboard Menu (overrides post_game/citadel_db_page_post_game_new.xml)
+  if (modules.detailed_postgame) {
+    copyDirSync(path.join(repoRoot, 'detailed_postgame/panorama'), path.join(stageSourceDir, 'panorama'));
+  }
+
   // 7. Passive & Active Items Area modifications
   if (modules.abilities_no_behavior || modules.abilities_yes_behavior) {
     const scriptName = modules.abilities_yes_behavior ? 'active.py' : 'active_no_behavior.py';
@@ -568,7 +573,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename
     poker: list.includes('poker') || list.includes('3'),
     abilities_no_behavior: list.includes('abilities_no_behavior') || list.includes('active_no_filter') || list.includes('pak05') || list.includes('4'),
     abilities_yes_behavior: list.includes('abilities_yes_behavior') || list.includes('active_yes_filter') || list.includes('pak03') || list.includes('5'),
-    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('6')
+    hud_3d: list.includes('hud_3d') || list.includes('3d') || list.includes('6'),
+    detailed_postgame: list.includes('detailed_postgame') || list.includes('postgame') || list.includes('8')
   };
 
   const result = assembleCustomPack({

@@ -65,7 +65,8 @@ $availableModules = @(
     @{ Id = "abilities_no_behavior";  Name = "Active & Passive Items in Passive Area (No Filter / Original Active Behavior)";                         Default = $false },
     @{ Id = "abilities_yes_behavior"; Name = "Active & Passive Items with yesBehavior Filter";                                                         Default = $true },
     @{ Id = "hud_3d";                 Name = "3D Hero Dynamic Models HUD";                                                                             Default = $false },
-    @{ Id = "hp_colors_v3";           Name = "HP Colors v3 (Healthbar Colors, Timers HUD, World Settings & In-Game ESC Editor; replaces v2)";            Default = $true }
+    @{ Id = "hp_colors_v3";           Name = "HP Colors v3 (Healthbar Colors, Timers HUD, World Settings & In-Game ESC Editor; replaces v2)";            Default = $true },
+    @{ Id = "detailed_postgame";      Name = "Detailed Post Scoreboard Menu (exact stats, souls by source, items, lead graph)";                          Default = $true }
 )
 
 $selected = @{}
@@ -87,6 +88,7 @@ if ($Modules) {
         if ($clean -match '^(4|active_no_filter|pak05)')  { $selected["abilities_no_behavior"] = $true }
         if ($clean -match '^(5|active_yes_filter|pak03)') { $selected["abilities_yes_behavior"] = $true }
         if ($clean -match '^(6|3d|hud_3d)')                { $selected["hud_3d"] = $true }
+        if ($clean -match '^(8|postgame|detailed_postgame)$') { $selected["detailed_postgame"] = $true }
         if ($clean -eq 'all') { foreach ($k in @($selected.Keys)) { $selected[$k] = $true } }
     }
 } else {
