@@ -307,6 +307,7 @@
 	width: 196px;
 	height: 100%;
 	flow-children: down;
+	overflow: noclip;
 }
 
 .NSClockCaption
@@ -317,12 +318,14 @@
 	letter-spacing: 1px;
 	color: #FFEFD7cc;
 	text-shadow: 0px 0px 0px 3 #10130D;
-	margin-top: 12px;
+	margin-top: 4px;
 }
 
+/* caption, clock, mode and match id fit the 96 px header (the match id was cut at its bottom, user 2026-11-23) */
 .NSClock
 {
 	horizontal-align: center;
+	margin: -2px 0px -6px 0px;
 	font-family: VALVEOracle, Reaver, sans-serif;
 	font-size: 36px;
 	font-weight: bold;
@@ -330,15 +333,33 @@
 	text-shadow: 0px 0px 0px 5 #10130D;
 }
 
+/* the game mode, its own line over the match id: one "STANDARD MATCH (LOBBY) | MATCH 121685912" line was cut
+   with an ellipsis (user 2026-11-23); a fixed width past the 196 px centre keeps either line whole */
+.NSMode
+{
+	horizontal-align: center;
+	white-space: nowrap;
+	width: 320px;
+	text-align: center;
+	font-family: VALVEPulp, "Noto Sans", sans-serif;
+	font-size: 11px;
+	letter-spacing: 1.5px;
+	color: #aeaa94aa;
+	text-shadow: 0px 0px 0px 2 #10130D;
+}
+
 .NSMatch
 {
 	horizontal-align: center;
+	white-space: nowrap;
+	width: 320px;
+	text-align: center;
 	font-family: VALVEPulp, "Noto Sans", sans-serif;
 	font-size: 12px;
 	letter-spacing: 1px;
 	color: #aeaa94aa;
 	text-shadow: 0px 0px 0px 2 #10130D;
-	padding: 2px 6px;
+	padding: 0px 6px;
 }
 
 /* click copies the id (pg_board.js copyMatchId) */
@@ -410,12 +431,13 @@
 }
 
 /* hero card (a plain rectangle: the stock rough_edge masks carry no alpha and mask nothing) */
+/* the hero art alone: the stock cards are cut out, so no box behind them (user 2026-11-23: "remove the bg of the
+   hero banner"); the page shows through around the hero */
 .NSPortrait
 {
 	width: 105px;
 	height: 139px;
 	margin-bottom: -4px;
-	background-color: #10130D;
 }
 
 /* winners keep the gloat card; a losing column (NSLoss) swaps to the critical card */
@@ -512,11 +534,6 @@
 	font-weight: bold;
 	color: #FFEFD7;
 	text-shadow: 0px 0px 0px 4 #10130D;
-}
-
-.NSCell_deaths .NSCellValue
-{
-	opacity: 0.6;
 }
 
 /* best of 12: team starburst behind the number with the stock wobble. The label fits the number
@@ -736,6 +753,92 @@
 	height: 171px;
 }
 
+/* the line at the bottom of the spacer over the portraits saying the row names are clickable */
+.NSRowHint
+{
+	width: 100%;
+	vertical-align: bottom;
+	margin-bottom: 8px;
+	text-align: center;
+	font-family: VALVEPulp, "Noto Sans", sans-serif;
+	font-size: 10px;
+	letter-spacing: 1px;
+	color: #FFEFD766;
+	/* shown (pg_board.js rowHint) until the player has clicked a row name; no fade (an opacity-0 resting state on
+	   these labels never came back live) */
+	visibility: collapse;
+}
+
+.NSRowHint.NSRowHintOn
+{
+	visibility: visible;
+}
+
+/* a row name is clickable: it changes that row's stat (pg_board.js cycleRow) */
+.NSRowLabel.NSCycle:hover
+{
+	color: #FFEFD7;
+	background-color: #FFEFD710;
+}
+
+/* the hovered row name's kind (pg_board.js rowPips): a bar per stat on the middle of its bottom border, the shown
+   one lit; placed out of the column's flow at the row's bottom (its y set by script) */
+.NSRowPips
+{
+	ignore-parent-flow: true;
+	horizontal-align: center;
+	width: fit-children;
+	height: 3px;
+	flow-children: right;
+	visibility: collapse;
+}
+
+.NSRowPips.NSRowPipsOn
+{
+	visibility: visible;
+}
+
+.NSRowPip
+{
+	width: 14px;
+	height: 3px;
+	margin: 0px 2px;
+	border-radius: 1px;
+	background-color: #FFEFD733;
+	visibility: collapse;
+}
+
+.NSRowPip.NSRowPipShown
+{
+	visibility: visible;
+}
+
+.NSRowPip.NSRowPipOn
+{
+	background-color: #FFEFD7;
+}
+
+.NSRowLabel.NSRowLabelEmpty
+{
+	color: #FFEFD744;
+}
+
+/* the hidden save page (pg_board.js prefs*): laid out, never seen or hit */
+.NSPrefsWrap
+{
+	width: 10px;
+	height: 10px;
+	ignore-parent-flow: true;
+	visibility: collapse;
+}
+
+.NSPrefs
+{
+	width: 100%;
+	height: 100%;
+	opacity: 0.01;
+}
+
 .NSRowLabels
 {
 	width: 100%;
@@ -773,11 +876,48 @@
 	opacity: 0.35;
 }
 
+/* a row with nothing to say in this game (Street Brawl: no souls by source, every player on the same total
+   souls) is dropped from the label column and every player column (pg_board.js dropRow) */
+.NSLabels.NSNoSouls .NSSoulsLabel,
+.NSColumn.NSNoSouls .NSSouls,
+.NSLabels.NSNoTotal .NSTotalLabel,
+.NSColumn.NSNoTotal .NSSlot0
+{
+	height: 0px;
+	padding-top: 0px;
+	margin-top: 0px;
+	visibility: collapse;
+}
+
+/* the paper card follows the rows it backs (its height counts in the column's flow, see .NSPaper) */
+.NSColumn.NSNoTotal .NSPaper { height: 368px; }
+.NSColumn.NSNoSouls .NSPaper { height: 310px; }
+.NSColumn.NSNoTotal.NSNoSouls .NSPaper { height: 272px; }
+
 .NSItemsLabel
 {
 	height: 110px;
 	padding-top: 40px;
 	border-bottom: 0px solid #00000000;
+}
+
+/* under FINAL ITEMS: asking deadlock-api for the buy times, or why there are none (pg_board.js buyNote) */
+.NSBuyNote
+{
+	width: 100%;
+	margin-top: -52px;
+	padding: 0px 14px;
+	text-align: center;
+	font-family: VALVEPulp, "Noto Sans", sans-serif;
+	font-size: 10px;
+	letter-spacing: 1px;
+	color: #E8A25Ccc;
+	visibility: collapse;
+}
+
+.NSBuyNote.NSBuyNoteOn
+{
+	visibility: visible;
 }
 
 /* ---------- soul lead graph ---------- */
@@ -981,6 +1121,135 @@
 	color: #FFFFFF;
 	background-color: #4D7FE0;
 	text-shadow: 0px 0px 0px 2 #10130D;
+}
+
+/* ---------- stat timeline: the board's numbers at a hovered graph column (pg_board.js hoverAt) ---------- */
+
+/* over the plot, the same 1600 x 112 box; only the strips take the mouse */
+.NSGraphHover
+{
+	ignore-parent-flow: true;
+	width: 1600px;
+	height: 112px;
+	overflow: noclip;
+}
+
+.NSGraphStrips
+{
+	width: 100%;
+	height: 100%;
+}
+
+/* one per stock graph column; margin-left and width from pg_board.js */
+.NSGraphStrip
+{
+	height: 100%;
+	background-color: #00000000;
+}
+
+.NSGraphCursor
+{
+	width: 2px;
+	height: 112px;
+	background-color: #FFEFD7aa;
+	visibility: collapse;
+}
+
+.NSGraphCursorDot
+{
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background-color: #10130D;
+	visibility: collapse;
+}
+
+.NSGraphCursorDot.NSPeakDotTeam1
+{
+	background-color: #E8920C;
+}
+
+.NSGraphCursorDot.NSPeakDotTeam2
+{
+	background-color: #4D7FE0;
+}
+
+.NSGraphCursorDot .NSGraphDotCore
+{
+	background-color: #FFEFD7;
+}
+
+/* the time and the lead at the column, beside the cursor (CHIP_W in pg_board.js) */
+.NSGraphChip
+{
+	width: 112px;
+	height: 22px;
+	margin-top: 4px;
+	padding-top: 3px;
+	border-radius: 3px;
+	text-align: center;
+	font-family: VALVEOracle, Reaver, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFEFD7;
+	background-color: #10130Ddd;
+	visibility: collapse;
+}
+
+.NSGraphChip.NSChipTeam1
+{
+	color: #201500;
+	background-color: #E8920C;
+}
+
+.NSGraphChip.NSChipTeam2
+{
+	color: #FFFFFF;
+	background-color: #4D7FE0;
+}
+
+.NSGraphHover.NSHoverOn .NSGraphCursor,
+.NSGraphHover.NSHoverOn .NSGraphCursorDot,
+.NSGraphHover.NSHoverOn .NSGraphChip
+{
+	visibility: visible;
+}
+
+.NSGraphHover.NSHoverOn .NSGraphCursorDot.NSNoLead
+{
+	visibility: collapse;
+}
+
+/* the clock reads amber at a hovered time (NSAtTime on the frame; the numbers keep their own colours, the best-of-12
+   ones their stat colour); a number no graph gives over time (assists) stays final, dimmed */
+.NSAtTime .NSClock
+{
+	color: #FBDCA0;
+}
+
+.NSCell.NSCellFinal .NSCellValue
+{
+	opacity: 0.35;
+}
+
+/* a row label with a note while hovering ("HEALING (NO BARRIER)") */
+.NSRowLabel.NSRowLabelNote
+{
+	font-size: 13px;
+	letter-spacing: 0.5px;
+	padding-top: 12px;
+}
+
+/* souls by source while hovering: no arrival stroke on every move */
+.NSSouls.NSStatic .NSSrcBar
+{
+	transform: scale3d( 1, 1, 1 );
+	animation-name: none;
+}
+
+.NSSouls.NSSoulsFinal
+{
+	opacity: 0.45;
 }
 
 .NSGraphTicks

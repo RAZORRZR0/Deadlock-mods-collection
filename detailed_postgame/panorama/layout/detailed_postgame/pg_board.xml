@@ -46,6 +46,8 @@
 				<Panel class="NSHeadCentre" hittest="false">
 					<Label class="NSClockCaption" text="GAME TIME" />
 					<Label id="NSClock" class="NSClock" text="" />
+					<!-- The game mode on its own line over the match id (pg_board.js readMode). -->
+					<Label id="NSMode" class="NSMode" text="" hittest="false" />
 					<!-- Click copies the match id (pg_board.js copyMatchId); the tooltip is the stock #MatchID one. -->
 					<Label id="NSMatch" class="NSMatch" text="" hittest="true" onmouseover="UIShowTextTooltip( #Citadel_PostGame_CopyMatchID )" onmouseout="UIHideTextTooltip()" />
 				</Panel>
@@ -68,18 +70,23 @@
 			<Panel id="NSBody" class="NSBody" hittest="false">
 				<Panel class="NSTeam" hittest="false" />
 				<Panel id="NSLabels" class="NSLabels" hittest="false">
-					<Panel class="NSOrg" hittest="false" />
-					<Panel class="NSRowLabels" hittest="false">
-						<Label class="NSRowLabel" text="TOTAL SOULS" />
+					<!-- Over the portraits: how to change a row (pg_board.js cycleRow). -->
+					<Panel class="NSOrg" hittest="false">
+						<Label id="NSRowHint" class="NSRowHint" text="CLICK A ROW NAME TO SWAP" hittest="false" />
+					</Panel>
+					<Panel id="NSRowLabels" class="NSRowLabels" hittest="false">
+						<Label class="NSRowLabel NSTotalLabel" text="TOTAL SOULS" />
 						<Label class="NSRowLabel" text="KILLS" />
 						<Label class="NSRowLabel" text="DEATHS" />
-						<Label class="NSRowLabel" text="ASSISTS" />
+						<Label id="NSLabelAssists" class="NSRowLabel" text="ASSISTS" />
 						<Label class="NSRowLabel" text="PLAYER DAMAGE" />
 						<Label class="NSRowLabel" text="OBJECTIVE DAMAGE" />
-						<Label class="NSRowLabel" text="HEALING" />
+						<Label id="NSLabelHeal" class="NSRowLabel" text="HEALING" />
 					</Panel>
 					<Label id="NSSoulsLabel" class="NSRowLabel NSSoulsLabel" text="SOULS BY SOURCE" />
 					<Label class="NSRowLabel NSItemsLabel" text="FINAL ITEMS" />
+					<!-- Under FINAL ITEMS: why there are no buy times yet (pg_board.js buyNote). -->
+					<Label id="NSBuyNote" class="NSBuyNote" text="" hittest="false" />
 				</Panel>
 				<Panel class="NSTeam" hittest="false" />
 			</Panel>
@@ -108,6 +115,16 @@
 				<Panel id="NSGraphStems" class="NSGraphStems" hittest="false" />
 				<Panel id="NSGraphTicks" class="NSGraphTicks" hittest="false" />
 				<Panel id="NSGraphEvents" class="NSGraphEvents" hittest="false" />
+				<!-- Stat timeline (pg_board.js timelineStrips / hoverAt): one hit strip per stock graph column, last so it is on top;
+				     the cursor hairline, its dot on the lead line and the time chip show while the mouse is on a strip. -->
+				<Panel id="NSGraphHover" class="NSGraphHover" hittest="false">
+					<Panel id="NSGraphCursor" class="NSGraphCursor" hittest="false" />
+					<Panel id="NSGraphCursorDot" class="NSGraphCursorDot" hittest="false">
+						<Panel class="NSGraphDotCore" hittest="false" />
+					</Panel>
+					<Label id="NSGraphChip" class="NSGraphChip" text="" hittest="false" />
+					<Panel id="NSGraphStrips" class="NSGraphStrips" hittest="false" />
+				</Panel>
 			</Panel>
 		</Panel>
 	</Panel>

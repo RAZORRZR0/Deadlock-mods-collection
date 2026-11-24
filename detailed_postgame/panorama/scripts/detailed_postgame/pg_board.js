@@ -14,7 +14,7 @@
 
   const TAG = "[DPS]";
   // STANDALONE ONLY (pak11): credit + donate strip under the stock page nav; observer_hud has its own branding and none of this.
-  const MOD_VERSION = "1";
+  const MOD_VERSION = "3";
   const CREDIT_TEXT = `DETAILED POSTGAME V${MOD_VERSION} BY HANTURAYA`;
   const DONATE_URL = "https://ko-fi.com/hantuaraya";
   // Event-driven (plan phase 2): the match event (CitadelMatchDetailsUpdated) and a screen pick
@@ -45,6 +45,7 @@
     // A reloaded script starts with none of this run's memory: its columns go with it (the next run
     // would stack its own beside them).
     try { teardown(); } catch (e) { /* page gone */ }
+    try { prefsClose(); } catch (e) { /* page gone */ }
   };
 
   // [key, bound value, stock award class]; the label column in pg_board.xml is in the same order.
@@ -57,8 +58,10 @@
     ["odmg", "{i:obj_dmg}", "AwardObjDmg"],
     ["heal", "{i:player_healing}", "AwardHealing"] // healing + barrier, like stock (user decision)
   ];
-  const BIND = STATS.map((s) => s[1]).concat(["{i:hero_id}", "{s:match_id}", "{s:match_minutes}", "{s:match_seconds}"]).join("|");
-  const BIND_PARTS = STATS.length + 4;
+  // Then the scoreboard's healing split (its healing tooltip; SUPPORT section), empty when unbound.
+  const BIND = STATS.map((s) => s[1]).concat(["{i:hero_id}", "{s:match_id}", "{s:match_minutes}", "{s:match_seconds}",
+    "{i:player_healing_healing}", "{i:player_healing_barriering}"]).join("|");
+  const BIND_PARTS = STATS.length + 6;
   // Stock tooltip label -> [css key, display name].
   const SOURCES = {
     "Troopers": ["troopers", "Troopers"],
@@ -113,14 +116,20 @@
   const UI = {
     page: null, screen: null, scoreboard: null, graphs: null, tip: null,
     names: [null, null], results: [null, null], worth: [null, null], kills: [null, null],
-    clock: null, match: null, soulsLabel: null, frame: null,
+    clock: null, match: null, mode: null, soulsLabel: null, frame: null,
     graph: null, draw: null, canvas: null, marks: null, peaks: [null, null], end: null, ticks: null, events: null, stems: null,
     top: null, bottom: null, topScale: null, bottomScale: null,
+    hover: null, strips: null, cursor: null, cursorDot: null, chip: null, // stat timeline
+    rowLabels: [], rowHint: null, pips: null, buyNote: null, // the seven row labels; the "click a row name" hint; the hovered row's bars
     progress: null, progressFill: null, progressText: null, progressStep: null,
     credit: null, creditDonate: null // standalone-only credit strip
   };
   const S = {
     key: "",
+    pipSlot: -1, // the row name the mouse is on (its bars show, rowPips); -1: none
+    walkers: null, // [team 1, team 2] seconds of each enemy Walker the team killed (lead graph lanes); null: not read
+    flex: false, // the extra-slot locks are shown (checkFlex)
+    namesGen: -1, // the build whose item icons were read (scanItemNames)
     gen: 0,
     rescan: null, // a scan to run again (retryScan): { m, gen, attempt, at }
     stockHidden: [], // stock labels hidden by show(): opacity 0 and no hit testing until teardown
@@ -145,7 +154,18 @@
     revealToken: 0, // the running graph wipe; a new one supersedes it
     graphDraws: [], // the lead graph's canvas strokes, painted by paint()
     matchId: "", // the shown match's id (copied by a click on #NSMatch)
-    copyToken: 0 // the running "copied" feedback; a newer click or match supersedes it
+    mode: "", // the game mode from the stock .MatchMode label, upper case ("" until it binds)
+    copyToken: 0, // the running "copied" feedback; a newer click or match supersedes it
+    head: null, // the header's final texts and each team's heroes: { worth: [2], kills: [2], clock, heroes: [2][] }
+    finalSouls: new Map(), // hero -> the scan's souls-by-source tooltip at the end
+    timeline: null, // the stat timeline: { n, times, by: hero -> { <key>: [n], src: [n] }, heroes }
+    graphYOf: null, // lead -> y in the plot (renderGraph), for the hover dot
+    leadAt: new Map(), // graph column time -> lead (team 1 minus team 2)
+    duration: 0, // the drawn graph's match length (s)
+    hoverCol: -1, // the graph column under the mouse (-1: none, final numbers shown)
+    hoverToken: 0, // bumps on every hover change; a stale delayed restore does nothing
+    rows: STATS.map(([key]) => key), // the seven rows' stat keys ("" = empty row); kept for the next match and saved
+    matchDur: 0 // the shown match's length (s), for the per-minute stats
   };
 
   // ---------- discovery ----------
@@ -171,7 +191,9 @@
     }
     UI.clock = ctx.FindChildTraverse("NSClock");
     UI.match = ctx.FindChildTraverse("NSMatch");
+    UI.mode = ctx.FindChildTraverse("NSMode");
     UI.soulsLabel = ctx.FindChildTraverse("NSSoulsLabel");
+    UI.labels = ctx.FindChildTraverse("NSLabels");
     UI.graph = ctx.FindChildTraverse("NSGraph");
     UI.draw = ctx.FindChildTraverse("NSGraphDraw");
     UI.canvas = ctx.FindChildTraverse("NSGraphCanvas");
@@ -185,6 +207,15 @@
     UI.bottom = ctx.FindChildTraverse("NSGraphBottom");
     UI.topScale = ctx.FindChildTraverse("NSGraphTopScale");
     UI.bottomScale = ctx.FindChildTraverse("NSGraphBottomScale");
+    UI.hover = ctx.FindChildTraverse("NSGraphHover");
+    UI.strips = ctx.FindChildTraverse("NSGraphStrips");
+    UI.cursor = ctx.FindChildTraverse("NSGraphCursor");
+    UI.cursorDot = ctx.FindChildTraverse("NSGraphCursorDot");
+    UI.chip = ctx.FindChildTraverse("NSGraphChip");
+    const rowLabels = ctx.FindChildTraverse("NSRowLabels");
+    UI.rowLabels = ok(rowLabels) ? rowLabels.Children() : [];
+    UI.rowHint = ctx.FindChildTraverse("NSRowHint");
+    UI.buyNote = ctx.FindChildTraverse("NSBuyNote");
     UI.progress = ctx.FindChildTraverse("NSProgress");
     UI.progressFill = ctx.FindChildTraverse("NSProgressFill");
     UI.progressText = ctx.FindChildTraverse("NSProgressText");
@@ -277,6 +308,7 @@
     });
     v.matchId = parts[STATS.length + 1];
     v.duration = num(parts[STATS.length + 2]) * 60 + num(parts[STATS.length + 3]);
+    v.split = { healing: num(parts[STATS.length + 4]), barrier: num(parts[STATS.length + 5]) };
     // Stock MVP marks: MVP_Rank1 = MVP (mvp_trophy), MVP_Rank2/3 = Key Player (key_player_trophy).
     v.mvp = row.BHasClass("MVP_Rank1") ? 1 : row.BHasClass("MVP_Rank2") ? 2 : row.BHasClass("MVP_Rank3") ? 3 : 0;
     const name = row.FindChildTraverse("PlayerName");
@@ -304,8 +336,23 @@
   function readMatch() {
     const teams = [readTeam(1), readTeam(2)];
     if (!teams[0] || !teams[1]) return null;
+    healingWithBarriers(teams);
     const first = teams[0].rows[0];
     return { id: first.matchId, duration: first.duration, teams };
+  }
+  // HEALING is healing + barriers, as Statlocker and deadlock-api count it (user 2026-11-23). The stock
+  // {i:player_healing} also takes the player's self-damage off (match 137998268, metadata: Shiv 4,544 - 1,833 =
+  // 2,711, Lady Geist 34,686 - 18,118 = 16,568), so it could read below the HEALING ONLY row; its AwardHealing star
+  // follows that number, so the star is worked out here (ties all starred, none when nobody healed).
+  function healingWithBarriers(teams) {
+    const players = teams[0].rows.concat(teams[1].rows);
+    const like = players.map((r) => r.text.souls).find((t) => /\d[^\d]\d{3}/.test(t)) || "";
+    for (const r of players.concat([teams[0].totals, teams[1].totals])) {
+      r.value.heal = r.split.healing + r.split.barrier;
+      r.text.heal = fmtLike(like, r.value.heal);
+    }
+    const top = Math.max(...players.map((r) => r.value.heal));
+    for (const r of players) r.award.heal = top > 0 && r.value.heal === top;
   }
 
   const matchKey = (m) => `${m.id}:${m.teams.map((t) => t.rows.map((r) => r.hero).join(",")).join("/")}`;
@@ -329,10 +376,37 @@
       setText(UI.kills[i], String(t.totals.value.kills));
     });
     setText(UI.clock, clock(m.duration));
+    S.head = { worth: UI.worth.map((l) => (ok(l) ? l.text : "")), kills: UI.kills.map((l) => (ok(l) ? l.text : "")), clock: clock(m.duration),
+      heroes: m.teams.map((t) => t.rows.map((r) => r.hero)) };
     S.matchId = String(m.id || "");
+    S.matchDur = m.duration;
     S.copyToken++; // a pending "copied" label is replaced by this match's
-    setText(UI.match, `MATCH ${S.matchId}`);
+    S.mode = "";
+    setText(UI.mode, "");
+    readMode();
+    setText(UI.match, matchLine());
     if (ok(UI.match)) UI.match.RemoveClass("NSCopied");
+  }
+
+  // The game mode (Standard, Ranked, Street Brawl...) from the stock .MatchMode label ({s:match_mode}),
+  // which the board hides; shown on its own line over the match id (user 2026-11-14; one line
+  // "STANDARD MATCH (LOBBY) | MATCH 121685912" was cut with an ellipsis, user 2026-11-23). An unbound
+  // label reads as nothing.
+  function matchLine() {
+    return `MATCH ${S.matchId}`;
+  }
+  function readMode() {
+    if (stopped || !ok(UI.screen)) return;
+    let mode = "";
+    for (const kid of UI.screen.Children()) {
+      if (!kid.BHasClass("MatchMode")) continue;
+      const t = labelText(kid);
+      if (t && !t.includes("{") && !t.startsWith("#")) mode = t.toUpperCase();
+    }
+    if (!mode || mode === S.mode) return;
+    S.mode = mode;
+    log(`mode: ${mode}`);
+    setText(UI.mode, mode);
   }
 
   // ---------- copy the match id ----------
@@ -365,18 +439,19 @@
     if (!route && copyByEntry(S.matchId)) route = "entry";
     log(`match id ${route ? `copied (${route})` : "not copied"}`);
     const token = ++S.copyToken;
-    setText(UI.match, route ? "MATCH ID COPIED" : `MATCH ${S.matchId}`);
+    setText(UI.match, route ? "MATCH ID COPIED" : matchLine());
     UI.match.SetHasClass("NSCopied", !!route);
     $.Schedule(COPIED_S, () => {
       if (stopped || token !== S.copyToken || !ok(UI.match)) return;
-      setText(UI.match, `MATCH ${S.matchId}`);
+      setText(UI.match, matchLine());
       UI.match.RemoveClass("NSCopied");
     });
   }
 
-  // Stock panels are restyled in place, never moved: C++ looks row children up by id later and a
-  // missing one is fatal (live 2026-10-25: "FATAL ERROR: Unable to find child 'ItemsContainer'"
-  // after ItemsContainer was reparented). Our own panels are created inside the stock rows.
+  // Stock panels are restyled in place, never moved to another parent: C++ looks row children up by id later
+  // and a missing one is fatal (live 2026-10-25: "FATAL ERROR: Unable to find child 'ItemsContainer'"
+  // after ItemsContainer was reparented). Our own panels are created inside the stock rows. Reordering within
+  // the same parent keeps the lookup (#CopyBuildButton, live 2026-11-23).
   function css(panel, styles) {
     if (!ok(panel)) return;
     for (const key of Object.keys(styles)) panel.style[key] = styles[key];
@@ -493,7 +568,8 @@
       if (i === 2) css(team, { marginLeft: "196px" });
       hide(ok(team) ? team.FindChildTraverse("TeamTableHeader") : null);
       const players = ok(team) ? team.FindChildTraverse("TeamPlayers") : null;
-      css(players, { width: "702px", height: "fit-children", flowChildren: "right", margin: "0px", padding: "0px", overflow: "noclip" });
+      // Fewer than 6 players (Street Brawl 4v4, user 2026-11-14): the columns hug the label column on both sides.
+      css(players, { width: "fit-children", height: "fit-children", flowChildren: "right", horizontalAlign: i === 1 ? "right" : "left", margin: "0px", padding: "0px", overflow: "noclip" });
     }
   }
 
@@ -550,6 +626,7 @@
     unhoverItems(HOVER.items);
     HOVER.items = items;
     HOVER.chain = [];
+    wantBuys(); // the buy times shown on a hovered item
     for (let p = items; ok(p) && p !== UI.scoreboard; p = p.GetParent()) HOVER.chain.push(p);
     for (const p of HOVER.chain) lift(p, true);
     pollHover(++HOVER.token);
@@ -563,7 +640,9 @@
     for (const icon of items.Children()) if (icon.BHasHoverStyle()) { hovered = icon; break; }
     if (hovered !== HOVER.icon) {
       lift(HOVER.icon, false);
+      buyLabel(HOVER.icon, false);
       lift(hovered, true);
+      buyLabel(hovered, true);
       HOVER.icon = hovered;
     }
     $.Schedule(HOVER_S, () => pollHover(token));
@@ -572,10 +651,72 @@
     if (!items || HOVER.items !== items) return;
     HOVER.token++;
     lift(HOVER.icon, false);
+    buyLabel(HOVER.icon, false);
     for (const p of HOVER.chain) lift(p, false);
     HOVER.items = null;
     HOVER.icon = null;
     HOVER.chain = [];
+  }
+
+  // ---------- commend and create build ----------
+  // The stock commend button lives in the row's first child, .CommendContainer (stock
+  // citadel_db_post_game_scoreboard_new.xml). It stays there (never reparented), floats over the portrait's top
+  // left (user 2026-11-23; top right before) and shows while the player card is hovered (user 2026-11-14).
+  // The stock "Create Build" button (#CopyBuildButton, the .PlayerRow's last child; on click C++ makes a local
+  // unpublished build from the player's purchases in this match, sells and imbues included) floats over the top
+  // right, shown with the commend button (user 2026-11-23). It is moved to the front of its own parent so it
+  // sits over the portrait; it is never reparented. Stock CSS still decides whether it exists:
+  // .CanCommendPlayers on the page, no button for bots, the local player or a commended player (who gets the stock
+  // commended icon). The button keeps its stock tooltip, hover and click.
+  const COMMEND_POLL_S = 0.1;
+  // The shared look of the two portrait-corner buttons (commend top left, Create Build top right).
+  const CORNER_BUTTON = { width: "28px", height: "28px", verticalAlign: "top", backgroundColor: "#10130Dcc", borderRadius: "50%",
+    backgroundPosition: "50% 50%", backgroundRepeat: "no-repeat", preTransformScale2d: "1" };
+  const COMMEND = { row: null, token: 0 };
+  const commendBox = (row) => (ok(row) ? row.Children().find((k) => k.BHasClass("CommendContainer")) : null);
+  function commendShown(row, on) {
+    const box = commendBox(row);
+    if (ok(box)) css(box.FindChildTraverse("CommendPlayerButton"), { opacity: on ? "1" : "0" });
+    if (ok(row)) css(row.FindChildTraverse("CopyBuildButton"), { opacity: on ? "1" : "0" });
+  }
+  // main: the row's .PlayerRow (the button's parent); column: the board's column, already first in main.
+  function placeCopyBuild(main, column) {
+    const button = main.FindChild("CopyBuildButton");
+    if (!ok(button) || !ok(column)) return;
+    main.MoveChildBefore(button, column);
+    css(button, CORNER_BUTTON);
+    css(button, { visibility: "visible", horizontalAlign: "right", margin: "4px 4px -32px 0px", backgroundSize: "14px 18px", washColor: "#FFEFD7",
+      zIndex: "2", opacity: "0", transitionProperty: "opacity, brightness", transitionDuration: "0.15s" });
+  }
+  function placeCommend(row) {
+    const box = commendBox(row);
+    if (!ok(box)) return;
+    css(box, { width: "105px", height: "56px", margin: "0px 0px -56px 0px", padding: "0px", zIndex: "2", overflow: "noclip", visibility: "visible" });
+    // Commend (and the stock "commended" badge in its place) and Create Build are the same 28 px dark round
+    // button, 4 px in from the portrait's top corners (user 2026-11-23: "not very symmetrical"). The stock
+    // local-player caret (#LocalPlayerIdentifier, a blue arrow on your own card) is not shown.
+    for (const kid of box.Children()) {
+      if (kid.id === "LocalPlayerIdentifier") { hide(kid); continue; }
+      css(kid, CORNER_BUTTON);
+      css(kid, { horizontalAlign: "left", margin: "4px 0px 0px 4px" });
+    }
+    css(box.FindChildTraverse("CommendPlayerButton"), { opacity: "0", transitionProperty: "opacity, brightness, pre-transform-scale2d", transitionDuration: "0.15s" });
+    row.SetPanelEvent("onmouseover", () => hoverCommend(row));
+  }
+  function hoverCommend(row) {
+    if (stopped || COMMEND.row === row) return;
+    commendShown(COMMEND.row, false);
+    COMMEND.row = row;
+    commendShown(row, true);
+    pollCommend(++COMMEND.token);
+  }
+  // The hover ends when neither the card nor anything in it is hovered (a lost onmouseout ends it too).
+  function pollCommend(token) {
+    if (stopped || token !== COMMEND.token) return;
+    if (ok(COMMEND.row) && COMMEND.row.BHasHoverStyle()) { $.Schedule(COMMEND_POLL_S, () => pollCommend(token)); return; }
+    commendShown(COMMEND.row, false);
+    COMMEND.row = null;
+    COMMEND.token++;
   }
 
   function decorateRow(r, teamIndex, index, loss) {
@@ -583,8 +724,11 @@
     const items = row.FindChildTraverse("ItemsContainer");
     const main = ok(items) ? items.GetParent() : null;
     if (!ok(main)) throw new Error("row without ItemsContainer");
-    css(row, { width: "105px", height: "fit-children", margin: "0px 6px", padding: "0px", flowChildren: "down", backgroundColor: "#00000000", backgroundImage: "none", overflow: "noclip" });
-    for (const kid of row.Children()) if (!ok(kid.FindChildTraverse("ItemsContainer")) && kid.id !== "NSBinds") hide(kid);
+    // visible: C++ reuses rows across matches, and the last match's totals row (hidden by the board) can come
+    // back as a player row (user 2026-11-14: a 6v6 after a 4v4 Street Brawl showed 5 columns a side).
+    css(row, { width: "105px", height: "fit-children", margin: "0px 6px", padding: "0px", flowChildren: "down", backgroundColor: "#00000000", backgroundImage: "none", overflow: "noclip", visibility: "visible" });
+    for (const kid of row.Children()) if (!ok(kid.FindChildTraverse("ItemsContainer")) && kid.id !== "NSBinds" && !kid.BHasClass("CommendContainer")) hide(kid);
+    placeCommend(row);
     css(main, { width: "105px", height: "fit-children", flowChildren: "down", margin: "0px", padding: "0px", backgroundColor: "#00000000", overflow: "noclip" });
     let nameBlock = null;
     for (const kid of main.Children()) {
@@ -607,22 +751,27 @@
       setText(column.FindChildTraverse("NSAwardText"), r.mvp === 1 ? "MVP" : "KEY PLAYER");
     }
     main.MoveChildBefore(column, items);
+    placeCopyBuild(main, column);
     for (const id of ["NSPortrait", "NSPortraitLoss"]) {
       const portrait = column.FindChildTraverse(id);
       if (ok(portrait)) portrait.SetHeroID(r.hero);
     }
     const cells = column.FindChildTraverse("NSCells");
+    const cellOf = {}; // key -> [cell, value label]: the stat timeline rewrites the values on a graph hover
     STATS.forEach(([key], i) => {
       const cell = $.CreatePanel("Panel", cells, "", { class: "NSCell", hittest: "false" });
       cell.AddClass(`NSCell_${key}`);
+      cell.AddClass(`NSSlot${i}`); // the row, whatever stat it shows (Street Brawl drops row 1 by its slot)
       if (i % 2) cell.AddClass("NSOdd");
       if (r.award[key]) { cell.AddClass("NSBest"); cell.AddClass(`NSBest_${key}`); }
-      $.CreatePanel("Label", cell, "", { class: "NSCellValue", text: r.text[key], hittest: "false" });
+      cellOf[key] = [cell, $.CreatePanel("Label", cell, "", { class: "NSCellValue", text: r.text[key], hittest: "false" })];
     });
     renderName(column.FindChildTraverse("NSPlate"), r, nameBlock, main, column);
     // Entrance stagger from the centre outward, as the NSCol delays in pg_board.css; the stock items follow.
     const delay = 0.10 + 0.05 * (teamIndex === 0 ? 5 - index : index);
-    const entry = { hero: r.hero, column, souls: column.FindChildTraverse("NSSouls"), plate: column.FindChildTraverse("NSPlate"), nameBlock, items, delay };
+    const entry = { hero: r.hero, column, souls: column.FindChildTraverse("NSSouls"), plate: column.FindChildTraverse("NSPlate"), nameBlock, items, delay,
+      cells: cellOf, text: r.text, award: r.award, value: r.value, split: r.split, teamIndex, teamKills: 0, srcLines: null,
+      slots: STATS.map(([key]) => cellOf[key]), slotKey: STATS.map(([key]) => key), slotStar: STATS.map(([key]) => (r.award[key] ? key : "")) };
     S.cols.push(entry);
     css(items, { opacity: "0", transitionProperty: "opacity", transitionDuration: "0.3s", transitionTimingFunction: "ease-out" });
   }
@@ -645,30 +794,63 @@
     });
   }
 
-  function renderSouls(byHero) {
+  // A row with nothing to say in this game (Street Brawl, user 2026-11-14) is dropped from the label column and
+  // every player column (pg_board.css: NSNoTotal, NSNoSouls; the paper card shortens with it).
+  function dropRow(cls, on) {
+    if (ok(UI.labels)) UI.labels.SetHasClass(cls, on);
+    for (const c of S.cols) if (ok(c.column)) c.column.SetHasClass(cls, on);
+  }
+
+  // final: the scan is done; a game with no souls by source at all (Street Brawl) then drops the row.
+  function renderSouls(byHero, final = false) {
     let any = false;
     const shown = [];
     for (const c of S.cols) {
       const data = byHero.get(c.hero);
       if (!ok(c.souls)) continue;
       c.souls.RemoveClass("NSShow");
-      c.souls.RemoveAndDeleteChildren();
+      c.souls.RemoveClass("NSStatic");
+      c.souls.RemoveClass("NSSoulsFinal");
+      fillSouls(c, data ? data.rows : []);
       if (!data) continue;
       any = true;
-      const rows = data.rows.slice().sort((a, b) => b.value - a.value).slice(0, 5);
-      rows.forEach((s, i) => {
-        const [key, name] = SOURCES[s.name] || ["other", s.name];
-        const line = $.CreatePanel("Panel", c.souls, "", { class: `NSSrc NSSrc_${key}`, hittest: "false" });
-        line.AddClass(`NSR${i}`); // stroke stagger (CSS)
-        const bar = $.CreatePanel("Panel", line, "", { class: "NSSrcBar", hittest: "false" });
-        bar.style.width = `${Math.max(0, Math.min(100, s.pct))}%`;
-        $.CreatePanel("Label", line, "", { class: "NSSrcName", text: name, hittest: "false" });
-        $.CreatePanel("Label", line, "", { class: "NSSrcPct", text: `${s.pct}%`, hittest: "false" });
-      });
       shown.push(c.souls);
     }
+    if (final) S.finalSouls = byHero;
     if (ok(UI.soulsLabel)) UI.soulsLabel.SetHasClass("NSEmpty", !any);
+    dropRow("NSNoSouls", final && !any);
     trigger(shown, "NSShow");
+  }
+
+  // A column's top five sources as five pooled lines, made once and refilled (the stat timeline refills them
+  // on every graph hover). NSR<i> staggers the arrival stroke (CSS); unused lines collapse.
+  function fillSouls(c, rows) {
+    if (!ok(c.souls)) return;
+    if (!c.srcLines) {
+      c.srcLines = [];
+      for (let i = 0; i < 5; i++) {
+        const line = $.CreatePanel("Panel", c.souls, "", { class: `NSSrc NSR${i}`, hittest: "false" });
+        const bar = $.CreatePanel("Panel", line, "", { class: "NSSrcBar", hittest: "false" });
+        const name = $.CreatePanel("Label", line, "", { class: "NSSrcName", text: "", hittest: "false" });
+        const pct = $.CreatePanel("Label", line, "", { class: "NSSrcPct", text: "", hittest: "false" });
+        c.srcLines.push({ line, bar, name, pct, key: "" });
+      }
+    }
+    const top = (rows || []).slice().sort((a, b) => b.value - a.value).slice(0, 5);
+    c.srcLines.forEach((l, i) => {
+      const s = top[i];
+      l.line.style.visibility = s ? "visible" : "collapse";
+      if (!s) return;
+      const [key, name] = SOURCES[s.name] || ["other", s.name];
+      if (l.key !== key) {
+        if (l.key) l.line.RemoveClass(`NSSrc_${l.key}`);
+        l.line.AddClass(`NSSrc_${key}`);
+        l.key = key;
+      }
+      l.bar.style.width = `${Math.max(0, Math.min(100, s.pct))}%`;
+      setText(l.name, name);
+      setText(l.pct, `${s.pct}%`);
+    });
   }
 
   // ---------- soul lead graph ----------
@@ -864,6 +1046,9 @@
       UI.end.style.marginTop = `${(pillY - 11).toFixed(1)}px`;
     }
     S.graphScale = scale;
+    S.graphYOf = yOf;
+    S.leadAt = new Map(pts.map((p) => [p.t, p.a - p.b]));
+    S.duration = duration;
     renderGraphCaptions();
 
     UI.ticks.RemoveAndDeleteChildren();
@@ -966,7 +1151,14 @@
     for (const kid of UI.screen.Children()) {
       if (kid.id === "MatchID" || kid.BHasClass("MatchMode")) stockHide(kid);
     }
+    // The mode label binds with the match details, which can land after the board shows.
+    readMode();
+    for (const s of [1.0, 3.0]) $.Schedule(s, readMode);
     log(`board shown: match ${m.id}, ${m.teams[0].rows.length}v${m.teams[1].rows.length}, ${clock(m.duration)}`);
+    prefsLoad();
+    // Stock shows the commend buttons only with .CanCommendPlayers (the viewer played this match).
+    const canCommend = ok(UI.scoreboard) && (UI.scoreboard.BHasClass("CanCommendPlayers") || UI.scoreboard.BAscendantHasClass("CanCommendPlayers"));
+    log(`commend: ${canCommend ? "offered" : "not offered (stock: only in a match you played)"}`);
   }
 
   // C++ reuses the stock rows when another match opens on the page (live: items changed under a
@@ -981,6 +1173,7 @@
     for (const c of S.cols) {
       if (ok(c.column)) c.column.DeleteAsync(0);
       css(c.items, { transitionDuration: "0s", opacity: "1" }); // the rows may stay stock
+      slotsClear(c);
     }
     S.introShown = false;
     S.introToken++;
@@ -995,6 +1188,10 @@
     S.graphDraws = [];
     if (ok(UI.canvas)) UI.canvas.ClearJS("#00000000");
     if (ok(UI.marks)) UI.marks.RemoveAndDeleteChildren();
+    timelineClear();
+    S.walkers = null;
+    S.flex = false;
+    buyNote("");
   }
 
   function build(m) {
@@ -1007,6 +1204,14 @@
       t.rows.forEach((r, index) => decorateRow(r, i, index, anyWin && !t.win));
       hide(t.totals.row);
     });
+    for (const c of S.cols) c.teamKills = m.teams[c.teamIndex].totals.value.kills;
+    wireRows();
+    paintCells(-1); // the picked rows (kept from the last match) and their labels
+    // Every player on the same total souls (Street Brawl, user 2026-11-14): the row says nothing; drop it.
+    const souls = m.teams.flatMap((t) => t.rows.map((r) => r.value.souls));
+    const sameTotal = souls.length > 1 && souls.every((v) => v === souls[0]);
+    dropRow("NSNoTotal", sameTotal);
+    S.sameTotal = sameTotal;
     fitGraph();
     progress(SCAN_FROM, "BUILDING BOARD", "");
     renderSouls(new Map());
@@ -1014,6 +1219,8 @@
     logData("rows", m.teams.map((t) => ({ win: t.win, totals: t.totals.value, rows: t.rows.map((r) => ({ hero: r.hero, account: r.account, mvp: r.mvp, ...r.value })) })));
     scan(m);
   }
+
+
 
   // ---------- scan: stock graph tooltip and Lane Stats ----------
 
@@ -1041,7 +1248,8 @@
   }
 
   // "27:51 | Troopers | 15,441 | (64%) | ... | 23,944" -> { time, rows: [{name, value, pct}], total }
-  function readTip() {
+  // allowEmpty: a column with nothing yet ("0:35 | 0": no damage at all) reads as no rows.
+  function readTip(allowEmpty = false) {
     const tokens = tipTokens();
     if (!tokens.length) return null;
     const time = secs(tokens[0]);
@@ -1049,10 +1257,59 @@
     const rest = tokens.slice(1);
     let total = null;
     if (rest.length % 3 === 1) total = num(rest.pop());
-    if (rest.length % 3 !== 0 || rest.length === 0) return null;
+    if (rest.length % 3 !== 0 || (rest.length === 0 && !allowEmpty)) return null;
     const rows = [];
     for (let i = 0; i < rest.length; i += 3) rows.push({ name: rest[i], value: num(rest[i + 1]), pct: num(rest[i + 2]) });
     return { time, rows, total, sig: tokens.join("|") };
+  }
+
+  // The general graphs (Souls Collected, Kills, Deaths, Healing) in player mode list every player in one
+  // tooltip, largest first, a player at 0 left out, and name no one: each row is the stock PlayerRow
+  // snippet (citadel_tooltip_graph_playernetworth.xml: .Row with #HeroImage and .ValueLabel), so the hero
+  // comes from the row's hero image or, as live, its #ColorBar: the image has no heroid (live 2026-11-23, client
+  // 6864, match 121685912, detailed_postgame/live/20261123-tooltip-rows-probe-6864.log), the bar's inline background-color is the
+  // player's colour, the same as the graph button's #PlayerColor (colorHero: colour -> hero).
+  // -> { time, rows: [{hero, value, color}], sig }; hero 0 when neither tells. Kills at 6:32 listed 7 of 12 players.
+  function readTipHeroes(colorHero) {
+    const tip = tooltip();
+    if (!tip || !tip.visible) return null;
+    let time = -1;
+    const rows = [];
+    const kidText = (p, cls) => {
+      for (const kid of p.Children()) if (kid.BHasClass(cls)) return labelText(kid);
+      return "";
+    };
+    const walk = (p) => {
+      if (!ok(p) || !p.visible) return;
+      if (p.BHasClass("Row")) {
+        if (p.BHasClass("MatchTime")) time = secs(labelText(p));
+        else if (!p.BHasClass("LabelRow")) {
+          const image = p.FindChildTraverse("HeroImage");
+          let hero = 0;
+          try { hero = Number(image && image.heroid) || 0; } catch (e) { hero = 0; }
+          const bar = p.FindChildTraverse("ColorBar");
+          const color = ok(bar) ? String(bar.style.backgroundColor || "").toUpperCase() : "";
+          if (!hero && colorHero) hero = colorHero.get(color) || 0;
+          rows.push({ hero, value: num(kidText(p, "ValueLabel")), color });
+        }
+        return;
+      }
+      for (const kid of p.Children()) walk(kid);
+    };
+    walk(tip);
+    if (time < 0) time = secs(tipTokens()[0] || ""); // the first label is the time either way
+    if (time < 0) return null;
+    return { time, rows, sig: `${time}|${rows.map((r) => `${r.hero}:${r.value}`).join("|")}` };
+  }
+
+  // A tooltip whose rows name no one (Damage from Players: one row per enemy hero) -> { time, rows: [], total, sig };
+  // the last label is the total, a column with nothing yet ("0:35") reads 0.
+  function readTipTotal() {
+    const tokens = tipTokens();
+    if (!tokens.length) return null;
+    const time = secs(tokens[0]);
+    if (time < 0) return null;
+    return { time, rows: [], total: tokens.length > 1 ? num(tokens[tokens.length - 1]) : 0, sig: tokens.join("|") };
   }
 
   function columns() {
@@ -1098,15 +1355,21 @@
 
   // Runs jobs in order. Each job acts, then checks at once; a check that is not satisfied yet is
   // retried once per frame (the graph may redraw a frame later) and the act repeated every other
-  // frame. Synchronous results chain within one frame.
-  function runJobs(gen, jobs, done, onStep) {
+  // frame. Synchronous results chain within one frame, at most `budget` acts a frame (the stat timeline's
+  // ~1,100 hovers would otherwise all land in one frame).
+  function runJobs(gen, jobs, done, onStep, budget = Infinity) {
     const stats = { frames: 0, retries: 0, failed: 0, t0: Date.now() };
     let i = 0;
     const next = () => {
+      let acts = 0;
       while (!stopped && gen === S.gen && i < jobs.length) {
         const job = jobs[i];
         if (onStep) onStep(i, jobs.length);
         if (job.skip && job.skip()) { i++; continue; }
+        if (acts++ >= budget) {
+          $.Schedule(0, () => { if (!stopped && gen === S.gen) { stats.frames++; next(); } });
+          return;
+        }
         try { job.act(); } catch (e) { logOnce(`act:${e}`, `scan act failed: ${e}`); }
         if (!attempt(job, 0)) return;
       }
@@ -1226,7 +1489,7 @@
     const canvas = UI.graphs ? UI.graphs.FindChildTraverse("Graph") : null;
     const count = ok(canvas) ? canvas.GetChildCount() : 0;
     if (!count) {
-      if (!retryScan(m, gen, attempt, "no graph columns")) { log("scan: no graph columns"); progressDone(); }
+      if (!retryScan(m, gen, attempt, "no graph columns")) { log("scan: no graph columns"); progressDone(); paintCells(S.hoverCol); scanItemNames(gen); }
       return;
     }
     S.scanning = gen;
@@ -1236,8 +1499,10 @@
     const events = [];
     const lanes = [];
     let teamNames = null; // tooltip row name -> team index, from the last column's exact totals
+    let rowsNamed = false; // false: tied totals and no stock team name told the tooltip rows apart
     let prevSig = "";
     let lastPoint = null;
+    const times = new Array(count).fill(-1); // each graph column's time (s), for the stat timeline
     const jobs = [];
     const setup = (fn) => ({ act: fn, check: () => true, take: () => {} });
 
@@ -1256,8 +1521,21 @@
           const keep = Math.abs(r0.value - totals[0]) + Math.abs(r1.value - totals[1]);
           const swap = Math.abs(r0.value - totals[1]) + Math.abs(r1.value - totals[0]);
           const tolerance = Math.max(50, 0.005 * (totals[0] + totals[1]));
-          if (r0.name === r1.name || keep === swap || Math.min(keep, swap) > tolerance) return null;
-          teamNames = keep < swap ? new Map([[r0.name, 0], [r1.name, 1]]) : new Map([[r0.name, 1], [r1.name, 0]]);
+          if (r0.name === r1.name || Math.min(keep, swap) > tolerance) return null;
+          if (keep !== swap) {
+            teamNames = keep < swap ? new Map([[r0.name, 0], [r1.name, 1]]) : new Map([[r0.name, 1], [r1.name, 0]]);
+            rowsNamed = true;
+          } else {
+            // Tied totals cannot name the rows (Street Brawl, match 136872372: all 8 players end on 22,400,
+            // so the scan read no lead and retried 8 times; user report 2026-11-13). The graph is still this
+            // match's. The stock team names can name the rows; else the order stays unknown and the lead is
+            // drawn only when it is 0 at every column (the order then changes nothing).
+            const stock = [0, 1].map((i) => String($.Localize(`#Citadel_Team${i + 1}_Name`)).toUpperCase());
+            const i0 = stock.indexOf(String(r0.name).toUpperCase());
+            const i1 = stock.indexOf(String(r1.name).toUpperCase());
+            rowsNamed = i0 >= 0 && i1 >= 0 && i0 !== i1;
+            teamNames = rowsNamed ? new Map([[r0.name, i0], [r1.name, i1]]) : new Map([[r0.name, 0], [r1.name, 1]]);
+          }
         }
         if (!teamNames.has(tip.rows[0].name) || !teamNames.has(tip.rows[1].name)) return null;
         return tip;
@@ -1267,6 +1545,7 @@
         const v = [0, 0];
         for (const r of tip.rows) v[teamNames.get(r.name)] = r.value;
         const point = { t: tip.time, a: v[0], b: v[1] };
+        times[index < 0 ? count - 1 : index] = tip.time;
         if (index < 0) lastPoint = point;
         else series.push(point);
       },
@@ -1311,7 +1590,7 @@
     }
 
     // 3. Souls by source per player, at the last column.
-    jobs.push(setup(() => { graphType(4); asTeam(false); }));
+    jobs.push(setup(() => { graphType(graphTypeId(TL_SOURCES)); asTeam(false); })); // by its label, as the timeline
     for (let n = 1; n <= buttons; n++) {
       jobs.push({
         skip: () => !buttonHero[n],
@@ -1359,6 +1638,10 @@
         lanes.length = 0;
         souls.clear();
       }
+      if (lastPoint && !rowsNamed && series.some((p) => p.a !== p.b)) {
+        log(`scan: tied totals and tooltip rows ${Array.from(teamNames.keys()).join("|")} not the stock team names: the lead is not drawn`);
+        series.length = 0;
+      }
       for (const lane of lanes) {
         const side = lane.side;
         if (side.team < 0) {
@@ -1385,10 +1668,1150 @@
       logData("series", series);
       logData("souls", Array.from(souls, ([hero, tip]) => ({ hero, total: tip.total, rows: tip.rows })));
       logData("events", events);
-      renderSouls(souls);
+      // Walkers (lane tier 2) each team killed, for the extra slots (checkFlex); only from this match's graph.
+      S.walkers = lastPoint && lanes.length ? [1, 2].map((team) => events.filter((e) => e.tier === "tier2" && e.killer === team).map((e) => e.t).sort((a, b) => a - b)) : null;
+      renderSouls(souls, true);
       renderGraph(series, events, m.duration);
       progressDone();
+      // The stat timeline reads the same columns per player once the board is drawn (only for this match's graph).
+      if (lastPoint && S.graphScale) scanTimeline(m, gen, times, buttonHero, souls);
+      if (!S.scanning && !S.rescan) {
+        paintCells(S.hoverCol); // no timeline coming: its rows say so ("-")
+        scanItemNames(gen); // no timeline coming: the item hovers may start
+      }
     }, (i, total) => progress(SCAN_FROM + (1 - SCAN_FROM) * (i / total), "READING GRAPHS", `${i + 1} / ${total}`));
+  }
+
+  // ---------- stat timeline: the board's numbers at a graph column ----------
+  // User 2026-11-23: hovering the soul lead graph shows every player's numbers at that moment (souls, kills,
+  // deaths, player and objective damage, healing, souls by source) and the header's team totals and clock;
+  // leaving the graph brings the final numbers back. The stock graphs sample a match in 40 even columns
+  // (121685912, 23:47: one every ~36 s), so the hover snaps to those columns and never makes up a value in
+  // between. What each stock graph gives (probe, live 2026-11-23, client 6864, detailed_postgame/live/20261123-graph-probe-6864.log):
+  //   Souls Collected, Kills, Deaths, Healing - player mode: every player in one tooltip, named by colour
+  //     (readTipHeroes);
+  //   Damage Breakdown, per picked player - "Enemy Players" = player damage, "Objectives" = objective damage
+  //     (both equal the scoreboard at the last column);
+  //   Souls by Source, per picked player.
+  // Healing by Type is not used: its total was another number than the player's healing for some players
+  // (hero 84: 5,349 against 865; verify-timeline-live.js, 2026-11-23).
+  // Assists have no stock graph: their cells keep the final number, dimmed, while the mouse is on the graph.
+  // The Healing graph leaves out the barrier the scoreboard adds (hero 87: 22,671 healing + 1,214 barrier =
+  // 23,885), so while hovering the healing row is the graph's at every column, the last one included, and its
+  // label says so; every other stat's last column is the scoreboard's exact final number.
+  const TL_KEYS = ["souls", "kills", "deaths", "pdmg", "odmg", "heal"];
+  // [key, graph type label token, English label, the type id seen live (6864)]
+  const TL_GENERAL = [
+    ["souls", "#Citadel_GraphType_NetWorth", "Souls Collected", 0],
+    ["kills", "#Citadel_GraphType_Kills", "Kills", 1],
+    ["deaths", "#Citadel_GraphType_Deaths", "Deaths", 2],
+    ["heal", "#Citadel_GraphType_Healing", "Healing", 6]
+  ];
+  const TL_SOURCES = ["#Citadel_GraphType_SoulsBySource", "Souls by Source", 4];
+  const TL_DAMAGE = ["#Citadel_GraphType_DamageBreakdown", "Damage Breakdown", 5];
+  const TL_DTYPE = ["#Citadel_GraphType_DamageType", "Damage Dealt by Type", 7];
+  const TL_TAKEN = ["#Citadel_GraphType_DamageTaken", "Damage from Players", 11];
+  const TL_BUDGET = 24; // timeline hovers a frame (~2,100 in all for 12 players and 40 columns)
+  const RESTORE_S = 0.05; // the mouse left a strip: the final numbers come back unless it entered another
+  const loc = (token, english) => {
+    const s = String($.Localize(token) || "");
+    return s && !s.startsWith("#") ? s : english;
+  };
+  // 22095 written like the scoreboard's own text for that cell ("22,095").
+  const fmtLike = (text, v) => {
+    const sep = /\d([^\d])\d{3}(?!\d)/.exec(String(text || ""));
+    return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, sep ? sep[1] : ",");
+  };
+
+  // A graph type's id by its dropdown label (the ids are the engine's and may move), else the id seen live.
+  function graphTypeId([token, english, fallback]) {
+    const want = loc(token, english).toUpperCase();
+    try {
+      const dd = UI.graphs.FindChildTraverse("TypeDropDown");
+      const menu = ok(dd) && typeof dd.AccessDropDownMenu === "function" ? dd.AccessDropDownMenu() : null;
+      if (ok(menu)) {
+        for (const o of menu.Children()) {
+          const id = /^type_(\d+)$/.exec(String(o.id || ""));
+          if (id && labelText(o).toUpperCase() === want) return Number(id[1]);
+        }
+      }
+    } catch (e) { /* no menu: the live id */ }
+    return fallback;
+  }
+
+  // Players who share a colour ("twins"; live 6864, match 121685912: heroes 86 and 87, 18 and 84) give the
+  // general graphs' rows of that colour unnamed. Their values per column are put back on the players from the
+  // last column (the scoreboard) towards the first: every value is a running total, so no player's value may
+  // be above their next column's; of the orders left, the one whose steps best follow the players' own
+  // (per-player) growth is taken: Souls by Source totals for souls, its Enemy Kills souls for kills. Deaths
+  // have no per-player graph: two twins on the same total at the next column may then be swapped (logged as
+  // ordered by growth); their values together are always the graph's.
+  // values: [n] -> sorted values of the group at that column (null: unread); end: the group's final values per
+  // hero; guide(h, c) -> a per-player measure that grows like this stat, or null. -> { at: hero -> [n], guessed }.
+  // slack: how far a graph value may sit above the next column's (souls: the graph against the scoreboard).
+  function untwin(group, values, end, guide, slack = 0) {
+    const n = values.length;
+    const at = new Map(group.map((h) => [h, new Array(n).fill(null)]));
+    for (const h of group) at.get(h)[n - 1] = end.get(h);
+    let guessed = 0;
+    const perms = (list) => (list.length <= 1 ? [list] : list.flatMap((x, i) => perms(list.slice(0, i).concat(list.slice(i + 1))).map((p) => [x].concat(p))));
+    for (let c = n - 2; c >= 0; c--) {
+      const vals = values[c];
+      if (!vals || group.some((h) => at.get(h)[c + 1] === null)) continue;
+      const next = (h) => at.get(h)[c + 1];
+      const orders = (group.length <= 4 ? perms(vals) : [vals]).filter((p) => group.every((h, i) => p[i] <= next(h) + slack));
+      if (!orders.length) continue;
+      // Squared distance of each step from the player's own growth; a rank swap against the next column
+      // only breaks a tie (no guide, equal steps: the order of the next column is kept).
+      // The guide's steps scaled to this column's total step (kill souls against kills), when every twin has one.
+      const steps = group.map((h) => { const g0 = guide(h, c); const g1 = guide(h, c + 1); return g0 !== null && g1 !== null ? g1 - g0 : null; });
+      const guideSum = steps.every((x) => x !== null) ? steps.reduce((s, x) => s + x, 0) : 0;
+      const scale = guideSum > 0 ? (group.reduce((s, h) => s + next(h), 0) - vals.reduce((s, x) => s + x, 0)) / guideSum : 0;
+      const cost = (p) => group.reduce((s, h, i) => {
+        const want = scale ? steps[i] * scale : 0;
+        let swaps = 0;
+        group.forEach((h2, k) => { if (k > i && (p[i] - p[k]) * (next(h) - next(h2)) < 0) swaps++; });
+        return s + Math.pow(next(h) - p[i] - want, 2) + 1e-6 * swaps;
+      }, 0);
+      const costs = orders.map(cost);
+      const best = costs.indexOf(Math.min(...costs));
+      if (new Set(orders.map((p) => p.join(","))).size > 1) guessed++;
+      group.forEach((h, i) => { at.get(h)[c] = orders[best][i]; });
+    }
+    return { at, guessed };
+  }
+
+  // Reads every column of the general graphs (all players at once) and of the per-player graphs (one pick per
+  // player), after the main scan. Each graph is first checked at its last column against what it must show
+  // (the scoreboard's numbers, or the main scan's souls by source), so a switch that lands a frame late is
+  // never read as the new graph; a graph that never matches is left out and its cells stay final.
+  function scanTimeline(m, gen, times, buttonHero, finalSouls) {
+    const n = times.length;
+    const rows = m.teams[0].rows.concat(m.teams[1].rows);
+    const heroes = rows.map((r) => r.hero);
+    if (n < 2 || times.some((t) => t < 0) || new Set(heroes).size !== heroes.length) {
+      log(`timeline: not read (${n} columns, ${times.filter((t) => t < 0).length} without a time, ${heroes.length} players, ${new Set(heroes).size} heroes)`);
+      return;
+    }
+    const final = new Map(rows.map((r) => [r.hero, r.value]));
+    // Player colour -> heroes, from the graph buttons (#PlayerColor's inline colour, the button's hero badge).
+    const byColor = new Map();
+    const noColor = [];
+    for (let b = 1; b <= 12; b++) {
+      const button = UI.graphs.FindChildTraverse(`PlayerButton${b}`);
+      if (!ok(button)) continue;
+      const swatch = button.FindChildTraverse("PlayerColor");
+      const color = ok(swatch) ? String(swatch.style.backgroundColor || "").toUpperCase() : "";
+      if (color && final.has(buttonHero[b])) byColor.set(color, (byColor.get(color) || []).concat([buttonHero[b]]));
+      else noColor.push(b);
+    }
+    const colorHero = new Map(Array.from(byColor).filter(([, hs]) => hs.length === 1).map(([color, hs]) => [color, hs[0]]));
+    const twins = Array.from(byColor).filter(([, hs]) => hs.length > 1); // [colour, heroes]
+    const by = new Map(heroes.map((h) => {
+      const p = { src: new Array(n).fill(null), dtype: new Array(n).fill(null), taken: new Array(n).fill(null) };
+      for (const k of TL_KEYS) p[k] = new Array(n).fill(null);
+      return [h, p];
+    }));
+    // key -> colour -> [n] sorted values of that colour's players (twins only)
+    const twinVals = new Map(TL_GENERAL.map(([key]) => [key, new Map(twins.map(([color]) => [color, new Array(n).fill(null)]))]));
+    const last = n - 1;
+    const ready = new Set();
+    const failed = [];
+    const endSigs = []; // each checked graph's last-column tooltip: a later graph's must differ
+    const jobs = [];
+    const setup = (fn) => ({ act: fn, check: () => true, take: () => {} });
+    const twinOf = new Map(twins); // colour -> its heroes
+    const isTwin = new Set(twins.flatMap(([, hs]) => hs));
+    const known = (tip) => tip.rows.every((r) => final.has(r.hero) || twinOf.has(r.color));
+    const valueOf = (tip, h) => { const r = tip.rows.find((x) => x.hero === h); return r ? r.value : 0; };
+    // A twin colour's values, largest first, padded with 0 for its players the tooltip left out.
+    const twinValues = (tip, color) => {
+      const vals = tip.rows.filter((r) => !r.hero && r.color === color).map((r) => r.value);
+      while (vals.length < twinOf.get(color).length) vals.push(0);
+      return vals.sort((a, b) => b - a);
+    };
+    const near = (v, want) => Math.abs(v - want) <= Math.max(50, 0.005 * want); // the graph can be a few souls off
+    const same = { souls: near, kills: (v, w) => v === w, deaths: (v, w) => v === w };
+    // The last column against the scoreboard: named players one by one, twins as a set. Healing has no exact
+    // match (the scoreboard adds barrier): a tooltip no earlier graph showed, a frame after the switch.
+    const atEnd = (key, tip, tries) => (key === "heal" ? tries >= 1 && !endSigs.includes(tip.sig) :
+      heroes.every((h) => isTwin.has(h) || same[key](valueOf(tip, h), final.get(h)[key])) &&
+      twins.every(([color, hs]) => {
+        const want = hs.map((h) => final.get(h)[key]).sort((a, b) => b - a);
+        return twinValues(tip, color).every((v, i) => same[key](v, want[i]));
+      }));
+    const unread = (tag) => {
+      failed.push(tag);
+      const tip = readTipHeroes(colorHero);
+      logOnce(`tl:${tag}`, `timeline: ${tag} unread (${tipTokens().join("|").slice(0, 160)}${tip ? ` rows ${tip.rows.map((r) => `${r.hero}${r.color}`).join(",")}` : ""})`);
+    };
+
+    for (const [key, ...type] of TL_GENERAL) {
+      const id = graphTypeId(type);
+      jobs.push(setup(() => { graphType(id); asTeam(false); }));
+      jobs.push({
+        act: () => hover(-1),
+        check: (tries) => {
+          const tip = readTipHeroes(colorHero);
+          return tip && tip.time === times[last] && known(tip) && atEnd(key, tip, tries) ? tip : null;
+        },
+        take: (tip) => {
+          endSigs.push(tip.sig);
+          ready.add(key);
+          for (const [color] of twins) twinVals.get(key).get(color)[last] = twinValues(tip, color);
+          // Healing keeps the graph's own last column (no barrier, like every other column of it); twins' in untwin.
+          if (key === "heal") for (const h of heroes) if (!isTwin.has(h)) by.get(h).heal[last] = valueOf(tip, h);
+        },
+        fail: () => unread(key)
+      });
+      for (let c = 0; c < last; c++) {
+        jobs.push({
+          skip: () => !ready.has(key),
+          act: () => hover(c),
+          check: () => {
+            const tip = readTipHeroes(colorHero);
+            return tip && tip.time === times[c] && known(tip) ? tip : null;
+          },
+          take: (tip) => {
+            for (const h of heroes) if (!isTwin.has(h)) by.get(h)[key][c] = valueOf(tip, h);
+            for (const [color] of twins) twinVals.get(key).get(color)[c] = twinValues(tip, color);
+          },
+          fail: () => unread(`${key}@${c}`)
+        });
+      }
+    }
+
+    // One pick per graph button (buttonHero: the main scan's button -> hero), its last column checked first.
+    const buttons = Math.min(12, rows.length);
+    // The pick is asserted again with every column, and must still hold at the end (the last column's tooltip
+    // as checked first, every column's total never below the one before): live 2026-11-23 the last columns of
+    // one pick read another player's (hero 12's damage turned into hero 86's at 20:12). A player that drifts is
+    // read once more, then left out (final, dimmed).
+    // read: the tooltip reader (readTip; Damage from Players rows name no one: readTipTotal).
+    const perPlayer = (name, type, check, take, total, clear, read = () => readTip(true)) => {
+      const id = graphTypeId(type);
+      jobs.push(setup(() => { graphType(id); asTeam(false); }));
+      for (let b = 1; b <= buttons; b++) {
+        const hero = buttonHero[b];
+        if (!final.has(hero)) continue;
+        const tag = `${name}:${b}`;
+        const round = (attempt) => {
+          let endSig = "";
+          let prev = -1;
+          let drift = "";
+          const list = [{
+            act: () => { pick(b); hover(-1); },
+            check: (tries) => {
+              if (tries) hover(-1); // a tooltip made now, after a pick that landed late
+              const tip = read();
+              return tip && tip.time === times[last] && check(tip, hero, tries) ? tip : null;
+            },
+            take: (tip) => { endSig = tip.sig; endSigs.push(tip.sig); ready.add(tag); take(by.get(hero), last, tip); },
+            fail: () => unread(tag)
+          }];
+          for (let c = 0; c < last; c++) {
+            list.push({
+              skip: () => !ready.has(tag) || !!drift,
+              act: () => { pick(b); hover(c); },
+              check: () => {
+                const tip = read();
+                return tip && tip.time === times[c] ? tip : null;
+              },
+              take: (tip) => {
+                const v = total(tip);
+                if (v < prev) { drift = `${times[c]} s: ${prev} -> ${v}`; return; }
+                prev = v;
+                take(by.get(hero), c, tip);
+              },
+              fail: () => unread(`${tag}@${c}`)
+            });
+          }
+          const confirm = {
+            skip: () => !ready.has(tag),
+            act: () => { pick(b); hover(-1); },
+            check: () => {
+              const tip = read();
+              return tip && tip.time === times[last] ? tip : null;
+            },
+            take: (tip) => {
+              if (!drift && tip.sig !== endSig) drift = "the last column changed";
+              if (!drift) return;
+              ready.delete(tag);
+              if (attempt < 1) {
+                log(`timeline: ${tag} (hero ${hero}) drifted (${drift}); read again`);
+                jobs.splice(jobs.indexOf(confirm) + 1, 0, ...round(attempt + 1));
+              } else {
+                failed.push(`${tag} drifted`);
+                logOnce(`tl:${tag}:drift`, `timeline: ${tag} (hero ${hero}) drifted again (${drift}); left out`);
+                clear(by.get(hero));
+              }
+            },
+            fail: () => unread(`${tag}@end`)
+          };
+          list.push(confirm);
+          return list;
+        };
+        jobs.push(...round(0));
+      }
+    };
+    // No exact match at the end: a tooltip no earlier graph or pick showed (a pick that has not landed yet
+    // still shows the last player's), or the same one after a few frames (two players with the same numbers).
+    const fresh = (tip, tries) => !endSigs.includes(tip.sig) || tries >= 6;
+    const sum = (tip) => (tip.total !== null ? tip.total : tip.rows.reduce((s, r) => s + r.value, 0));
+    perPlayer("src", TL_SOURCES, (tip, hero, tries) => {
+      const want = finalSouls.get(hero);
+      return want ? tip.sig === want.sig : fresh(tip, tries);
+    }, (p, c, tip) => { p.src[c] = tip.rows; }, sum, (p) => p.src.fill(null));
+    const PLAYERS = loc("#Citadel_Graph_Damage_Player", "Enemy Players");
+    const BOSS = loc("#Citadel_Graph_Damage_Boss", "Objectives");
+    const dmg = (tip, label) => { const r = tip.rows.find((x) => x.name === label); return r ? r.value : 0; };
+    perPlayer("dmg", TL_DAMAGE, (tip, hero) => dmg(tip, PLAYERS) === final.get(hero).pdmg && dmg(tip, BOSS) === final.get(hero).odmg,
+      (p, c, tip) => { p.pdmg[c] = dmg(tip, PLAYERS); p.odmg[c] = dmg(tip, BOSS); }, sum, (p) => { p.pdmg.fill(null); p.odmg.fill(null); });
+    // Damage Dealt by Type (DAMAGE TYPES): its total is the player damage, exactly.
+    perPlayer("dtype", TL_DTYPE, (tip, hero) => sum(tip) === final.get(hero).pdmg, (p, c, tip) => { p.dtype[c] = tip.rows; }, sum,
+      (p) => p.dtype.fill(null));
+    // Damage from Players (COMBAT): one nameless row per enemy hero; the total is what the player took from them.
+    perPlayer("taken", TL_TAKEN, (tip, hero, tries) => fresh(tip, tries), (p, c, tip) => { p.taken[c] = tip.total; }, (tip) => tip.total,
+      (p) => p.taken.fill(null), readTipTotal);
+
+    // Put the stock graph back the way it opens.
+    jobs.push(setup(() => { graphType(0); asTeam(true); }));
+
+    S.scanning = gen;
+    log(`timeline: ${jobs.length} steps, ${n} columns, ${heroes.length} players, ${colorHero.size} player colours` +
+      `${twins.length ? `, shared by ${twins.map(([, hs]) => hs.join("+")).join(" ")}` : ""}${noColor.length ? `, none on button ${noColor.join(",")}` : ""}`);
+    runJobs(gen, jobs, (stats) => {
+      S.scanning = 0;
+      unhover();
+      // The last column is the scoreboard's final numbers, exactly; healing the graph's when it was read (the
+      // scoreboard adds barrier, which no graph has over time).
+      for (const h of heroes) {
+        const p = by.get(h);
+        for (const k of TL_KEYS) if (k !== "heal" || !ready.has("heal")) p[k][last] = final.get(h)[k];
+        const end = finalSouls.get(h);
+        if (end) p.src[last] = end.rows;
+      }
+      // A player's Souls by Source at column c, all of it or one source (null: not read).
+      const srcOf = (h, c, name = "") => {
+        const src = by.get(h).src[c];
+        return src ? src.filter((r) => !name || r.name === name).reduce((s, r) => s + r.value, 0) : null;
+      };
+      // Twins: their general values put back on each player (untwin). Guides: souls follow the player's Souls by
+      // Source total, kills its Enemy Kills souls; deaths and healing have none.
+      const guides = { souls: (h, c) => srcOf(h, c), kills: (h, c) => srcOf(h, c, "Enemy Kills") };
+      let guessed = 0;
+      for (const [key] of TL_GENERAL) {
+        if (!ready.has(key)) continue;
+        for (const [color, group] of twins) {
+          const values = twinVals.get(key).get(color);
+          const guide = guides[key] || (() => null);
+          // The scoreboard's healing adds barrier: the graph's own last values, larger to the larger scoreboard number.
+          let end = new Map(group.map((h) => [h, final.get(h)[key]]));
+          if (key === "heal" && values[last]) {
+            const rank = group.slice().sort((x, y) => final.get(y).heal - final.get(x).heal);
+            end = new Map(rank.map((h, i) => [h, values[last][i]]));
+          }
+          values[last] = null;
+          const out = untwin(group, values, end, guide, key === "souls" ? 50 : 0);
+          for (const h of group) out.at.get(h).forEach((v, c) => { if (c < last || key === "heal") by.get(h)[key][c] = v; });
+          guessed += out.guessed;
+        }
+      }
+      const full = (k) => heroes.filter((h) => by.get(h)[k].every((v) => v !== null)).length;
+      log(`timeline done in ${Date.now() - stats.t0} ms, ${stats.frames} frames, ${stats.retries} retries, ${failed.length} failed: ` +
+        `${TL_KEYS.concat(["src", "dtype", "taken"]).map((k) => `${k} ${full(k)}/${heroes.length}`).join(", ")}${twins.length ? `; ${guessed} twin column(s) ordered by growth` : ""}`);
+      // One line per column: [hero, souls, kills, deaths, pdmg, odmg, heal, souls by source total, damage taken] per
+      // player (null: not read).
+      logData("timeline", times.map((t, c) => ({ t, p: heroes.map((h) => [h, ...TL_KEYS.map((k) => by.get(h)[k][c]), srcOf(h, c), by.get(h).taken[c]]) })));
+      S.timeline = { n, times: times.slice(), by, heroes, healRead: ready.has("heal") };
+      timelineStrips();
+      paintCells(S.hoverCol); // the sections that need the graphs (damage taken, damage types) have them now
+      scanItemNames(gen); // the item hovers wait for the graph reads (both hover stock panels)
+    }, null, TL_BUDGET);
+  }
+
+  // One hit strip per graph column over the lead graph, from halfway to the previous column to halfway to the
+  // next (the last one runs on under the final-lead pill).
+  function timelineStrips() {
+    const T = S.timeline;
+    if (!T || !ok(UI.strips) || !S.graphScale || !(S.duration > 0)) return;
+    UI.strips.RemoveAndDeleteChildren();
+    const xs = T.times.map((t) => graphX(t, S.duration));
+    xs.forEach((x, c) => {
+      const left = c ? (xs[c - 1] + x) / 2 : 0;
+      const right = c < xs.length - 1 ? (x + xs[c + 1]) / 2 : 1600;
+      const strip = $.CreatePanel("Panel", UI.strips, "", { class: "NSGraphStrip", hittest: "true" });
+      strip.style.marginLeft = `${left.toFixed(1)}px`;
+      strip.style.width = `${Math.max(1, right - left).toFixed(1)}px`;
+      strip.SetPanelEvent("onmouseover", () => hoverAt(c));
+      strip.SetPanelEvent("onmouseout", () => leaveAt(c));
+    });
+    log(`timeline: ${xs.length} hover strips`);
+  }
+
+  // ---------- stat sections (user 2026-11-23, after Statlocker's Match Summary views) ----------
+  // Each of the seven rows shows one stat of its kind (ROW_FAMILY below), its scoreboard stat by default; a click
+  // on the row's name changes it. The others are worked out from the scoreboard and the stat timeline's graphs:
+  //   souls        souls / min
+  //   kills        KDA
+  //   deaths       damage taken (from players: the Damage from Players graph, before mitigation, so above
+  //                deadlock-api's player_damage_taken: 24,369 against 21,095), damage taken / life
+  //   assists      kill participation
+  //   player dmg   damage / min, damage / life, bullet (headshots included), headshot (Gun Damage - Crit), ability
+  //                (the rest of Damage Dealt by Type, which adds up to the player damage), melee
+  //   objective    objective damage / min
+  //   healing      healing and barriers (the scoreboard's split: player_healing_healing / _barriering)
+  // Per life divides by the deaths (at least 1), like Statlocker. Heal prevented, accuracy, last hits and the like
+  // are only in the match metadata, which no script reads (live probe: detailed_postgame/live/
+  // 20261123-row-variables-probe-6864.log).
+  // key -> [row label, star colour (pg_board.css NSBest_<key>), over time (false: final only, dimmed on a hover)]
+  const KEY_INFO = {
+    souls: ["TOTAL SOULS", "souls", true], kills: ["KILLS", "kills", true], deaths: ["DEATHS", "deaths", true],
+    assists: ["ASSISTS", "assists", false], pdmg: ["PLAYER DAMAGE", "pdmg", true], odmg: ["OBJECTIVE DAMAGE", "odmg", true],
+    heal: ["HEALING", "heal", true],
+    kda: ["KDA", "kills", false], kp: ["KILL PARTICIPATION", "assists", false], dpm: ["DAMAGE / MIN", "pdmg", true],
+    spm: ["SOULS / MIN", "souls", true], dpl: ["DAMAGE / LIFE", "pdmg", true], tpl: ["TAKEN / LIFE", "odmg", true],
+    taken: ["DAMAGE TAKEN", "odmg", true], bullet: ["BULLET DAMAGE", "pdmg", true], crit: ["HEADSHOT DAMAGE", "kills", true],
+    melee: ["MELEE DAMAGE", "assists", true], ability: ["ABILITY DAMAGE", "pdmg", true], odpm: ["OBJ. DAMAGE / MIN", "odmg", true],
+    healing: ["HEALING ONLY", "heal", false], barrier: ["BARRIERS", "heal", false]
+  };
+  const BASE_AWARD = Object.fromEntries(STATS.map(([key, , award]) => [key, !!award]));
+  // What a click on each row's name moves through: the stats of that row's kind, its scoreboard stat first (user
+  // 2026-11-23: "based on the per level and if it's suitable on that level"). No stat is in two kinds.
+  const ROW_FAMILY = [
+    ["souls", "spm"],
+    ["kills", "kda"],
+    ["deaths", "taken", "tpl"],
+    ["assists", "kp"],
+    ["pdmg", "dpm", "dpl", "bullet", "crit", "ability", "melee"],
+    ["odmg", "odpm"],
+    ["heal", "healing", "barrier"]
+  ];
+  const perMin = (v, t) => (v === null || v === undefined || !(t > 0) ? null : v / (t / 60));
+  const perLife = (v, d) => (v === null || v === undefined || d === null || d === undefined ? null : v / Math.max(1, d));
+  // Damage Dealt by Type rows -> { bullet, crit, melee, ability } (melee by its English name: other clients count it as ability).
+  function damageTypes(rows) {
+    if (!rows) return null;
+    const gun = loc("#Citadel_Graph_WeaponDamage", "Gun Damage");
+    const crit = loc("#Citadel_Graph_WeaponDamageCrit", "Gun Damage - Crit");
+    const out = { bullet: 0, crit: 0, melee: 0, ability: 0 };
+    let all = 0;
+    for (const r of rows) {
+      all += r.value;
+      if (r.name === gun) out.bullet += r.value;
+      else if (r.name === crit) { out.crit += r.value; out.bullet += r.value; }
+      else if (/melee/i.test(r.name)) out.melee += r.value;
+    }
+    out.ability = all - out.bullet - out.melee;
+    return out;
+  }
+  // One stat of one column at graph column c (-1: the end of the match); null when nothing tells it.
+  function statAt(col, key, c) {
+    const T = S.timeline;
+    const p = T ? T.by.get(col.hero) : null;
+    const at = c < 0 && T ? T.n - 1 : c;
+    const v = (k) => {
+      if (c < 0) return col.value[k];
+      const a = p && p[k] ? p[k][c] : null;
+      return a === undefined ? null : a;
+    };
+    const time = c < 0 ? S.matchDur : T.times[c];
+    const taken = () => (p && at >= 0 ? p.taken[at] : null);
+    switch (key) {
+      case "kda": return c < 0 ? (v("kills") + v("assists")) / Math.max(1, v("deaths")) : null;
+      case "kp": return c < 0 && col.teamKills > 0 ? (v("kills") + v("assists")) / col.teamKills : null;
+      case "dpm": return perMin(v("pdmg"), time);
+      case "spm": return perMin(v("souls"), time);
+      case "odpm": return perMin(v("odmg"), time);
+      case "dpl": return perLife(v("pdmg"), v("deaths"));
+      case "taken": return taken();
+      case "tpl": return perLife(taken(), v("deaths"));
+      case "bullet": case "crit": case "melee": case "ability": {
+        const split = p && at >= 0 ? damageTypes(p.dtype[at]) : null;
+        return split ? split[key] : null;
+      }
+      case "healing": return c < 0 ? col.split.healing : null;
+      case "barrier": return c < 0 ? col.split.barrier : null;
+      default: return v(key);
+    }
+  }
+  // A value the graphs have not given: "..." while a graph read is running or due again, then "-" (it never comes:
+  // no lead graph, an unread graph, a team with no kills; review 2026-11-23).
+  const graphsPending = () => !!S.scanning || !!(S.rescan && S.rescan.gen === S.gen);
+  function fmtStat(col, key, v) {
+    if (v === null || v === undefined) return graphsPending() ? "..." : "-";
+    if (key === "kda") return v.toFixed(2);
+    if (key === "kp") return `${(v * 100).toFixed(1)}%`;
+    return fmtLike(col.text.souls, v);
+  }
+  // The seven rows of every column for the picked section, at graph column c (-1: the final board): values, the
+  // dimmed final ones a column has no value for, the best-of-12 stars and the row labels.
+  function paintCells(c) {
+    const hovering = c >= 0;
+    STATS.forEach((_, slot) => {
+      const key = S.rows[slot];
+      const label = UI.rowLabels[slot];
+      if (ok(label)) label.SetHasClass("NSRowLabelEmpty", !key);
+      if (!key) {
+        for (const col of S.cols) paintSlot(col, slot, "", "", false, false, "");
+        setText(label, "+ ADD STAT");
+        if (ok(label)) label.RemoveClass("NSRowLabelNote");
+        return;
+      }
+      const base = Object.prototype.hasOwnProperty.call(BASE_AWARD, key); // a scoreboard stat: its own text and stars
+      const [name, colour, overTime] = KEY_INFO[key];
+      const vals = S.cols.map((col) => statAt(col, key, c));
+      const finals = hovering ? S.cols.map((col) => statAt(col, key, -1)) : vals;
+      const top = (list) => (list.some((x) => x === null || x === undefined) ? null : Math.max(...list));
+      // Stars: base at the end keeps the scoreboard's own; a moment with a missing value keeps the final ones.
+      const starsOf = (list) => { const t = top(list); return t !== null && t > 0 ? list.map((x) => x === t) : null; };
+      let stars = null;
+      if (!base || BASE_AWARD[key]) {
+        if (base && (!hovering || top(vals) === null)) stars = S.cols.map((col) => !!col.award[key]);
+        else stars = starsOf(top(vals) === null ? finals : vals);
+      }
+      S.cols.forEach((col, i) => {
+        const missing = hovering && (vals[i] === null || vals[i] === undefined);
+        const text = base && (!hovering || missing) ? col.text[key] : fmtStat(col, key, missing ? finals[i] : vals[i]);
+        paintSlot(col, slot, key, text, missing, !!(stars && stars[i]), colour);
+      });
+      let caption = name;
+      // The Healing graph has no barrier; when it was not read the hover shows the final (with barrier) numbers.
+      if (hovering && base && key === "heal" && S.timeline && S.timeline.healRead) caption = "HEALING (NO BARRIER)";
+      else if (hovering && (!overTime || vals.every((x) => x === null || x === undefined))) caption = `${name} (FINAL)`;
+      setText(label, caption);
+      if (ok(label)) label.SetHasClass("NSRowLabelNote", caption.length > 16);
+    });
+  }
+  // One cell: its key class (NSCell_<key>), text, dimming and star (NSBest + NSBest_<colour>).
+  function paintSlot(col, slot, key, text, dim, star, colour) {
+    const [cell, label] = col.slots[slot] || [];
+    if (!ok(cell)) return;
+    const was = col.slotKey[slot];
+    if (was !== key) {
+      if (was) cell.RemoveClass(`NSCell_${was}`);
+      if (key) cell.AddClass(`NSCell_${key}`);
+      col.slotKey[slot] = key;
+    }
+    setText(label, text);
+    cell.SetHasClass("NSCellFinal", dim);
+    const had = col.slotStar[slot];
+    if (had && (!star || had !== colour)) { cell.RemoveClass(`NSBest_${had}`); col.slotStar[slot] = ""; }
+    cell.SetHasClass("NSBest", star);
+    if (star && col.slotStar[slot] !== colour) { cell.AddClass(`NSBest_${colour}`); col.slotStar[slot] = colour; }
+  }
+  // Every row name is clickable (user 2026-11-23: the MORE menu of presets was confusing; removed).
+  function wireRows() {
+    UI.rowLabels.forEach((label, slot) => {
+      if (!ok(label) || label.BHasClass("NSCycle")) return;
+      label.AddClass("NSCycle");
+      label.SetPanelEvent("onactivate", () => cycleRow(slot, 1));
+      label.SetPanelEvent("oncontextmenu", () => cycleRow(slot, -1));
+      label.SetPanelEvent("onmouseover", () => rowPips(slot));
+      label.SetPanelEvent("onmouseout", () => { if (S.pipSlot === slot) rowPips(-1); });
+    });
+  }
+  // A hovered row name shows its kind as bars on the middle of its bottom border, one per stat, the shown one lit
+  // (user 2026-11-23). One strip in the row-name column (#NSRowPips, out of its flow), moved to the hovered row;
+  // slot -1 hides it.
+  const ROW_H = 38; // .NSRowLabel height
+  function rowPips(slot) {
+    S.pipSlot = slot;
+    const family = slot >= 0 ? ROW_FAMILY[slot] : null;
+    const host = family && ok(UI.rowLabels[slot]) ? UI.rowLabels[slot].GetParent() : null;
+    if (!ok(UI.pips)) {
+      if (!ok(host)) return;
+      UI.pips = $.CreatePanel("Panel", host, "NSRowPips", { class: "NSRowPips", hittest: "false" });
+    }
+    UI.pips.SetHasClass("NSRowPipsOn", !!family);
+    if (!family) return;
+    while (UI.pips.GetChildCount() < family.length) $.CreatePanel("Panel", UI.pips, "", { class: "NSRowPip", hittest: "false" });
+    UI.pips.Children().forEach((pip, i) => {
+      pip.SetHasClass("NSRowPipShown", i < family.length);
+      pip.SetHasClass("NSRowPipOn", i < family.length && family[i] === S.rows[slot]);
+    });
+    // Street Brawl drops row 1 (NSNoTotal): the rows under it move up one.
+    const row = slot - (slot > 0 && ok(UI.labels) && UI.labels.BHasClass("NSNoTotal") ? 1 : 0);
+    UI.pips.style.y = `${(row + 1) * ROW_H - 3}px`;
+  }
+  // A click on a row's name moves that row to the next stat of its kind (ROW_FAMILY; a right click: the one before),
+  // so a row never shows another row's stat.
+  function cycleRow(slot, dir) {
+    const family = ROW_FAMILY[slot];
+    if (stopped || !family) return;
+    const at = family.indexOf(S.rows[slot]);
+    const next = family[((at < 0 ? 0 : at + dir) + family.length) % family.length];
+    if (next === S.rows[slot]) return; // a kind of one stat
+    const rows = S.rows.slice();
+    rows[slot] = next;
+    log(`row ${slot + 1}: ${next}`);
+    PF.clicked = true;
+    rowHint();
+    setRows(rows, true);
+    if (S.pipSlot === slot) rowPips(slot);
+  }
+  // "CLICK A ROW NAME TO SWAP" over the row names until the player has clicked one, in this session or an earlier
+  // one (user 2026-11-23). Hidden until the save page has answered or given up, so it never flashes on for a
+  // player who already knows.
+  function rowHint() {
+    if (ok(UI.rowHint)) UI.rowHint.SetHasClass("NSRowHintOn", PF.asked && !PF.clicked);
+  }
+  function setRows(rows, byUser) {
+    if (rows.join(",") === S.rows.join(",")) return;
+    if (byUser && PF.read !== "done") rows.forEach((key, slot) => { if (key !== S.rows[slot]) PF.touched.add(slot); });
+    S.rows = rows;
+    if (byUser) prefsSave();
+    paintCells(S.hoverCol);
+  }
+
+  // ---------- saved rows (user 2026-11-23: "make it have a persistent save ... fine to use web for saving") ----------
+  // The seven row keys live in the hpv2-store page dps/v1 (Steam's CEF localStorage on this PC, nothing on a
+  // server), reached through a hidden CitadelHTMLPanel the way Observer HUD's store is: the request in the URL
+  // fragment, the reply in the page title (prefix DPS1:). Read when the board first shows, and again on the next
+  // show or row click while no read has been answered. A row changed before the answer keeps the change; the
+  // others take the saved stat. Written PREFS_SAVE_S after the last change, never before a read was answered (a
+  // write then would put the scoreboard's stats over the saved rows). No answer: the board keeps the rows it has,
+  // and says so in the log.
+  const PREFS_URL = "https://hantu-raya.github.io/hpv2-store/dps/v1/";
+  const PREFS_PREFIX = "DPS1:";
+  const PREFS_HELLO_S = 2; // greeted at 0, 2, 4 and 6 s (the third from a blank page: a lost first load never answers)
+  const PREFS_HELLO_TRIES = 4;
+  const PREFS_OP_S = 4;
+  const PREFS_SAVE_S = 1;
+  // read: "" (not asked), "asking", "done" (answered: rows or nothing saved). touched: the rows changed by a click
+  // before then.
+  const PF = { panel: null, handler: false, phase: "idle", gen: 0, seq: 0, id: "", tries: 0, queue: [], cur: null, read: "",
+    touched: new Set(), saveToken: 0, asked: false, clicked: false };
+  // A saved row keeps its stat when the stat is of that row's kind, else shows the row's scoreboard stat (an older
+  // save could hold a preset's layout).
+  const cleanRows = (raw) => {
+    if (!Array.isArray(raw) || raw.length !== STATS.length) return null;
+    return raw.map((key, slot) => (ROW_FAMILY[slot].includes(key) ? key : ROW_FAMILY[slot][0]));
+  };
+  function prefsPanel() {
+    if (ok(PF.panel)) return PF.panel;
+    const wrap = $.CreatePanel("Panel", ctx, "NSPrefsWrap", { class: "NSPrefsWrap", hittest: "false" });
+    PF.panel = $.CreatePanel("CitadelHTMLPanel", wrap, "NSPrefs", { class: "NSPrefs", hittest: "false", acceptsfocus: "false" });
+    PF.handler = false;
+    return PF.panel;
+  }
+  function prefsSend(message) {
+    const panel = prefsPanel();
+    if (!PF.handler) {
+      PF.handler = true;
+      $.RegisterEventHandler("HTMLTitle", panel, onPrefsTitle);
+    }
+    panel.SetURL(`${PREFS_URL}#${encodeURIComponent(JSON.stringify(message))}`);
+  }
+  function prefsOp(op) {
+    PF.queue.push(op);
+    if (PF.phase !== "idle") return;
+    PF.phase = "hello";
+    PF.tries = 0;
+    prefsHello(++PF.gen);
+  }
+  function prefsHello(gen) {
+    if (stopped || gen !== PF.gen || PF.phase !== "hello") return;
+    if (PF.tries >= PREFS_HELLO_TRIES) { prefsGiveUp(); return; }
+    try {
+      if (PF.tries === 2) PF.panel.SetURL("about:blank");
+      PF.tries++;
+      PF.id = `h${++PF.seq}`;
+      prefsSend({ i: PF.id, o: "hello" });
+    } catch (e) {
+      prefsGiveUp();
+      return;
+    }
+    $.Schedule(PREFS_HELLO_S, () => prefsHello(gen));
+  }
+  function prefsNext() {
+    while (PF.queue.length && PF.queue[0].gen !== undefined && PF.queue[0].gen !== S.gen) PF.queue.shift(); // an old match's
+    const op = PF.queue.shift();
+    if (!op) { prefsDone(); return; }
+    const gen = ++PF.gen;
+    PF.phase = "op";
+    PF.cur = op;
+    PF.id = `${op.o}${++PF.seq}`;
+    const message = { i: PF.id, o: op.o };
+    if (op.o === "w") message.c = op.c;
+    if (op.o === "it") { message.m = op.m; message.h = op.h; }
+    try {
+      prefsSend(message);
+    } catch (e) {
+      prefsGiveUp();
+      return;
+    }
+    $.Schedule(op.o === "it" ? BUY_IT_S : PREFS_OP_S, () => { if (!stopped && gen === PF.gen && PF.phase === "op") prefsGiveUp(); });
+  }
+  function onPrefsTitle(panelOrTitle, eventTitle) {
+    if (stopped) return;
+    const title = eventTitle !== undefined ? eventTitle : panelOrTitle;
+    if (typeof title !== "string" || title.indexOf(PREFS_PREFIX) !== 0) return;
+    let reply = null;
+    try { reply = JSON.parse(title.slice(PREFS_PREFIX.length)); } catch (e) { return; }
+    if (!reply || typeof reply !== "object" || reply.i !== PF.id) return; // late, duplicate or foreign
+    if (reply.o === "ready" && PF.phase === "hello") {
+      if (typeof reply.h !== "string" || reply.h.split("#")[0] !== PREFS_URL || reply.v !== 1 || reply.ok !== true) { prefsGiveUp(); return; }
+      prefsNext();
+      return;
+    }
+    const op = PF.cur;
+    if (PF.phase !== "op" || !op || reply.o !== op.o) return;
+    if (op.o === "r") {
+      let rows = null;
+      let record = null;
+      if (reply.ok === true && reply.x === 1) { try { record = JSON.parse(reply.v); rows = cleanRows(record.rows); } catch (e) { rows = null; } }
+      // A row was clicked in an earlier session: the save says so (clicked, written since 2026-11-23), or its rows
+      // are not the scoreboard's (an older save).
+      if (rows && (record.clicked === true || rows.join(",") !== STATS.map(([key]) => key).join(","))) PF.clicked = true;
+      PF.asked = true;
+      rowHint();
+      const kept = Array.from(PF.touched).sort();
+      PF.read = "done";
+      PF.touched.clear();
+      if (rows) setRows(rows.map((key, slot) => (kept.includes(slot) ? S.rows[slot] : key)), false);
+      log(`prefs: ${rows ? `rows ${rows.map((key) => key || "-").join(",")}` : "nothing saved"}${kept.length ? ` (row ${kept.map((i) => i + 1).join(", ")} changed meanwhile: kept)` : ""}`);
+      if (kept.length) prefsSave();
+    } else if (op.o === "it") onBuyReply(op, reply);
+    else if (op.o === "w") log(`prefs: ${reply.ok === true ? "saved" : `not saved (${reply.e || "?"})`}`);
+    prefsNext();
+  }
+  function prefsDone() {
+    PF.gen++;
+    PF.phase = "idle";
+    PF.id = "";
+    PF.cur = null;
+    try { if (ok(PF.panel)) PF.panel.SetURL("about:blank"); } catch (e) { /* the panel is gone */ }
+  }
+  function prefsGiveUp() {
+    log("prefs: no answer from the save page");
+    if (BUY.state === "asking") buyFailed("the save page did not answer", "ITEM TIMES: DEADLOCK-API NOT REACHED. TRY AGAIN LATER");
+    PF.asked = true; // no answer: the hint shows, unless a row was clicked this session
+    rowHint();
+    PF.queue = [];
+    if (PF.read === "asking") PF.read = ""; // asked again on the next show or row click
+    prefsDone();
+  }
+  function prefsLoad() {
+    if (PF.read) return;
+    PF.read = "asking";
+    prefsOp({ o: "r" });
+  }
+  function prefsSave() {
+    const token = ++PF.saveToken;
+    $.Schedule(PREFS_SAVE_S, () => {
+      if (stopped || token !== PF.saveToken) return;
+      if (PF.read !== "done") { prefsLoad(); return; } // its answer saves the clicked rows over the saved ones
+      PF.queue = PF.queue.filter((op) => op.o !== "w");
+      prefsOp({ o: "w", c: JSON.stringify({ v: 1, rows: S.rows, clicked: true }) }); // only a click saves
+    });
+  }
+  function prefsClose() {
+    if (!ok(PF.panel)) return;
+    const wrap = PF.panel.GetParent();
+    (ok(wrap) && wrap.id === "NSPrefsWrap" ? wrap : PF.panel).DeleteAsync(0);
+    PF.panel = null;
+  }
+
+  // ---------- final item slots: names, extra-slot locks and purchase times ----------
+  // User 2026-11-23: buy times from deadlock-api's purchase history; then "add the locked on the flex slot since
+  // they did not get the walkers like the gameplay does it", "remove the items if the player havent bought it rather
+  // being grey", "the empty spaces don't have the time", "it's 3 slot conditional", "do it without the api and use
+  // based on the graph", "reduce api usage as possible and check the ingame first", and say when a match is still
+  // too new for deadlock-api.
+  // In game first: the stock row always holds 12 CitadelModIcon panels, empty slots included, with no item id or
+  // name on them (probe 2026-11-23, detailed_postgame/live/20261123-item-icons-probe-6864.log). Hovering one shows the
+  // stock CitadelModDetailsTooltip with the item's name first, one frame later. An empty slot's icon has no item
+  // category class (isWeapon, isArmor, isTech) and is not hovered. So once the graphs are read the board hovers each
+  // item icon for a frame (the TooltipManager layer at opacity 0 meanwhile, so nothing flashes) and reads its name. 9 slots are open from the start and one more per enemy Walker the
+  // team kills (the game's Citadel_FlexSlotUnlockedSlot02-04), read from the lead graph's lane objectives (tier 2).
+  // The board then shows each player's 12 cells as the game does: the items, blank empty slots, a lock per extra slot
+  // not open yet. Only purchase times need deadlock-api: asked through the save page (dps/v1, op "it") on the
+  // first hover of the lead graph or of a player's items, once per match per game session, again after
+  // BUY_RETRY_MS when it failed. A hovered item then shows when it was bought, and on a graph hover the items not
+  // bought by then are left out.
+  const ITEM_SLOTS = 12;
+  const FLEX_SLOTS = 3;
+  const LOCK_ICON = "s2r://panorama/images/upgrades/lock_icon_psd.vtex";
+  const BUY_IT_S = 20; // per player; the page's own request gives up at 15 s
+  const BUY_TIP_FRAMES = 3; // frames to wait for an icon's name in the tooltip
+  const BUY_TAIL_S = 0.5; // the tooltip layer stays hidden this long after the last hover (the stock hide lags)
+  const BUY_RETRY_MS = 60000;
+  // Styled inline: the board's stylesheet does not reach the stock scoreboard's panels (live 2026-11-23).
+  // 14 px and 2 px sides: the 45 px icon (shown at 75 %) holds "28:01"; 17 px with 5 px sides cut "17:23" to "17..."
+  // (user screenshot 2026-11-23). noclip: a longer time ("1:02:03") draws past the icon's edges instead of an ellipsis.
+  const BUY_LABEL = { horizontalAlign: "center", verticalAlign: "bottom", marginBottom: "2px", padding: "1px 2px", borderRadius: "3px",
+    backgroundColor: "#10130Ddd", color: "#FFEFD7", fontSize: "14px", fontWeight: "bold", letterSpacing: "0px", textOverflow: "noclip",
+    zIndex: "10", visibility: "collapse" };
+  // opacity inline as on the stock icons (styleItems): stock rules may fade the container's children.
+  // A blank cell is drawn as the game's empty item slot, a dark square with a thin light border (user 2026-11-23: "like
+  // the base game empty boxes"); a locked one has the stock item lock on it. It lives in the stock icon, first and the
+  // icon's full size, shown only on a blank cell (the game rebuilds ItemsContainer's children and drops any it did not
+  // make; a 0 px box with overflow noclip drew nothing: live 2026-11-23).
+  const CELL_BOX = { width: "100%", height: "100%", visibility: "collapse" };
+  const CELL_STYLE = { width: "100%", height: "100%", backgroundColor: "#0000004d", border: "1px solid #FFEFD733", borderRadius: "3px" };
+  const LOCK_IMG = { width: "55%", height: "55%", horizontalAlign: "center", verticalAlign: "center", opacity: "0.6" };
+  const BUY = { gen: -1, state: "", wait: 0, by: new Map(), failed: "", missing: 0, at: 0, names: new Map(), cache: new Map() };
+  const itemIcons = (col) => (ok(col.items) ? col.items.Children().filter((p) => ok(p) && p.paneltype === "CitadelModIcon") : []);
+  // An empty slot's icon has no item category class (probe 2026-11-23: Ivy's last three, 9 items owned).
+  const emptySlot = (icon) => !icon.BHasClass("isWeapon") && !icon.BHasClass("isArmor") && !icon.BHasClass("isTech");
+
+  // An item's name in the player's language (cached; the class name itself when the game has no such token).
+  function itemName(cls) {
+    if (!BUY.names.has(cls)) BUY.names.set(cls, loc(`#${cls}`, cls).trim().toLowerCase());
+    return BUY.names.get(cls);
+  }
+  // The first label of the stock item tooltip, "" while it shows none.
+  function itemTipName() {
+    const tip = windowRoot().FindChildTraverse("CitadelModDetailsTooltip");
+    if (!ok(tip) || !tip.visible) return "";
+    let first = "";
+    const walk = (p) => {
+      if (first || !ok(p) || !p.visible) return;
+      if (p.paneltype === "Label") {
+        const t = String(p.text || "").trim();
+        if (t) { first = t; return; }
+      }
+      for (const kid of p.Children()) walk(kid);
+    };
+    walk(tip);
+    return first;
+  }
+  // Each icon's item name ("" for an empty slot), then the slots (checkFlex, paintSlots) and any purchase times.
+  function scanItemNames(gen) {
+    if (stopped || gen !== S.gen || S.namesGen === gen) return;
+    const list = [];
+    for (const col of S.cols) {
+      col.iconNames = new Map();
+      itemIcons(col).forEach((icon, i) => list.push({ col, icon, first: i === 0, name: "" }));
+    }
+    if (!list.length) return;
+    let layer = null;
+    const hideLayer = () => {
+      if (!ok(layer)) layer = windowRoot().FindChildTraverse("TooltipManager");
+      if (ok(layer)) layer.style.opacity = "0";
+    };
+    hideLayer();
+    const layerAtStart = ok(layer);
+    const t0 = Date.now();
+    let at = 0;
+    let wait = 0;
+    let frames = 0;
+    let prev = "";
+    let seen = new Set();
+    const out = (e) => { try { $.DispatchEvent("DispatchPanelEvent", e.icon, "onmouseout"); } catch (err) { /* the icon is gone */ } };
+    const done = () => {
+      // Back to 1, not null: live, opacity 0 then null leaves a panel hidden (observer_hud validator, stuckHidden).
+      $.Schedule(BUY_TAIL_S, () => { if (ok(layer)) layer.style.opacity = "1"; });
+      if (stopped || gen !== S.gen) return;
+      for (const e of list) e.col.iconNames.set(e.icon, e.name);
+      for (const col of S.cols) col.stockOrder = Array.from(col.iconNames.keys()); // put back on teardown
+      S.namesGen = gen;
+      const named = list.filter((e) => e.name).length;
+      log(`slots: ${named} items, ${list.length - named} empty, read in ${Date.now() - t0} ms, ${frames} frames` +
+        `${layerAtStart ? "" : ok(layer) ? ", tooltip layer found late" : ", no tooltip layer to hide"}`);
+      checkFlex();
+      applyBuys();
+      paintSlots(S.hoverCol);
+    };
+    const read = () => {
+      if (stopped || gen !== S.gen) { out(list[at]); done(); return; }
+      frames++;
+      wait++;
+      if (!ok(layer)) hideLayer();
+      const name = itemTipName();
+      // A new name, or the same one once BUY_TIP_FRAMES passed (two players may own the item read last).
+      if ((!name || name === prev) && wait < BUY_TIP_FRAMES) { $.Schedule(0, read); return; }
+      list[at].name = name && !seen.has(name) ? name : ""; // nobody owns an item twice
+      if (name) prev = name;
+      if (list[at].name) seen.add(list[at].name);
+      out(list[at]);
+      at++;
+      next();
+    };
+    const next = () => {
+      if (stopped || gen !== S.gen || at >= list.length) { done(); return; }
+      if (list[at].first) seen = new Set();
+      if (emptySlot(list[at].icon)) { at++; next(); return; } // nothing to hover: an empty slot
+      wait = 0;
+      try { $.DispatchEvent("DispatchPanelEvent", list[at].icon, "onmouseover"); } catch (err) { at++; next(); return; }
+      $.Schedule(0, read);
+    };
+    next();
+  }
+  // The locks follow the Walker kills only when the end agrees: nobody owns more items than their team's slots.
+  function checkFlex() {
+    S.flex = false;
+    const W = S.walkers;
+    if (!W) { log("slots: no lane objectives read: no extra-slot locks"); return; }
+    // Street Brawl (every player on the same souls) has its own rules, and its lane objectives read as Walkers at
+    // 0:01 (live 136872372); no real Walker falls in the first minute either.
+    if (S.sameTotal) { log("slots: Street Brawl: no extra-slot locks"); return; }
+    if (W.some((w) => w.some((t) => t < 60))) { log("slots: a Walker in the first minute: the lane objectives are not trusted, no locks"); return; }
+    for (const col of S.cols) {
+      const owned = Array.from(col.iconNames.values()).filter(Boolean).length;
+      const open = ITEM_SLOTS - FLEX_SLOTS + Math.min(FLEX_SLOTS, W[col.teamIndex].length);
+      if (owned > open) {
+        log(`slots: hero ${col.hero} ends with ${owned} items, more than ${open} slots: the Walker kills are not trusted, no locks`);
+        return;
+      }
+    }
+    S.flex = true;
+    log(`slots: extra slots open at the end ${W.map((w) => Math.min(FLEX_SLOTS, w.length)).join("/")} (Walkers at ${W.map((w) => w.map(clock).join(",") || "-").join(" / ")})`);
+  }
+  // At graph column c (-1: the end) each player's 12 cells, the stock icons in place: an item owned then shows, an
+  // item not bought yet and an empty slot are blank (the icon's own stack faded, an empty-slot frame drawn), and the last blank cells carry a lock
+  // per extra slot the team had not opened. Without trusted locks there are no locks; the blank cells stay.
+  function paintSlots(c) {
+    if (S.namesGen !== S.gen) return;
+    const T = S.timeline;
+    const time = c >= 0 && T ? T.times[c] : Infinity;
+    for (const col of S.cols) {
+      if (!col.iconNames) continue;
+      // The items owned then in the order they were bought (user 2026-11-23; no time yet: the stock order, after the
+      // timed ones), then the blank cells in the stock order.
+      const cells = Array.from(col.iconNames).filter(([icon]) => ok(icon)).map(([icon, name], i) => {
+        const bought = col.buyAt ? col.buyAt.get(icon) : undefined;
+        return { icon, i, t: bought === undefined ? Infinity : bought, on: !!name && !(bought > time) };
+      });
+      const shown = cells.filter((e) => e.on).sort((a, b) => a.t - b.t || a.i - b.i);
+      const blanks = cells.filter((e) => !e.on).map((e) => e.icon);
+      for (const e of cells) css(e.icon.FindChild("modIconContainer"), { opacity: e.on ? "1" : "0" });
+      placeIcons(col, shown.map((e) => e.icon).concat(blanks));
+      const open = S.flex ? Math.min(FLEX_SLOTS, S.walkers[col.teamIndex].filter((t) => t <= time).length) : FLEX_SLOTS;
+      const locked = new Set(blanks.slice(Math.max(0, blanks.length - (FLEX_SLOTS - open))));
+      for (const e of cells) slotCell(e.icon, !e.on, locked.has(e.icon));
+    }
+  }
+  // The stock icons in this order (moved within their own container; only when the order changed).
+  function placeIcons(col, icons) {
+    if (!ok(col.items) || (col.placed && col.placed.length === icons.length && col.placed.every((p, i) => p === icons[i]))) return;
+    icons.forEach((icon, i) => {
+      const at = col.items.GetChild(i);
+      if (ok(at) && at !== icon) col.items.MoveChildBefore(icon, at);
+    });
+    col.placed = icons;
+  }
+  // A blank cell's empty-slot frame (#NSSlotCell), with the lock (#NSSlotLock) when the slot was not open.
+  function slotCell(icon, blank, locked) {
+    let box = icon.FindChild("NSSlotCell");
+    if (!blank && !ok(box)) return;
+    if (!ok(box)) {
+      box = $.CreatePanel("Panel", icon, "NSSlotCell", { hittest: "false" });
+      css(box, CELL_BOX);
+      const cell = $.CreatePanel("Panel", box, "", { hittest: "false" });
+      css(cell, CELL_STYLE);
+      const img = $.CreatePanel("Image", cell, "NSSlotLock", { src: LOCK_ICON, scaling: "stretch-to-fit-preserve-aspect", hittest: "false" });
+      if (typeof img.SetImage === "function") img.SetImage(LOCK_ICON);
+      css(img, LOCK_IMG);
+      const first = icon.GetChild(0);
+      if (ok(first) && first !== box) icon.MoveChildBefore(box, first);
+    }
+    css(box, { visibility: blank ? "visible" : "collapse" });
+    css(box.FindChildTraverse("NSSlotLock"), { visibility: locked ? "visible" : "collapse" });
+  }
+
+  // The note under FINAL ITEMS: asking, or why there are no buy times ("" hides it).
+  function buyNote(text) {
+    setText(UI.buyNote, text);
+    if (ok(UI.buyNote)) UI.buyNote.SetHasClass("NSBuyNoteOn", !!text);
+  }
+  // On the first hover of the lead graph or of a player's items: the purchase times, once per match per session.
+  function wantBuys() {
+    if (stopped || !S.key || !/^\d{1,12}$/.test(S.matchId)) return;
+    if (BUY.gen === S.gen && (BUY.state === "asking" || BUY.state === "done" || (BUY.state === "failed" && Date.now() - BUY.at < BUY_RETRY_MS))) return;
+    BUY.gen = S.gen;
+    BUY.at = Date.now();
+    const cached = BUY.cache.get(S.matchId);
+    if (cached) {
+      BUY.by = cached;
+      BUY.state = "done";
+      applyBuys();
+      return;
+    }
+    const heroes = S.cols.map((c) => c.hero).filter((h) => h > 0);
+    if (!heroes.length) return;
+    BUY.state = "asking";
+    BUY.wait = heroes.length;
+    BUY.by = new Map();
+    BUY.failed = "";
+    BUY.missing = 0;
+    buyNote("ITEM TIMES: ASKING DEADLOCK-API...");
+    for (const h of heroes) prefsOp({ o: "it", m: S.matchId, h, gen: S.gen });
+  }
+  function buyFailed(why, note) {
+    BUY.state = "failed";
+    BUY.at = Date.now();
+    log(`buys: no purchase history (${why})`);
+    buyNote(note);
+  }
+  function onBuyReply(op, reply) {
+    if (op.gen !== S.gen || BUY.gen !== op.gen || BUY.state !== "asking") return;
+    if (reply.ok === true && reply.x === 1 && Array.isArray(reply.v)) {
+      BUY.by.set(op.h, reply.v.filter((r) => Array.isArray(r) && typeof r[0] === "string" && r[0].length < 80 && Number.isFinite(r[1]) && Number.isFinite(r[2])));
+    } else if (reply.ok === true && reply.x === 0) BUY.missing++;
+    else BUY.failed = String(reply.e || "?").slice(0, 40);
+    if (--BUY.wait > 0) return;
+    if (!BUY.by.size) {
+      if (BUY.failed) buyFailed(`deadlock-api: ${BUY.failed}`, "ITEM TIMES: DEADLOCK-API NOT REACHED. TRY AGAIN LATER");
+      else buyFailed("deadlock-api does not have this match yet", "ITEM TIMES: THIS MATCH IS TOO NEW FOR DEADLOCK-API. TRY AGAIN LATER");
+      return;
+    }
+    BUY.state = "done";
+    BUY.cache.set(S.matchId, BUY.by);
+    buyNote("");
+    applyBuys();
+  }
+  // Each named icon's purchase: the last time it was bought and kept (deadlock-api lists every purchase in order).
+  function applyBuys() {
+    if (stopped || S.namesGen !== S.gen || BUY.gen !== S.gen || BUY.state !== "done") return;
+    let named = 0;
+    let timed = 0;
+    for (const col of S.cols) {
+      col.buyAt = new Map();
+      for (const [icon, name] of col.iconNames || []) {
+        if (!name || !ok(icon)) continue;
+        named++;
+        let t = -1;
+        for (const [cls, bought, sold] of BUY.by.get(col.hero) || []) if (!sold && itemName(cls) === name.toLowerCase()) t = Math.max(t, bought);
+        if (t < 0) continue;
+        timed++;
+        col.buyAt.set(icon, t);
+        // Inside the icon's own stack (modIconContainer: its children overlap; the icon flows its own down).
+        const host = icon.FindChildTraverse("modIconContainer") || icon;
+        let label = host.FindChild("NSBuyTime");
+        if (!ok(label)) {
+          label = $.CreatePanel("Label", host, "NSBuyTime", { text: "", hittest: "false" });
+          css(label, BUY_LABEL);
+        }
+        label.text = clock(t);
+        (col.buyLabels = col.buyLabels || []).push(label);
+      }
+    }
+    log(`buys: ${timed}/${named} items timed`);
+    paintSlots(S.hoverCol);
+  }
+  // The hovered item's buy time (pollHover); off: hidden.
+  function buyLabel(icon, on) {
+    if (!ok(icon)) return;
+    const host = icon.FindChildTraverse("modIconContainer") || icon;
+    css(host.FindChild("NSBuyTime"), { visibility: on ? "visible" : "collapse" });
+  }
+  // teardown: the stock rows are reused by the next match.
+  function slotsClear(col) {
+    if (col.stockOrder) { col.placed = null; placeIcons(col, col.stockOrder.filter(ok)); }
+    for (const p of col.buyLabels || []) if (ok(p)) p.DeleteAsync(0);
+    col.buyLabels = [];
+    for (const icon of (col.iconNames || new Map()).keys()) {
+      if (!ok(icon)) continue;
+      css(icon.FindChild("modIconContainer"), { opacity: "1" });
+      const cell = icon.FindChild("NSSlotCell");
+      if (ok(cell)) cell.DeleteAsync(0);
+    }
+  }
+
+  // The board at graph column c: the picked section's numbers at that moment (paintCells), the sources, the header.
+  function hoverAt(c) {
+    const T = S.timeline;
+    if (stopped || !T || c < 0 || c >= T.n) return;
+    S.hoverCol = c;
+    S.hoverToken++;
+    paintCells(c);
+    paintSlots(c);
+    wantBuys();
+    for (const col of S.cols) {
+      const p = T.by.get(col.hero);
+      if (ok(col.column)) col.column.AddClass("NSAtTime");
+      if (ok(col.souls)) {
+        const src = p ? p.src[c] : null;
+        const end = S.finalSouls.get(col.hero);
+        col.souls.AddClass("NSStatic");
+        col.souls.SetHasClass("NSSoulsFinal", !src && !!end);
+        fillSouls(col, src || (end ? end.rows : []));
+      }
+    }
+    if (S.head) {
+      [0, 1].forEach((i) => {
+        // Team sums from the players; the last column keeps the totals rows (the graphs can be a soul off).
+        const sum = (key) => {
+          if (c === T.n - 1) return null;
+          let s = 0;
+          for (const h of S.head.heroes[i]) {
+            const v = T.by.has(h) ? T.by.get(h)[key][c] : null;
+            if (v === null) return null;
+            s += v;
+          }
+          return s;
+        };
+        const worth = sum("souls");
+        const kills = sum("kills");
+        setText(UI.worth[i], worth === null ? S.head.worth[i] : fmtK(worth));
+        setText(UI.kills[i], kills === null ? S.head.kills[i] : String(kills));
+      });
+    }
+    const t = T.times[c];
+    setText(UI.clock, clock(t));
+    if (ok(UI.frame)) UI.frame.AddClass("NSAtTime");
+    // Cursor: a hairline at the column, a dot on the lead line, the time and the lead in a chip.
+    const x = graphX(t, S.duration);
+    css(UI.cursor, { marginLeft: `${(x - 1).toFixed(1)}px` });
+    const lead = S.leadAt.get(t);
+    const side = lead === undefined || fmtK(Math.abs(lead)) === "0.0K" ? -1 : lead > 0 ? 0 : 1;
+    if (ok(UI.cursorDot)) {
+      UI.cursorDot.SetHasClass("NSNoLead", lead === undefined || !S.graphYOf);
+      UI.cursorDot.SetHasClass("NSPeakDotTeam1", side === 0);
+      UI.cursorDot.SetHasClass("NSPeakDotTeam2", side === 1);
+      if (lead !== undefined && S.graphYOf) css(UI.cursorDot, { marginLeft: `${(x - 6).toFixed(1)}px`, marginTop: `${(S.graphYOf(lead) - 6).toFixed(1)}px` });
+    }
+    if (ok(UI.chip)) {
+      setText(UI.chip, lead === undefined ? clock(t) : side < 0 ? `${clock(t)}  EVEN` : `${clock(t)}  +${fmtK(Math.abs(lead))}`);
+      UI.chip.SetHasClass("NSChipTeam1", side === 0);
+      UI.chip.SetHasClass("NSChipTeam2", side === 1);
+      const CHIP_W = 112; // .NSGraphChip width
+      const left = x + 8 + CHIP_W <= CHART_W ? x + 8 : x - 8 - CHIP_W;
+      css(UI.chip, { marginLeft: `${Math.max(0, left).toFixed(1)}px` });
+    }
+    if (ok(UI.hover)) UI.hover.AddClass("NSHoverOn");
+  }
+
+  // The mouse left strip c: the final numbers come back unless it is already on another strip.
+  function leaveAt(c) {
+    if (S.hoverCol !== c) return;
+    S.hoverCol = -1;
+    const token = ++S.hoverToken;
+    $.Schedule(RESTORE_S, () => { if (!stopped && token === S.hoverToken && S.hoverCol < 0) restoreFinal(); });
+  }
+
+  function restoreFinal() {
+    S.hoverCol = -1;
+    paintCells(-1);
+    paintSlots(-1);
+    for (const col of S.cols) {
+      if (ok(col.column)) col.column.RemoveClass("NSAtTime");
+      if (ok(col.souls) && col.souls.BHasClass("NSStatic")) {
+        const end = S.finalSouls.get(col.hero);
+        col.souls.RemoveClass("NSSoulsFinal");
+        fillSouls(col, end ? end.rows : []);
+      }
+    }
+    if (S.head) {
+      [0, 1].forEach((i) => { setText(UI.worth[i], S.head.worth[i]); setText(UI.kills[i], S.head.kills[i]); });
+      setText(UI.clock, S.head.clock);
+    }
+    if (ok(UI.frame)) UI.frame.RemoveClass("NSAtTime");
+    if (ok(UI.hover)) UI.hover.RemoveClass("NSHoverOn");
+  }
+
+  // teardown: no timeline, no strips, the final numbers (the columns themselves go with the build).
+  function timelineClear() {
+    if (S.hoverCol >= 0 || (ok(UI.hover) && UI.hover.BHasClass("NSHoverOn"))) restoreFinal();
+    S.hoverToken++;
+    S.timeline = null;
+    S.finalSouls = new Map();
+    S.leadAt = new Map();
+    S.graphYOf = null;
+    S.duration = 0;
+    if (ok(UI.strips)) UI.strips.RemoveAndDeleteChildren();
   }
 
   // ---------- loop ----------
@@ -1408,13 +2831,26 @@
       $.RegisterEventHandler("CitadelPostGameSelectScreenIndex", UI.page, () => { if (!stopped) wake(SCREEN_WAKE_MS); });
     }
     if (!ok(UI.scoreboard) || !ok(UI.graphs) || !ok(UI.screen)) return false;
-    if (!UI.page.BHasClass("PageVisible")) { if (S.loadingSince) { S.loadingSince = 0; progressHide(); } return false; }
+    if (!UI.page.BHasClass("PageVisible")) {
+      if (S.loadingSince) { S.loadingSince = 0; progressHide(); }
+      // Closed with the mouse on the lead graph: no onmouseout comes, so the final numbers come back here.
+      if (S.hoverCol >= 0) restoreFinal();
+      // Closed while the graphs are read: a hidden graph reads nothing, so the scan would finish with no values
+      // and the same match never scans again. Drop the board; the next show builds and reads it afresh.
+      if (S.key && S.scanning && S.scanning === S.gen) {
+        log("scan: the page closed before the graphs were read; read again on the next show");
+        teardown();
+        S.key = "";
+      }
+      return false;
+    }
     fitBoard();
     // The board builds while the page opens on the Team1 screen; the entrance plays when the Scoreboard
     // screen comes into focus and is re-armed once that screen has been away a while (playIntro).
     const focused = UI.screen.BHasClass("Focused");
     if (!focused && S.focused) S.blurAt = Date.now();
     S.focused = focused;
+    if (!focused && S.hoverCol >= 0) restoreFinal(); // the carousel moved with the mouse on the lead graph
     if (S.key && focused && !S.introShown) playIntro();
     if (S.key && !focused && S.introShown && Date.now() - S.blurAt >= INTRO_RESET_MS) resetIntro();
     // A graph tooltip shown off the Graphs screen is left over (the carousel moved while the mouse was on the
