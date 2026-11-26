@@ -1540,6 +1540,7 @@
 		m_flDuckOffHorizontal = 400.0
 		m_flJumpToRoofRayCheckDist = 160.0
 		m_flMinTimeToRoofCheck = 0.7
+		m_flMinTimeToRoofCheckLatchDist = 96.0
 		m_flClimbRopeSlowDurationOnHit = 2.0
 		m_flCameraRotateSpeed = 10.0
 		m_bAffectedByRushMovementTimeScale = true
@@ -1787,6 +1788,9 @@
 		m_AirJumpParticle = resource_name:"particles/generic/air_jump.vpcf"
 		m_DashJumpParticle = resource_name:"particles/generic/roll_jump.vpcf"
 		m_flLateJumpGraceWindow = 0.15
+		m_flFailedAirJumpGroundJumpAirDrag = 2.0
+		m_flFailedAirJumpPenaltyGroundTime = 0.5
+		m_nFailedAirJumpPenaltyJumpsToMaxAirDrag = 3
 		m_flDashJumpVerticalSpeed = 425.0
 		m_flDashJumpDistanceInMeters = 19.0
 		m_flZiplineRefundWindow = 0.2
@@ -5954,6 +5958,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -6832,6 +6842,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -10436,6 +10452,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -11314,6 +11336,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -12196,6 +12224,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -13074,6 +13108,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -13956,6 +13996,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -14836,6 +14882,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -15714,6 +15766,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -24023,13 +24081,13 @@
 			}
 			Damage = 
 			{
-				m_strValue = "120"
+				m_strValue = "156"
 				m_strCSSClass = "damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
-					m_flStatScale = 0.609336
+					m_flStatScale = 0.792137
 				}
 			}
 			StunDuration = 
@@ -27394,7 +27452,7 @@
 				m_iBullets = 1
 				m_flCycleTime = 0.4725
 				m_reloadDuration = 2.75
-				m_iClipSize = 10
+				m_iClipSize = 8
 				m_iBurstShotCount = 1
 				m_flIntraBurstCycleTime = 0
 				m_flBulletGravityScale = 0.0
@@ -28291,6 +28349,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -29881,7 +29945,7 @@
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
-					m_flStatScale = 1.116
+					m_flStatScale = 0.9
 					m_flStreetBrawlStatScale = 2.5
 				}
 				m_bIsAbilityDamageProperty = true
@@ -31204,6 +31268,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -34219,6 +34289,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -37940,6 +38016,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -40293,6 +40375,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -42911,6 +42999,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -43984,7 +44078,7 @@
 					_my_subclass_name = "MaxBonusBulletDamage_scale_function"
 					_class = "scale_function_kinetic_carbine_damage"
 					m_eSpecificStatScaleType = "EWeaponPower"
-					m_flStatScale = 125
+					m_flStatScale = 110
 				}
 				m_bIsAbilityDamageProperty = true
 			}
@@ -44132,7 +44226,7 @@
 					},
 					{
 						m_strPropertyName = "MaxBonusBulletDamage"
-						m_strBonus = "55"
+						m_strBonus = "40"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "EWeaponPower"
 					},
@@ -45709,6 +45803,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -48847,6 +48947,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -53381,6 +53487,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -55392,6 +55504,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -55673,18 +55791,18 @@
 			}
 			SelfDamagePct = 
 			{
-				m_strValue = "30"
+				m_strValue = "50"
 			}
 			Damage = 
 			{
-				m_strValue = 90
+				m_strValue = 85
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 1.35
+					m_flStatScale = 1.3
 				}
 				m_bIsAbilityDamageProperty = true
 			}
@@ -55702,7 +55820,7 @@
 			}
 			ArmingDuration = 
 			{
-				m_strValue = "0.65"
+				m_strValue = "0.8"
 				m_strCSSClass = "duration"
 			}
 			BeepSoundIntervalBias = 
@@ -55809,7 +55927,7 @@
 				[
 					{
 						m_strPropertyName = "Damage"
-						m_strBonus = 50
+						m_strBonus = 45
 					},
 					{
 						m_strPropertyName = "Radius"
@@ -58325,6 +58443,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -61569,6 +61693,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -64391,6 +64521,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -65129,7 +65265,7 @@
 		m_iUpdateTime = 1707519913
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FLYING"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_FRIENDLY"
 		m_eAbilitySpectatePriority = "CITADELTV_ABILITY_SPECTATE_PRIORITY_MEDIUM"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/hornet/vindicta_flight.psd"
@@ -67097,6 +67233,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -68357,11 +68499,11 @@
 			}
 			GrowthPerMeter = 
 			{
-				m_strValue = "0.5m"
+				m_strValue = "0.475m"
 			}
 			InitialWidth = 
 			{
-				m_strValue = "1m"
+				m_strValue = "1.5m"
 			}
 			SlowDuration = 
 			{
@@ -70026,6 +70168,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -70181,7 +70329,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 28.0
+				m_strValue = 29.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -70320,7 +70468,7 @@
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "DPS_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 0.38
+					m_flStatScale = 0.32
 				}
 				m_bIsAbilityDamageProperty = true
 			}
@@ -70373,7 +70521,7 @@
 			}
 			MaxSlowTime = 
 			{
-				m_strValue = "2.0"
+				m_strValue = "2.5"
 				m_strCSSClass = "duration"
 			}
 			IceBeamBuildupProcDuration = 
@@ -70501,7 +70649,7 @@
 					},
 					{
 						m_strPropertyName = "DPS"
-						m_strBonus = "0.6"
+						m_strBonus = "0.5"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -70973,7 +71121,7 @@
 				[
 					{
 						m_strPropertyName = "BonusSpiritPct"
-						m_strBonus = "35"
+						m_strBonus = "30"
 					},
 					{
 						m_strPropertyName = "BonusSpirit"
@@ -73133,6 +73281,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -74557,6 +74711,7 @@
 			m_strVictimLockonSound = soundevent:"Lash.A4.Death.Slam.Lockon.Victim"
 		}
 		m_AllyIndicatorParticle = resource_name:"particles/abilities/lash/lash_final_strike_ally_indicator.vpcf"
+		m_bShowLostLOSOnHUD = true
 		m_strChannelLoopSound = soundevent:"Lash.A4.Death.Slam.Channel.Lp"
 		m_strAG2CastingAction = "lash_death_slam"
 		m_strAG2ChannelingAction = "lash_death_slam_channeling"
@@ -75976,6 +76131,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -77647,7 +77808,7 @@
 		m_flBossDamageScale = 1.0
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_MINIMAP_GROUND"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CAN_CAST_ON_ZIPLINE | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_BUSY | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_CAN_CANCEL_DURING_CAST_DELAY"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CAN_CAST_ON_ZIPLINE | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_BUSY | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_CAN_CANCEL_DURING_CAST_DELAY | CITADEL_ABILITY_BEHAVIOR_ALLOW_ALT_CAST"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/mirage/mirage_teleport.psd"
 		m_strArriveSound = soundevent:"Mirage.A4.Teleport.Arrive"
 		m_strDepartSound = soundevent:"Mirage.A4.Teleport.Depart"
@@ -77952,7 +78113,7 @@
 				m_iBullets = 4
 				m_flCycleTime = 0.189
 				m_reloadDuration = 2.82
-				m_iClipSize = 20
+				m_iClipSize = 25
 				m_iBurstShotCount = 1
 				m_flIntraBurstCycleTime = 0
 				m_flBulletGravityScale = 0.8
@@ -79053,6 +79214,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -82540,6 +82707,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -87004,11 +87177,11 @@
 				[
 					{
 						m_strPropertyName = "CooldownRefundPercent"
-						m_strBonus = "50"
+						m_strBonus = "60"
 					},
 					{
 						m_strPropertyName = "ImpactDamage"
-						m_strBonus = "90"
+						m_strBonus = "100"
 					},
 				]
 			},
@@ -87196,6 +87369,7 @@
 			m_vDomainMaxs = [ 1.0, 1.0 ]
 		}
 		m_flGroundBreakOffAngle = 6.0
+		m_flEnemyStopCheckRadius = 60.0
 	}
 	citadel_weapon_archer_set = 
 	{
@@ -88290,6 +88464,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -89173,7 +89353,7 @@
 		m_iUpdateTime = 1664993821
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_INPUT_DIRECTIONAL_2D | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_ALLOW_ALT_CAST | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_INPUT_DIRECTIONAL_2D | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_ALLOW_ALT_CAST | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FLYING"
 		m_strCastAnimGraphParam = "e_AirRaid"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/archer/archer_power_jump.psd"
@@ -91649,6 +91829,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -92460,8 +92646,8 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "TechArmorDamageReduction"
-						m_strBonus = "-4"
+						m_strPropertyName = "ImpactDamage"
+						m_strBonus = "50"
 					},
 					{
 						m_strPropertyName = "DashRange"
@@ -92473,8 +92659,8 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "ImpactDamage"
-						m_strBonus = "50"
+						m_strPropertyName = "TechArmorDamageReduction"
+						m_strBonus = "-4"
 					},
 					{
 						m_strPropertyName = "CooldownReductionOnHit"
@@ -93242,7 +93428,7 @@
 				[
 					{
 						m_strPropertyName = "EnemyHealthPercent"
-						m_strBonus = "10"
+						m_strBonus = "8"
 					},
 				]
 			},
@@ -94540,6 +94726,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -98072,6 +98264,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_SPHERE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_TRIGGER_CANCEL_MASH_PROTECTION_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowAsMovementAbility = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_TeleportTrailParticle = resource_name:"particles/abilities/pocket/pocket_flying_cloak_travel_beam.vpcf"
 		m_strCastSound = soundevent:"Pocket.Cloak.Cast"
@@ -100719,6 +100912,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -102111,8 +102310,9 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-25"
+						m_strPropertyName = "StunDuration"
+						m_strBonus = "0.75"
+						m_strCSSClass = "duration"
 					},
 				]
 			},
@@ -102120,13 +102320,12 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "StunDuration"
-						m_strBonus = "0.75"
-						m_strCSSClass = "duration"
+						m_strPropertyName = "AbilityCooldown"
+						m_strBonus = "-25"
 					},
 					{
 						m_strPropertyName = "Damage"
-						m_strBonus = "1.5"
+						m_strBonus = "1.2"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
 					},
@@ -102511,7 +102710,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_FRIENDLY"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_ALLOW_SELF_CAST | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_ALLOW_SELF_CAST | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FLYING"
 		m_flTargetingConeAngle = 40
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/tengu/tengu_lightning_crash.psd"
 		m_flTargetAirSpeedFast = 866.142
@@ -102543,6 +102742,19 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
+						m_strPropertyName = "SlowPercent"
+						m_strBonus = "32"
+					},
+					{
+						m_strPropertyName = "DebuffDuration"
+						m_strBonus = "3"
+					},
+				]
+			},
+			{
+				m_vecPropertyUpgrades = 
+				[
+					{
 						m_strPropertyName = "AirDropBulletShield"
 						m_strBonus = "300"
 					},
@@ -102551,19 +102763,6 @@
 						m_strBonus = "0.7"
 						m_eUpgradeType = "EAddToScale"
 						m_eScaleStatFilter = "ETechPower"
-					},
-				]
-			},
-			{
-				m_vecPropertyUpgrades = 
-				[
-					{
-						m_strPropertyName = "SlowPercent"
-						m_strBonus = "32"
-					},
-					{
-						m_strPropertyName = "DebuffDuration"
-						m_strBonus = "3"
 					},
 				]
 			},
@@ -103449,7 +103648,7 @@
 				m_flBulletRadiusVsWorld = 4.0
 				m_flExplosionRadius = 140.0
 				m_flExplosionDamageScaleAtMaxRadius = 0.5
-				m_iAmmoConsumedPerShot = 5
+				m_iAmmoConsumedPerShot = 4
 				m_flVerticalAimBias = 2.2
 				m_bCanCrit = false
 				m_strBulletLoopingSound = soundevent:"Viscous.Fire.Alt.Projectile.Lp"
@@ -104231,6 +104430,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -104771,6 +104976,10 @@
 		}
 		m_flMinRestitution = 1.5
 		m_flMaxRestitution = 4.0
+		m_flClimbHeight = 18.0
+		m_flLedgeForwardClearance = 18.0
+		m_flLedgeExtraDropHeight = 8.0
+		m_flEdgeBounceMaxNormalDot = 0.99
 		m_GrenadeHitSound = soundevent:"Viscous.GooBall.Hit"
 		m_GooGrenadePuddleAuraFriendlyModifier = subclass:
 		{
@@ -107274,6 +107483,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -107984,6 +108199,10 @@
 						m_strPropertyName = "MoveSpeedBonusPct"
 						m_strBonus = "20"
 					},
+					{
+						m_strPropertyName = "CombatBarrier"
+						m_strBonus = "50"
+					},
 				]
 			},
 			{
@@ -108626,8 +108845,8 @@
 			}
 			HealthStealPctHero = 
 			{
-				m_strValue = "75"
-				m_strStreetBrawlValue = "48.75"
+				m_strValue = "90"
+				m_strStreetBrawlValue = "58.5"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
@@ -108638,8 +108857,8 @@
 			}
 			HealthStealPct = 
 			{
-				m_strValue = "10"
-				m_strStreetBrawlValue = "7.5"
+				m_strValue = "15"
+				m_strStreetBrawlValue = "11.25"
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
@@ -109965,6 +110184,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -110331,6 +110556,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowEnemyMovementAbilities = true
 		m_flTargetingConeAngle = 60
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
 		m_eAbilitySpectatePriority = "CITADELTV_ABILITY_SPECTATE_PRIORITY_HIGH"
@@ -111123,7 +111349,7 @@
 				[
 					{
 						m_strPropertyName = "MagicDamagePerBullet"
-						m_strBonus = "0.045"
+						m_strBonus = "0.03"
 						m_eUpgradeType = "EAddToScale"
 					},
 					{
@@ -111374,7 +111600,7 @@
 			}
 			CardResourceGenPctScale = 
 			{
-				m_strValue = "85"
+				m_strValue = "68"
 				m_subclassScaleFunction = subclass:
 				{
 					_my_subclass_name = "card_gen"
@@ -112783,6 +113009,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -116845,6 +117077,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -119853,6 +120091,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -123969,6 +124213,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -126414,6 +126664,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -126933,7 +127189,7 @@
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
 		m_skillshotMissParticle = resource_name:"particles/abilities/skillshot_default_miss_owner.vpcf"
-		m_flBossDamageScale = 0.5
+		m_flBossDamageScale = 1.0
 		m_iUpdateTime = 1668192829
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
@@ -128390,6 +128646,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
 		m_eAbilitySpectatePriority = "CITADELTV_ABILITY_SPECTATE_PRIORITY_MEDIUM"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PREVENT_BOT_USAGE | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowAsMovementAbility = true
 		m_deploymentInfo = 
 		{
 			m_previewModel = resource_name:""
@@ -131725,6 +131982,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -139305,6 +139568,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -139720,7 +139989,7 @@
 					},
 					{
 						m_strPropertyName = "AbilityCastRange"
-						m_strBonus = "4m"
+						m_strBonus = "3m"
 					},
 				]
 			},
@@ -140034,7 +140303,7 @@
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_damage"
-					m_flStatScale = 1.85
+					m_flStatScale = 1.5
 					_my_subclass_name = "lovebites_bonusdamage_sf"
 				}
 				m_strCSSClass = "tech_damage"
@@ -140157,6 +140426,12 @@
 					{
 						m_strPropertyName = "BonusDamage"
 						m_strBonus = 45
+					},
+					{
+						m_strPropertyName = "BonusDamage"
+						m_strBonus = "0.35"
+						m_eUpgradeType = "EAddToScale"
+						m_eScaleStatFilter = "ETechPower"
 					},
 				]
 			},
@@ -141287,7 +141562,7 @@
 			m_vecHorizOffsetOperations = [  ]
 		}
 		m_AbilityToTrigger = "ability_vampirebat_batblink"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PREVENT_BOT_USAGE | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_ALLOW_ALT_CAST | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_TRIGGER"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PREVENT_BOT_USAGE | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_ALLOW_ALT_CAST | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_TRIGGER | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_flMinCancelTime = 1.0
 		m_HUDPanel = 
 		{
@@ -141839,7 +142114,7 @@
 				m_strCSSClass = "healing"
 				m_subclassScaleFunction = subclass:
 				{
-					_class = "scale_function_tech_damage"
+					_class = "scale_function_healing_spirit_scale"
 					m_flStatScale = 0.3
 					_my_subclass_name = "herohealsf"
 				}
@@ -143606,6 +143881,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -146666,7 +146947,7 @@
 		m_iUpdateTime = 1707519913
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DEACTIVATE_CROUCH_TOGGLE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FLYING"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_FRIENDLY"
 		m_eAbilitySpectatePriority = "CITADELTV_ABILITY_SPECTATE_PRIORITY_MEDIUM"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/hornet/vindicta_flight.psd"
@@ -147870,6 +148151,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -150093,6 +150380,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -152854,6 +153147,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -156128,6 +156427,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -158266,6 +158571,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -160414,6 +160725,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -163479,6 +163796,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -167361,6 +167684,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -171208,6 +171537,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -175193,6 +175528,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -176038,6 +176379,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_SPHERE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CLEAVE_DISABLED | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowAsMovementAbility = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/drifter/drifter_stalkersmark.psd"
 		m_strCastSound = soundevent:"Drifter.Stalkers.Mark.Cast"
@@ -178352,6 +178694,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -185966,7 +186314,7 @@
 			}
 			DamagePerChain = 
 			{
-				m_strValue = "43"
+				m_strValue = "37"
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
@@ -185978,7 +186326,7 @@
 			}
 			BonusPerChain = 
 			{
-				m_strValue = "43"
+				m_strValue = "37"
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
@@ -186098,6 +186446,7 @@
 		m_DamageParticle = resource_name:"particles/upgrades/capacitor_purge.vpcf"
 		m_PurgeCastParticle = resource_name:""
 		m_PurgeSound = soundevent:"Mods.Armor.DebuffRemover.Cast"
+		m_bTooltipShowEnemyMovementAbilities = true
 		m_vecTooltipSectionInfo = 
 		[
 			{
@@ -195616,7 +195965,7 @@
 			}
 			BonusAttackRangePercent = 
 			{
-				m_strValue = "20"
+				m_strValue = "18"
 				m_strCSSClass = "distance"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_BONUS_ATTACK_RANGE_PERCENT"
 				m_eStatsUsageFlags = ""
@@ -202047,7 +202396,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 45.0
+				m_strValue = 52.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -210253,7 +210602,9 @@
 					m_flBuildUpDecayDelay = 2.0
 					m_sLocalizationName = "modifier_tech_overflow_building"
 					m_eBuildupMode = "BUILDUP_MODE_ONE_AND_DONE"
-					m_bIsHidden = true
+					m_eDrawOverheadStatus = "OVERHEAD_DRAW_FOR_CASTER_ONLY"
+					m_eHudDisplayLocation = "DISPLAY_HUD_NONE"
+					m_eModifierDisplayLocaiton = "MODIFIER_DISPLAY_HEALTHBAR"
 				}
 				m_ProcModifier = subclass:
 				{
@@ -217215,6 +217566,7 @@
 		}
 		m_flTargetingConeAngle = 45
 		m_previewParticle = resource_name:"particles/upgrades/upgrade_containment_projectile_preview.vpcf"
+		m_bTooltipShowEnemyMovementAbilities = true
 		m_strCastSound = soundevent:"Mods.Tech.Slowing.Hex.Cast"
 		m_ProjectileImpactParticle = resource_name:"particles/upgrades/upgrade_containment_impact.vpcf"
 		m_TargetModifier = subclass:
@@ -221421,7 +221773,7 @@
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_FRIENDLY"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
 		m_flTargetingConeAngle = 60
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_CLEAVE_DISABLED | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_ALLOW_SELF_CAST | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_CLEAVE_DISABLED | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_ALLOW_SELF_CAST | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST"
 		m_mapProjectileInfos = 
 		{
 			primary = subclass:
@@ -222353,6 +222705,7 @@
 		m_strAG2SourceName = "item"
 		m_eItemSlotType = "EItemSlotType_Armor"
 		m_iItemTier = "EModTier_4"
+		m_bTooltipShowEnemyFlyingAbilities = true
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_CAST_RANGE_IS_2D | CITADEL_ABILITY_BEHAVIOR_CANCEL_ROPE_CLIMB_ON_CAST"
 		m_bitsInterruptingStates = "MODIFIER_STATE_IMMOBILIZED | MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
@@ -223054,6 +223407,7 @@
 		m_strAG2SourceName = "item"
 		m_eItemSlotType = "EItemSlotType_Tech"
 		m_iItemTier = "EModTier_4"
+		m_bTooltipShowEnemyMovementAbilities = true
 		m_bDisabled = false
 		m_iUpdateTime = 1741743802
 		m_vecComponentItems = 
@@ -224146,7 +224500,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 90.0
+				m_strValue = 105.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -226990,7 +227344,7 @@
 				{
 					_class = "scale_function_healing_spirit_scale"
 					_my_subclass_name = "TotalHealthRegen_scale_function"
-					m_flStatScale = 1.1
+					m_flStatScale = 1.25
 				}
 			}
 			HeroTargetBonus = 
@@ -248366,7 +248720,7 @@
 			}
 			DebuffDuration = 
 			{
-				m_strValue = "8"
+				m_strValue = "7"
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
 				{
@@ -252976,7 +253330,7 @@
 					_class = "scale_function_single_stat"
 					_my_subclass_name = "SecondaryDamage_scale_function"
 					m_eSpecificStatScaleType = "ELevelUpBoons"
-					m_flStatScale = 1.24
+					m_flStatScale = 1.12
 				}
 			}
 		}
@@ -260700,6 +261054,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -260856,7 +261216,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "23"
+				m_strValue = "20"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -262697,7 +263057,6 @@
 					[
 						"ELevelUpBoons",
 						"EWeaponDamageScale",
-						"EDamageScale",
 					]
 					m_eSpecificStatScaleType = "ELevelUpBoons"
 				}
@@ -262775,7 +263134,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST_TOGGLE"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_CREEP_ENEMY | CITADEL_UNIT_TARGET_MINION_ENEMY"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_REFUND_HALF_COOLDOWN_ON_CHANNEL_INTERRUPT"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_REFUND_HALF_COOLDOWN_ON_CHANNEL_INTERRUPT | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_strCSSClass = ""
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/priest/priest_crossbow.psd"
 		m_vecAbilityUpgrades = 
@@ -264298,7 +264657,6 @@
 					[
 						"ELevelUpBoons",
 						"EWeaponDamageScale",
-						"EDamageScale",
 					]
 					m_eSpecificStatScaleType = "ELevelUpBoons"
 				}
@@ -264552,6 +264910,7 @@
 		m_strAG2ChannelingAction = "flashbang_channeling"
 		m_strAG2CastCompletedAction = "flashbang_cast_completed"
 		m_flBounceVerticalReductionRatio = 0.5
+		m_flClimbHeight = 18.0
 		m_strCastDelaySound = soundevent:"Priest.Grenade.Cast"
 		m_BounceParticle = resource_name:"particles/abilities/priest/priest_flashbang_bounce.vpcf"
 		m_mapProjectileInfos = 
@@ -264842,13 +265201,13 @@
 		m_eAbilityType = "EAbilityType_Signature"
 		m_iMaxLevel = 1
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED"
-		m_PreviewPathParticle = resource_name:"particles/generic/generic_arc.vpcf"
+		m_PreviewPathParticle = resource_name:"particles/generic/generic_cast_arc_preview.vpcf"
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
 		m_skillshotMissParticle = resource_name:"particles/abilities/skillshot_default_miss_owner.vpcf"
 		m_flBossDamageScale = 1.0
 		m_iUpdateTime = 1682452561
-		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_LINE"
+		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CIRCLE"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PREVENT_TRAINING_BOT_USAGE | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
@@ -264976,7 +265335,7 @@
 			m_strHintText = "modifier_citadel_root"
 		}
 		m_flDropDownRate = 20.0
-		m_flClimbHeight = 1.0
+		m_flClimbHeight = 18.0
 		m_flDistanceAboveGround = 1.0
 		m_flDeceleration = 1300.0
 		m_flMinSpeedToArm = 1.0
@@ -266413,6 +266772,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -270567,6 +270932,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -270723,7 +271094,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "12"
+				m_strValue = "11"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -271219,7 +271590,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "35m"
+				m_strValue = "0"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -271349,14 +271720,13 @@
 			m_vecButtonHints = [  ]
 			m_vecHUDElements = [  ]
 		}
+		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
+		m_flTargetingConeAngle = 45
+		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_AbilityToTrigger = "ability_fencer_riposte"
 		m_strAG2CastCompletedAction = ""
 		m_strAG2ChannelingAction = ""
 		m_strAG2CastingAction = ""
-		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CONE"
-		m_flTargetingConeAngle = 90.0
-		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
-		m_bShowTargetingPreviewWhileCasting = true
 		m_bForceShowHUDPanel = false
 	}
 	ability_fencer_riposte = 
@@ -271392,7 +271762,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "0"
+				m_strValue = "35m"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -271495,17 +271865,6 @@
 				m_strValue = "3000"
 				m_eDisplayUnits = "EDisplayUnit_MetersPerSecond"
 			}
-			DashRange = 
-			{
-				m_strValue = "35m"
-				m_strCSSClass = "distance"
-				m_subclassScaleFunction = subclass:
-				{
-					_class = "scale_function_single_stat"
-					_my_subclass_name = "DashRange_scale_function"
-					m_eSpecificStatScaleType = "ETechRange"
-				}
-			}
 			SideMoveSpeed = 
 			{
 				m_strValue = "-100"
@@ -271551,7 +271910,8 @@
 			}
 			SlowDuration = 
 			{
-				m_strValue = "4"
+				m_strValue = "2"
+				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
 					_class = "scale_function_tech_duration"
@@ -271560,7 +271920,8 @@
 			}
 			SlowPercent = 
 			{
-				m_strValue = "40"
+				m_strValue = "50"
+				m_strCSSClass = "slow"
 				m_eProvidedPropertyType = "MODIFIER_VALUE_MOVEMENT_SPEED_SLOW_PERCENT"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
@@ -271578,18 +271939,6 @@
 				m_eProvidedPropertyType = "MODIFIER_VALUE_TECH_LIFESTEAL"
 				m_eStatsUsageFlags = "ConditionallyApplied"
 			}
-			StunDuration = 
-			{
-				m_strValue = "1.5"
-				m_strCSSClass = "duration"
-				m_strLocTokenOverride = "ImmobilizeDuration"
-				m_subclassScaleFunction = subclass:
-				{
-					_class = "scale_function_single_stat"
-					_my_subclass_name = "StunDuration_scale_function"
-					m_eSpecificStatScaleType = "ETechDuration"
-				}
-			}
 			DampingFactor = 
 			{
 				m_strValue = "0.5"
@@ -271605,24 +271954,17 @@
 				m_strCSSClass = "slow"
 				m_eDisplayType = "EMaxMoveSpeed"
 			}
-			MeleeResistReduction = 
+			Damage = 
 			{
-				m_strValue = "-25"
-				m_strCSSClass = "bullet_armor_down"
-				m_eDisplayType = "EMeleeResist"
-				m_eProvidedPropertyType = "MODIFIER_VALUE_MELEE_RESIST_REDUCTION"
-				m_eStatsUsageFlags = "ConditionallyApplied"
-			}
-			MeleeResistReductionDuration = 
-			{
-				m_strValue = "3.0"
-				m_strCSSClass = "duration"
+				m_strValue = "100"
 				m_subclassScaleFunction = subclass:
 				{
-					_class = "scale_function_single_stat"
-					_my_subclass_name = "MeleeResistReductionDuration_scale_function"
-					m_eSpecificStatScaleType = "ETechDuration"
+					_class = "scale_function_tech_damage"
+					_my_subclass_name = "Damage_scale_function"
+					m_flStatScale = 1.5
 				}
+				m_bIsAbilityDamageProperty = true
+				m_strCSSClass = "tech_damage"
 			}
 			TargetLifesteal = 
 			{
@@ -271653,7 +271995,7 @@
 			}
 			DashGraceWindow = 
 			{
-				m_strValue = "1.3"
+				m_strValue = "1.8"
 			}
 		}
 		m_bitsPostCastEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
@@ -271665,7 +272007,109 @@
 		{
 			primary = 
 			{
-				m_flBulletSpeed = 10000.0
+				m_flBulletSpeed = 64000.0
+				m_Spread = 0.5
+				m_StandingSpread = 1.5
+				m_flScatterYawScale = 1
+				m_flShootingUpSpreadPenalty = 0
+				m_flZoomMoveSpeedPercent = 1.0
+				m_flShootMoveSpeedPercent = 0.75
+				m_flHorizontalPunch = 0
+				m_flVerticalPunch = 0
+				m_flRecoilRecoverySpeed = 10.0
+				m_VerticallRecoil = 
+				{
+					m_Range = [ -0.2, 0.2 ]
+					m_flBurstSlope = 0.0
+					m_flBurstExponent = 0.0
+					m_flBurstConstant = 0.0
+				}
+				m_HorizontalRecoil = 
+				{
+					m_Range = [ -0.1, 0.1 ]
+					m_flBurstExponent = 0.0
+				}
+				m_flRecoilSpeed = 1
+				m_flZoomFOV = 35.0
+				m_flZoomFOV_Relative = -40.0
+				m_flDamageFalloffStartRange = 800
+				m_flDamageFalloffEndRange = 2500
+				m_flRange = 2500
+				m_flBulletLifetime = 2
+				m_flDamageFalloffStartScale = 1.0
+				m_flDamageFalloffEndScale = 0.1
+				m_flDamageFalloffBias = 0.5
+				m_iBullets = 1
+				m_flCycleTime = 0.3
+				m_reloadDuration = 1.5
+				m_iClipSize = 10
+				m_iBurstShotCount = 1
+				m_flIntraBurstCycleTime = 0
+				m_flBulletGravityScale = 0.01
+				m_flBulletRadius = 7
+				m_flBulletReflectScale = 0
+				m_flBulletReflectAmount = 1
+				m_flBulletInheritShooterVelocityScale = 0
+				m_szBulletTravelTracerParticle = resource_name:"particles/weapon_fx/reactive_armor_tracer.vpcf"
+				m_szMuzzleFlashEffectName = resource_name:"particles/weapon_fx/default_muzzle_flash.vpcf"
+				m_strBulletWhizSound = soundevent:"Base.Bullet.Whizby"
+				m_flBulletWhizDistance = 80
+				m_mapImpactEffects = 
+				{
+					default = 
+					{
+						m_strDecal = "Impact.Concrete"
+						m_strParticle = resource_name:"particles/impact_fx/impact_spark_spray_large.vpcf"
+						m_strSound = soundevent:"Default.BulletImpact"
+					}
+					flesh = 
+					{
+						m_strDecal = ""
+						m_strParticle = resource_name:"particles/blood_impact/blood_impact_red_01.vpcf"
+					}
+					concrete = 
+					{
+						m_strDecal = "Impact.Concrete"
+						m_strParticle = resource_name:"particles/impact_fx/impact_spark_spray_large.vpcf"
+					}
+					solidmetal = 
+					{
+						m_strDecal = "Impact.Concrete"
+						m_strParticle = resource_name:"particles/impact_fx/impact_spark_spray_large.vpcf"
+					}
+					wood = 
+					{
+						m_strDecal = "Impact.Wood"
+						m_strParticle = resource_name:"particles/impact_fx/impact_wood.vpcf"
+					}
+					wood_plank = 
+					{
+						m_strDecal = "Impact.Wood"
+						m_strParticle = resource_name:"particles/impact_fx/impact_wood.vpcf"
+					}
+					portals = 
+					{
+						m_strDecal = "Impact.Concrete"
+						m_strParticle = resource_name:"particles/impact_fx/impact_spark_spray_large.vpcf"
+						m_strSound = soundevent:""
+					}
+				}
+				m_flCritBonusStart = 1.65
+				m_flCritBonusEnd = 1.65
+				m_flCritBonusStartRange = 500.0
+				m_flCritBonusEndRange = 1500.0
+				m_flCritBonusAgainstNPCs = 0
+				m_flShootSpreadPenaltyPerShot = 0.0
+				m_flShootSpreadPenaltyDecayDelay = 0.0
+				m_flShootSpreadPenaltyDecay = 2.0
+				m_flRecoilShotIndexRecoveryTimeFactor = 0.25
+				m_bCanZoom = true
+				m_strWeaponImpactEffect = resource_name:"particles/weapon_fx/default_tracer_impact.vpcf"
+				m_flReloadMoveSpeed = "10000"
+				m_strLocalPlayerBulletImpactSound = soundevent:"Player.Bullet.Impact.Default"
+				m_strLocalPlayerBulletImpactHeavySound = soundevent:"Player.Bullet.Impact.Default"
+				m_flBulletDrag = 0
+				m_strShootSound = soundevent:""
 			}
 		}
 		m_bitsChannelEnabledStateMask = "MODIFIER_STATE_BUSY_WITH_ACTION"
@@ -271674,6 +272118,7 @@
 		_multibase = 
 		[
 			"signature_base",
+			"weapon_info_base",
 		]
 		m_bStartTrained = false
 		m_nAbilityPointsCost = 0
@@ -271693,7 +272138,7 @@
 		m_iUpdateTime = 0
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_BUSY"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_strAG2SourceName = "citadel_ability_fencer_riposte"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/fencer/fencer_riposte.psd"
@@ -271720,7 +272165,7 @@
 				[
 					{
 						m_strPropertyName = "AbilityCooldown"
-						m_strBonus = "-8"
+						m_strBonus = "-9"
 					},
 				]
 			},
@@ -271728,12 +272173,12 @@
 				m_vecPropertyUpgrades = 
 				[
 					{
-						m_strPropertyName = "MeleeResistReduction"
-						m_strBonus = "-25"
+						m_strPropertyName = "Damage"
+						m_strBonus = "100"
 					},
 					{
-						m_strPropertyName = "StunDuration"
-						m_strBonus = "0.7"
+						m_strPropertyName = "SlowDuration"
+						m_strBonus = "1"
 					},
 				]
 			},
@@ -271777,18 +272222,18 @@
 							m_vecAbilityProperties = 
 							[
 								{
-									m_strImportantProperty = "StunDuration"
+									m_strImportantProperty = "Damage"
 								},
 								{
-									m_strImportantProperty = "MeleeResistReduction"
+									m_strImportantProperty = "SlowPercent"
+								},
+								{
+									m_strImportantProperty = "SlowDuration"
 								},
 							]
 						},
 					]
-					m_vecBasicProperties = 
-					[
-						"MeleeResistReductionDuration",
-					]
+					m_vecBasicProperties = [  ]
 				},
 			]
 			m_vecAdditionalHeaderProperties = [  ]
@@ -271800,19 +272245,6 @@
 			m_strParticleEffect = resource_name:"particles/abilities/fencer/fencer_riposte.vpcf"
 			m_bIsHidden = true
 		}
-		m_DebuffModifier = subclass:
-		{
-			_class = "modifier_base"
-			_my_subclass_name = "modifier_fencer_riposte_attack_debuff"
-			m_bIsHidden = true
-			m_strSmallIconCssClass = "bullet_armor_reduction"
-			m_sLocalizationName = "modifier_bullet_armor_reduction"
-			m_strParticleEffect = resource_name:"particles/modifiers/armor_suppressor.vpcf"
-			m_vecAutoRegisterModifierValueFromAbilityPropertyName = 
-			[
-				"MeleeResistReduction",
-			]
-		}
 		m_TargetLifestealModifier = subclass:
 		{
 			_class = "modifier_fencer_riposte_target_lifesteal"
@@ -271820,16 +272252,20 @@
 			m_sLocalizationName = "modifier_fencer_riposte_target_lifesteal"
 			m_strSmallIconCssClass = "lifesteal"
 		}
-		m_ImmobilizeModifier = subclass:
+		m_PommelDebuffModifier = subclass:
 		{
-			_class = "modifier_citadel_root"
-			_my_subclass_name = "modifier_fencer_riposte_immobilize"
-			m_nEnabledStateMask = "MODIFIER_STATE_PARRY_DISABLED | MODIFIER_STATE_DISARMED"
-			m_sLocalizationName = "modifier_citadel_root"
-			m_eHudDisplayLocation = "DISPLAY_HUD_CENTER"
-			m_strSmallIconCssClass = "immobilize"
-			m_strParticleEffect = resource_name:"particles/abilities/fencer/fencer_riposte_root.vpcf"
+			_class = "modifier_slow_base"
+			_my_subclass_name = "modifier_fencer_riposte_pommel_debuff"
+			m_sLocalizationName = "modifier_fencer_riposte"
+			m_bIsHidden = false
+			m_nEnabledStateMask = "MODIFIER_STATE_SLOWED | MODIFIER_STATE_DASH_DISABLED_DEBUFF"
+			m_vecAutoRegisterModifierValueFromAbilityPropertyName = 
+			[
+				"SlowPercent",
+			]
 		}
+		m_flPommelKnockUpSpeed = 300.0
+		m_flPommelKnockBackSpeed = 250.0
 		m_strChannelSound = soundevent:"Fencer.Riposte.Cast"
 		m_DashLineEffect = resource_name:""
 		m_flDashAnimDelay = 0.4
@@ -271848,6 +272284,9 @@
 		m_strTargetingLoopSound = soundevent:"Fencer.Riposte.Counterattack.Mod.Lp"
 		m_strTargetingExpireSound = soundevent:"Fencer.Riposte.Counterattack.Mod.Expire"
 		m_RiposteParriedParticle = resource_name:"particles/abilities/fencer/fencer_riposte_counter_stance.vpcf"
+		m_BulletReflectAttackerHitFx = resource_name:"particles/upgrades/reactive_armor_attacker_hit.vpcf"
+		m_BulletReflectImpactParticle = resource_name:"particles/upgrades/reactive_armor_impact.vpcf"
+		m_strBulletReflectSound = soundevent:"Mods.Armor.ReturnFire.Proc"
 	}
 	ability_fencer_lunge = 
 	{
@@ -271856,7 +272295,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = "26"
+				m_strValue = "30"
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -272919,6 +273358,16 @@
 			m_strTimerSound = soundevent:"Fencer.Super.Slash.Target.Mod.Lp"
 			m_eHudDisplayLocation = "DISPLAY_HUD_CENTER"
 		}
+		m_LowHealthGlowModifier = subclass:
+		{
+			_class = "modifier_low_health_glow"
+			_my_subclass_name = "modifier_fencer_ultimate_low_health_glow"
+			m_bIsHidden = true
+			m_bShowAsLowHealth = true
+			m_GlowParticle = resource_name:"particles/status_fx/status_fx_last_hit.vpcf"
+			m_bCasterCountsAsAssister = false
+			m_eDebuffType = "MODIFIER_DEBUFF_NO"
+		}
 		m_TargetNonHeroModifier = subclass:
 		{
 			_class = "modifier_fencer_ultimate_target"
@@ -273277,7 +273726,7 @@
 				m_flDamageFalloffEndScale = 0.5
 				m_flDamageFalloffBias = 0.5
 				m_iBullets = 1
-				m_flCycleTime = 0.102
+				m_flCycleTime = 0.1075
 				m_reloadDuration = 2.8
 				m_iClipSize = 40
 				m_iBurstShotCount = 1
@@ -274408,6 +274857,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -276284,7 +276739,7 @@
 		m_strAbilityOffCooldownSound = soundevent:""
 		m_strAbilityChargeReadySound = soundevent:""
 		m_skillshotMissParticle = resource_name:"particles/abilities/skillshot_default_miss_owner.vpcf"
-		m_flBossDamageScale = 1.0
+		m_flBossDamageScale = 0.75
 		m_iUpdateTime = 0
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_DEPLOYED_OBJECT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
@@ -279770,6 +280225,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -282692,6 +283153,8 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_FIRED_AS_BULLET | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowEnemyMovementAbilities = true
+		m_bTooltipShowEnemyFlyingAbilities = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/werewolf/werewolf_bola.psd"
 		m_strCastSound = soundevent:"Werewolf.Netshot.Cast"
@@ -283058,7 +283521,6 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_SPHERE"
 		m_flTargetingConeAngle = 35.0
 		m_flTargetingConeHalfWidth = 50.0
-		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_NO_INVIS"
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_NEUTRAL"
@@ -287490,6 +287952,12 @@
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
 					m_strContext = "melee_pickup"
+				},
+				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
 				},
 				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
@@ -291925,6 +292393,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -292461,7 +292935,7 @@
 				[
 					{
 						m_strPropertyName = "BulletDamageMultiplier"
-						m_strBonus = "30"
+						m_strBonus = "45"
 					},
 					{
 						m_strPropertyName = "CooldownReductionPerHit"
@@ -292879,7 +293353,7 @@
 		m_bStartTrained = true
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_DEPLOYED_OBJECT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_HOLD_TOGGLE"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CAN_CAST_ON_ZIPLINE | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CAN_CAST_ON_ZIPLINE | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_eAbilityType = "EAbilityType_Weapon"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/artist/artist_livingink.psd"
@@ -295547,7 +296021,7 @@
 			primary = 
 			{
 				m_flBulletSpeed = 7000.0
-				m_Spread = 0.0
+				m_Spread = 0.25
 				m_StandingSpread = 1.5
 				m_flScatterYawScale = 1
 				m_flShootingUpSpreadPenalty = 0
@@ -295585,7 +296059,7 @@
 				m_iBurstShotCount = 1
 				m_flIntraBurstCycleTime = 0
 				m_flBulletGravityScale = 0
-				m_flBulletRadius = 7.0
+				m_flBulletRadius = 8.5
 				m_flBulletReflectScale = 0
 				m_flBulletReflectAmount = 1
 				m_flBulletInheritShooterVelocityScale = 0
@@ -295673,10 +296147,12 @@
 				m_strBulletImpactSound = soundevent:"Wraith.Wpn.Impact"
 				m_vecScatterOffsets = 
 				[
-					[ -0.5, -0.25 ],
-					[ 0.5, 0.25 ],
-					[ 0.0, 0.5 ],
+					[ -0.75, -0.375 ],
+					[ 0.75, 0.375 ],
+					[ 0.0, 0.75 ],
 				]
+				m_flPelletScatterSpreadFactor = 1.6
+				m_bApplySpreadToFirstPellet = true
 				m_bHitOnceAcrossAllBullets = true
 				m_flBulletSpeedRandomFactor = 0.3
 			}
@@ -296486,6 +296962,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -296819,6 +297301,8 @@
 				m_flAttackStateTime = 0.5
 				m_flAttackImpulse = 500.0
 				m_flAttackImpulseMaxUpward = 150.0
+				m_flCooldownOnHit = 0.75
+				m_flCooldownOnMiss = 0.75
 				m_MovementSpeedCurve = 
 				{
 					m_spline = 
@@ -296911,7 +297395,7 @@
 			EBabaBenchMeleeAttack_Heavy = 
 			{
 				m_bIsHeavyAttack = true
-				m_flChargeTime = 0.66
+				m_flChargeTime = 0.55
 				m_flAttackStateTime = 0.0
 				m_flPrimaryAttackPauseDuration = 0.0
 				m_bApplyScreenShake = true
@@ -296949,9 +297433,8 @@
 				}
 				m_bCanBeParried = true
 				m_bParryOnlyBlocksParrier = true
-				m_bParryStunsAttacker = false
-				m_flCooldownOnHit = 1.2
-				m_flCooldownOnMiss = 1.5
+				m_flCooldownOnHit = 1.0
+				m_flCooldownOnMiss = 1.3
 				m_strHitSound = soundevent:"Ability.Melee.Impact.Heavy.NPC"
 				m_strHitHeroSound = soundevent:"Ability.Melee.Impact.Heavy.Player"
 				m_strMeleeDashSound = soundevent:"Player.Melee.Dash.Ground"
@@ -297176,8 +297659,8 @@
 			}
 			DebuffDuration = 
 			{
-				m_strValue = "16"
-				m_strStreetBrawlValue = "14"
+				m_strValue = "10"
+				m_strStreetBrawlValue = "7"
 				m_strCSSClass = "duration"
 				m_subclassScaleFunction = subclass:
 				{
@@ -297233,7 +297716,7 @@
 			}
 			MagicDamagePerBullet = 
 			{
-				m_strValue = "8"
+				m_strValue = "12"
 				m_strCSSClass = "tech_damage"
 				m_bDamageAffectedByEffectiveness = true
 				m_subclassScaleFunction = subclass:
@@ -297339,7 +297822,7 @@
 					},
 					{
 						m_strPropertyName = "DebuffDuration"
-						m_strBonus = "8"
+						m_strBonus = "6"
 						m_strStreetBrawlBonus = "5"
 					},
 				]
@@ -297911,6 +298394,7 @@
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_NON_COMBAT | CITADEL_ABILITY_BEHAVIOR_CASTABLE_WHILE_BUSY"
+		m_bTooltipShowAsMovementAbility = true
 		m_strCastSound = soundevent:"Baba.Bench.Run.Cast"
 		m_flMaxChargeJumpDuration = 2.0
 		m_WeaponOffsetStand = [ 25, -20, 140 ]
@@ -298436,7 +298920,7 @@
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_NONE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL_ENEMY"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_FIRED_AS_BULLET | CITADEL_ABILITY_BEHAVIOR_COOLDOWN_ON_CHANNEL_END | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_HOLDS_AT_MAX_CHANNEL"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_FIRED_AS_BULLET | CITADEL_ABILITY_BEHAVIOR_COOLDOWN_ON_CHANNEL_END | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_HOLDS_AT_MAX_CHANNEL | CITADEL_ABILITY_BEHAVIOR_CAN_CAST_ON_ZIPLINE"
 		m_vecAbilityUpgrades = 
 		[
 			{
@@ -298915,7 +299399,7 @@
 			}
 			TimeToMaxStacks = 
 			{
-				m_strValue = "3.5"
+				m_strValue = "4"
 				m_strLocTokenOverride = "BabaUlt2TimeToMaxStacks"
 				m_strCSSClass = "duration"
 			}
@@ -298947,7 +299431,7 @@
 			}
 			AbilityCastRange = 
 			{
-				m_strValue = "18m"
+				m_strValue = "20m"
 				m_eDisplayUnits = "EDisplayUnit_Meters"
 				m_strCSSClass = "range"
 				m_bCanSetTokenOverride = true
@@ -299058,7 +299542,7 @@
 			}
 			BarrageMaxDamage = 
 			{
-				m_strValue = "450"
+				m_strValue = "650"
 				m_strLocTokenOverride = "MaxDamage"
 				m_strCSSClass = "tech_damage"
 				m_subclassScaleFunction = subclass:
@@ -299112,7 +299596,7 @@
 		m_flTargetingConeAngle = 110.0
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_MINION_ENEMY"
 		m_nAbilityTargetFlags = "CITADEL_UNIT_TARGET_FLAG_NO_INVIS"
-		m_bShowTargetingPreviewWhileChanneling = false
+		m_bShowTargetingPreviewWhileChanneling = true
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_HUDPanel = 
 		{
@@ -299361,6 +299845,7 @@
 			m_LockingOnParticleCaster = resource_name:"particles/abilities/baba/baba_homing_pigeon_lock_debuff_caster.vpcf"
 			m_strVictimMaxLockonSound = soundevent:"Baba.Ult.Lockon.Max.Victim"
 		}
+		m_bShowLostLOSOnHUD = true
 		m_strHitConfirmationSound = soundevent:"Baba.Ult.Hit"
 		m_strChannelLoopSound = soundevent:"Baba.Ult.Channel.Lp"
 		m_LaunchParticle = resource_name:"particles/abilities/baba/baba_homing_pigeon_channel_launch.vpcf"
@@ -300936,6 +301421,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -301390,7 +301881,7 @@
 		m_bStartTrained = true
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_ON_BUTTON_RELEASE"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_eAbilityType = "EAbilityType_Weapon"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/chess/chessmaster_movepiece.psd"
@@ -303251,6 +303742,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_UNIT"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_PRESS"
 		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_ALLOW_SELF_CAST | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST"
+		m_bTooltipShowAsMovementAbility = true
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_FRIENDLY | CITADEL_UNIT_TARGET_MINION_FRIENDLY"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/chess/chessmaster_knight.psd"
 		m_strCastSound = soundevent:"Chessmaster.Knight.Cast"
@@ -303711,7 +304203,7 @@
 		m_bStartTrained = true
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_ON_BUTTON_RELEASE"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FORCE_TRIGGER_UI"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_EQUAL_UNIT_TARGET_PRIORITY | CITADEL_ABILITY_BEHAVIOR_TARGET_THROUGH_WALLS | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_USE_INSTANT_CAST_UNIT_TARGET_UI | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_FORCE_TRIGGER_UI | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_bitsInterruptingStates = "MODIFIER_STATE_STUNNED | MODIFIER_STATE_IS_ASLEEP"
 		m_eAbilityType = "EAbilityType_Weapon"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/chess/chessmaster_moveking.psd"
@@ -304428,7 +304920,7 @@
 			{
 				_class = "projectile_chessmaster_forkpiece"
 				_my_subclass_name = "projectile_primary"
-				m_nBehaviors = "PBF_DetonateOnHitWorld"
+				m_nBehaviors = "PBF_DisableTriggerProjectileImpactBehavior"
 				m_flSpeed = 850.0
 				m_flUpSpeed = 100.0
 				m_vecCapsulePhysicsCenter1 = [ 0.0, 0.0, 0.0 ]
@@ -307223,6 +307715,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -307605,7 +308103,7 @@
 			}
 			Radius = 
 			{
-				m_strValue = "8.0m"
+				m_strValue = "6.5m"
 				m_strCSSClass = "distance"
 				m_subclassScaleFunction = subclass:
 				{
@@ -307673,7 +308171,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_GROUND"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_CIRCLE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_CHANNELLED | CITADEL_ABILITY_BEHAVIOR_CANNOT_CANCEL_DURING_CHANNEL | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_MOVEMENT | CITADEL_ABILITY_BEHAVIOR_CAN_SET_QUICK_CAST | CITADEL_ABILITY_BEHAVIOR_FLYING"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/deadpack/deadpack_chimera.psd"
 		m_HudSharedStyle = resource_name:"panorama/styles/ability_hud_elements/abilities_deadpack.vcss"
 		m_AutoIntrinsicModifiers = 
@@ -307813,20 +308311,20 @@
 						{
 							x = 0.0
 							y = 0.0
-							m_flSlopeIncoming = 9880.866
-							m_flSlopeOutgoing = 9880.866
+							m_flSlopeIncoming = 5928.52
+							m_flSlopeOutgoing = 5928.52
 						},
 						{
 							x = 0.084338
-							y = 833.3333
-							m_flSlopeIncoming = 509.24374
-							m_flSlopeOutgoing = 509.24374
+							y = 500.0
+							m_flSlopeIncoming = 305.54626
+							m_flSlopeOutgoing = 305.54626
 						},
 						{
 							x = 0.5
-							y = 254.62187
-							m_flSlopeIncoming = -1392.2646
-							m_flSlopeOutgoing = -1392.2646
+							y = 152.77313
+							m_flSlopeIncoming = -835.3588
+							m_flSlopeOutgoing = -835.3588
 						},
 					]
 					m_tangents = 
@@ -307845,7 +308343,7 @@
 						},
 					]
 					m_vDomainMins = [ 0.0, 0.0 ]
-					m_vDomainMaxs = [ 0.5, 1000.0 ]
+					m_vDomainMaxs = [ 0.5, 600.0 ]
 				}
 				m_flUpVelocityOverTime = 
 				{
@@ -307854,20 +308352,20 @@
 						{
 							x = 0.0
 							y = 0.0
-							m_flSlopeIncoming = 17677.768
-							m_flSlopeOutgoing = 17677.768
+							m_flSlopeIncoming = 11393.874
+							m_flSlopeOutgoing = 11393.874
 						},
 						{
 							x = 0.090509
-							y = 1500.0
+							y = 1031.25
 							m_flSlopeIncoming = 0.0
 							m_flSlopeOutgoing = 0.0
 						},
 						{
 							x = 0.437215
 							y = 0.0
-							m_flSlopeIncoming = -3907.2915
-							m_flSlopeOutgoing = -3907.2915
+							m_flSlopeIncoming = -2518.3713
+							m_flSlopeOutgoing = -2518.3713
 						},
 						{
 							x = 0.5
@@ -307896,7 +308394,7 @@
 						},
 					]
 					m_vDomainMins = [ 0.0, 0.0 ]
-					m_vDomainMaxs = [ 0.5, 1600.0 ]
+					m_vDomainMaxs = [ 0.5, 1100.0 ]
 				}
 				m_bAllowApplicationPrediction = false
 			}
@@ -308149,7 +308647,9 @@
 		m_flIntentSpaceStringStrengthFwd = 9.0
 		m_flIntentSpaceStringStrengthLeft = 7.0
 		m_flIntentSpaceStringStrengthVertical = 7.0
-		m_flIntentSpaceSurplusSpringStrength = 3.5
+		m_flIntentSpaceSurplusSpringStrength = 3.0
+		m_flIntentSpaceOpposingSpringStrength = 6.1
+		m_flIntentSpaceLateralSpringStrengthScale = 0.9
 		m_flIntentSpaceVerticalZInputOnly = 1.0
 		m_flIntentSpaceVerticalWithXYInput = 0.75
 		m_FallSpeedReductionCurve = 
@@ -308321,7 +308821,7 @@
 		{
 			AbilityCooldown = 
 			{
-				m_strValue = 25.0
+				m_strValue = 26.0
 				m_strDisableValue = "0"
 				m_strCSSClass = "cooldown"
 				m_bCanSetTokenOverride = true
@@ -308453,7 +308953,7 @@
 					_class = "scale_function_tech_damage"
 					_my_subclass_name = "Damage_scale_function"
 					m_eSpecificStatScaleType = "ETechPower"
-					m_flStatScale = 0.681
+					m_flStatScale = 0.62
 				}
 			}
 			ImpactDamage = 
@@ -308594,7 +309094,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_GROUND"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_HOLD_TOGGLE"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_TROOPER_ENEMY | CITADEL_UNIT_TARGET_NEUTRAL"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_SHOW_CAST_RANGE_AS_SAT_SPHERE_WHILE_CASTING | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_REFUND_HALF_COOLDOWN_ON_CHANNEL_INTERRUPT"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_PROJECTILE | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_PROJECTILE_PASS_THROUGH_WORLD | CITADEL_ABILITY_BEHAVIOR_SHOW_CAST_RANGE_AS_SAT_SPHERE_WHILE_CASTING | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_REFUND_HALF_COOLDOWN_ON_CHANNEL_INTERRUPT | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_strCSSClass = "detentionRounds"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/deadpack/deadpack_salvo.psd"
 		m_vecAbilityUpgrades = 
@@ -309190,6 +309690,16 @@
 		}
 		m_flChargeTime = 0.25
 		m_flGrabDistance = 150.0
+		m_LowHealthGlowModifier = subclass:
+		{
+			_class = "modifier_low_health_glow"
+			_my_subclass_name = "modifier_deadpack_ultimate_low_health_glow"
+			m_bIsHidden = true
+			m_bShowAsLowHealth = true
+			m_GlowParticle = resource_name:"particles/status_fx/status_fx_last_hit.vpcf"
+			m_bCasterCountsAsAssister = false
+			m_eDebuffType = "MODIFIER_DEBUFF_NO"
+		}
 		m_TargetModifier = subclass:
 		{
 			_class = "modifier_deadpack_ultimate_target"
@@ -309633,7 +310143,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_NONE"
 		m_eAbilityTargetingShape = "CITADEL_ABILITY_TARGETING_SHAPE_LINE"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST_TOGGLE"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK | CITADEL_ABILITY_BEHAVIOR_START_COOLDOWN_ON_TOGGLE_OFF | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_AIM_FACING_ENEMY | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DO_NOT_ALLOW_SPAM_PROC | CITADEL_ABILITY_BEHAVIOR_DO_NOT_CANCEL_ON_PARRY"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_SILENT_CAST_FAILURE_FEEDBACK | CITADEL_ABILITY_BEHAVIOR_START_COOLDOWN_ON_TOGGLE_OFF | CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_AIM_FACING_ENEMY | CITADEL_ABILITY_BEHAVIOR_REQUIRE_ABILITY_BUTTON_TO_CANCEL | CITADEL_ABILITY_BEHAVIOR_DO_NOT_CANCEL_ON_PARRY | CITADEL_ABILITY_BEHAVIOR_COUNTS_AS_ABILITY_USE"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_HERO_ENEMY | CITADEL_UNIT_TARGET_CREEP_ENEMY | CITADEL_UNIT_TARGET_BUILDING_ENEMY | CITADEL_UNIT_TARGET_MINION_ENEMY | CITADEL_UNIT_TARGET_GOLD_ORBS"
 		m_eTargettingLOSCheck = "Bounds_IgnoreObscureBlockers"
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/deadpack/deadpack_thermalmass.psd"
@@ -310012,7 +310522,7 @@
 		{
 			primary = 
 			{
-				m_flBulletSpeed = 20000.0
+				m_flBulletSpeed = 14000.0
 				m_Spread = 0.0
 				m_StandingSpread = 1.5
 				m_flScatterYawScale = 1
@@ -310131,6 +310641,68 @@
 				m_strZoomOutSound = soundevent:"default.ZoomOut"
 				m_flDamageForce = 50.0
 				m_bBulletShouldUseVerlet = true
+				m_bUseBulletSpeedScaleCurve = true
+				m_flBulletSpeedScaleOverDistance = 
+				{
+					m_spline = 
+					[
+						{
+							x = 0.0
+							y = 1.0
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = 0.0
+						},
+						{
+							x = 1181.0
+							y = 1.0
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = -0.01
+						},
+						{
+							x = 1241.0
+							y = 0.4
+							m_flSlopeIncoming = -0.01
+							m_flSlopeOutgoing = 0.0
+						},
+						{
+							x = 1575.0
+							y = 0.4
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = -0.003333
+						},
+						{
+							x = 1635.0
+							y = 0.2
+							m_flSlopeIncoming = -0.003333
+							m_flSlopeOutgoing = 0.0
+						},
+					]
+					m_tangents = 
+					[
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+					]
+					m_vDomainMins = [ 0.0, 0.0 ]
+					m_vDomainMaxs = [ 1635.0, 1.0 ]
+				}
 				m_flBulletDamage = 14.442
 				m_AimingShootSpreadPenalty = [ 0.0, 0.5 ]
 				m_vecScatterOffsets = [  ]
@@ -310369,7 +310941,7 @@
 		{
 			primary = 
 			{
-				m_flBulletSpeed = 20000.0
+				m_flBulletSpeed = 14000.0
 				m_Spread = 0.0
 				m_StandingSpread = 1.5
 				m_flScatterYawScale = 1
@@ -310488,6 +311060,68 @@
 				m_strZoomOutSound = soundevent:"default.ZoomOut"
 				m_flDamageForce = 50.0
 				m_bBulletShouldUseVerlet = true
+				m_bUseBulletSpeedScaleCurve = true
+				m_flBulletSpeedScaleOverDistance = 
+				{
+					m_spline = 
+					[
+						{
+							x = 0.0
+							y = 1.0
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = 0.0
+						},
+						{
+							x = 1181.0
+							y = 1.0
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = -0.01
+						},
+						{
+							x = 1241.0
+							y = 0.4
+							m_flSlopeIncoming = -0.01
+							m_flSlopeOutgoing = 0.0
+						},
+						{
+							x = 1575.0
+							y = 0.4
+							m_flSlopeIncoming = 0.0
+							m_flSlopeOutgoing = -0.003333
+						},
+						{
+							x = 1635.0
+							y = 0.2
+							m_flSlopeIncoming = -0.003333
+							m_flSlopeOutgoing = 0.0
+						},
+					]
+					m_tangents = 
+					[
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+						{
+							m_nIncomingTangent = "CURVE_TANGENT_LINEAR"
+							m_nOutgoingTangent = "CURVE_TANGENT_LINEAR"
+						},
+					]
+					m_vDomainMins = [ 0.0, 0.0 ]
+					m_vDomainMaxs = [ 1635.0, 1.0 ]
+				}
 				m_flBulletDamage = 17
 				m_strShootSound = soundevent:"Nurse.HealingNeedles.Fire"
 				m_AimingShootSpreadPenalty = [ 0.0, 0.5 ]
@@ -311354,6 +311988,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -311848,7 +312488,7 @@
 		{
 			primary = 
 			{
-				m_flBulletSpeed = 1315.0
+				m_flBulletSpeed = 1118.0
 				m_szBulletTravelTracerParticle = resource_name:"particles/abilities/nurse/nurse_leech_jar_projectile.vpcf"
 				m_eAttachmentSourceType = "EAttachmentSource_Custom"
 				m_flBulletGravityScale = 1.6
@@ -313033,7 +313673,7 @@
 		m_eAbilityTargetingLocation = "CITADEL_ABILITY_TARGETING_LOCATION_SELF"
 		m_eAbilityActivation = "CITADEL_ABILITY_ACTIVATION_INSTANT_CAST"
 		m_nAbilityTargetTypes = "CITADEL_UNIT_TARGET_ALL"
-		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DO_NOT_ALLOW_SPAM_PROC"
+		m_AbilityBehaviorsBits = "CITADEL_ABILITY_BEHAVIOR_NO_TARGET | CITADEL_ABILITY_BEHAVIOR_DISPLAYS_DAMAGE_IMPACT | CITADEL_ABILITY_BEHAVIOR_DONT_INTERRUPT_SLIDE_ON_CAST | CITADEL_ABILITY_BEHAVIOR_DO_NOT_ALLOW_SPAM_PROC | CITADEL_ABILITY_BEHAVIOR_DOES_NOT_COUNT_AS_ABILITY_USE"
 		m_strCSSClass = ""
 		m_strAbilityImage = panorama:"file://{images}/hud/abilities/nurse/needle.psd"
 		m_vecAbilityUpgrades = 
@@ -314685,6 +315325,12 @@
 					m_strContext = "melee_pickup"
 				},
 				{
+					m_strLocToken = "#AbilityButtonHint_MeleeItem"
+					m_eHintSide = "EButtonSide_Bottom"
+					m_nButton1 = "IN_WEAPON1"
+					m_strContext = "melee_item"
+				},
+				{
 					m_strLocToken = "#AbilityButtonHint_MeleeChangeTeam"
 					m_eHintSide = "EButtonSide_Bottom"
 					m_nButton1 = "IN_WEAPON1"
@@ -316058,7 +316704,7 @@
 				[
 					{
 						m_strPropertyName = "ReturnFireChance"
-						m_strBonus = "15"
+						m_strBonus = "20"
 					},
 					{
 						m_strPropertyName = "AbilityCooldown"
@@ -316720,7 +317366,7 @@
 			}
 			BonusMoveSpeed = 
 			{
-				m_strValue = "4m"
+				m_strValue = "5m"
 				m_strCSSClass = "move_speed"
 				m_eDisplayType = "EMaxMoveSpeed"
 				m_eDisplayUnits = "EDisplayUnit_MetersPerSecond"
@@ -316897,7 +317543,7 @@
 			m_sExpiredSound = soundevent:"Ratking.Charge.Explosion"
 			m_SewerModel = resource_name:"models/heroes_wip/ratking/ratking_ult_diorama.vmdl"
 			m_flExplosionHalfHeightMeters = 10.0
-			m_flTossSpeed = 500.0
+			m_flTossSpeed = 675.0
 			m_flTossGravityScale = 2.0
 			m_strParticleEffect = resource_name:""
 		}

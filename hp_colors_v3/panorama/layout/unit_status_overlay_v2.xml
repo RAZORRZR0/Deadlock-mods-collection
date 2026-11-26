@@ -125,7 +125,8 @@
 		</Panel>
 		<Panel id="HPColorsV3AssassinateAnchor" class="HPColorsV3StatusLabelAnchor" hittest="false" hittestchildren="false" />
 		<Panel id="AssassinateIndicator">
-			<Label text="#Citadel_Hud_Assassinate" />
+			<Label class="AssassinateLabel" text="#Citadel_Hud_Assassinate" />
+			<Label class="LowHealthTargetLabel" text="#Citadel_Hud_LowHealth" />
 		</Panel>
 		<Panel id="HPColorsV3UnkillableAnchor" class="HPColorsV3StatusLabelAnchor" hittest="false" hittestchildren="false" />
 		<Panel id="UnkillableIndicator">
